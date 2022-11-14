@@ -15,9 +15,6 @@ const sliceAuth = createSlice({
   },
 
   reducers: {
-    setPassword(state, action: PayloadAction<string>) {
-      state.password = action.payload;
-    },
     setResponsesAuth(state, action: PayloadAction<ResponsesAuth>) {
       state.responsesAuth = action.payload;
     },
@@ -32,8 +29,7 @@ const sliceAuth = createSlice({
 });
 
 export const {
-  setPassword,
-  setResponsesAuth,
+setResponsesAuth,
   setToken,
 } = sliceAuth.actions;
 

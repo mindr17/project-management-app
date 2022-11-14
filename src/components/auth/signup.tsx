@@ -4,9 +4,11 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { useAppDispatch } from "../../hooks/hooks";
 import { setResponsesAuth } from "../../store/sliceAuth";
 import { BASE_URL } from "../server/server";
+import { useRouter } from 'next/router';
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const [login, setLogin] = useState("");
   const [pass, setPass] = useState("");
@@ -44,6 +46,7 @@ export default function SignUp() {
     setLogin("");
     setPass("");
     setName("");
+    router.push('/login')
   };
 
   return (

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type ResponsesAuth = {
-  id: string;
-  name: string;
-  login: string;
+  id?: string;
+  name?: string;
+  login?: string;
 }
 
 const sliceAuth = createSlice({

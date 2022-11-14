@@ -17,7 +17,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Welcome to {responsesAuth.login}</h1>
+        <h1 className={styles.title}>Welcome {responsesAuth.login}</h1>
       </main>
 
       <footer className={styles.footer}>

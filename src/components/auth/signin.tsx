@@ -8,7 +8,7 @@ import { BASE_URL } from "../server/server";
 
 export default function SignIn() {
   const dispatch = useAppDispatch();
-  // const router = useRouter();
+  const router = useRouter();
   // const { token, password, responsesAuth } = useAppSelector(
   //   (state) => state.auth
   // );

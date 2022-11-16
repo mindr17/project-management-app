@@ -34,7 +34,6 @@ export default function SignUp() {
     const user =
       localStorage.getItem("user") &&
       (JSON.parse(localStorage.getItem("user") || "") as ResponsesAuth | null);
-    console.log(user);
     user && dispatch(setUser(user));
   }, []);
 
@@ -111,7 +110,7 @@ export default function SignUp() {
 
         <button>Register</button>
       </form>
-      <ToastContainer autoClose={false}/>
+      <ToastContainer autoClose={false} />
       <Link href={"/login"}>login</Link>
     </>
   );

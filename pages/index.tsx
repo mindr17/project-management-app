@@ -17,7 +17,6 @@ export default function Home() {
     const user =
       localStorage.getItem("user") &&
       (JSON.parse(localStorage.getItem("user") || "") as ResponsesAuth | null);
-    console.log(user);
     user && dispatch(setUser(user));
   }, []);
 
@@ -26,8 +25,6 @@ export default function Home() {
     dispatch(callReset());
     router.push("/");
   };
-  console.log('user main', user);
-  console.log('token main', token);
 
   return (
     <div className={styles.container}>

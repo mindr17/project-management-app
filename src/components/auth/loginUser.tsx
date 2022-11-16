@@ -39,12 +39,10 @@ export default function SignIn() {
     dispatch(callReset());
   }, [token, isError, isSuccess, message, router, dispatch]);
 
-
   useEffect(() => {
     const user =
       localStorage.getItem("user") &&
       (JSON.parse(localStorage.getItem("user") || "") as ResponsesAuth | null);
-    console.log(user);
     user && dispatch(setUser(user));
   }, []);
 

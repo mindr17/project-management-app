@@ -1,61 +1,66 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE_URL } from '../components/server/server';
-import axios from "axios";
 
-// const getDataFromInput = {
-//     name: "test14",
-//     login: "test14",
-//     password: "test",
-// };
 
-// export const fetchAuth = createAsyncThunk(
-//     'auth/fetchAuth',
-//     async function (_, { rejectWithValue }) {
-//         console.log('ok', _);
-//         const response = await fetch(`${BASE_URL}/signup`, {
-//             method: "post",
-//             body: JSON.stringify(getDataFromInput)
-//         });
-//         if (!response.ok) {
-//             return rejectWithValue('Server Error!');
-//         }
-//         const data = await response.json();
-//         console.log('data', data);
+type ResCreateUser = {
+  id: string;
+  name: string;
+  login: string;
+}
 
-//         return data.results;
+type FormData = {
+  name: string;
+  login: string;
+  password: string;
+}
 
-//     }
-// );
-// export const fetchAuth = createAsyncThunk(
-//     'auth/fetchAuth',
-//     async function (_, { rejectWithValue }) {
-//         const response = axios({
-//             method: "post",
-//             url: `${BASE_URL}/signup`,
-//             data: {
-//                 /*    name: name,
-//                    login: login,
-//                    password: pass, */
-//             },
-//         })
-//         /* .then(function (response) {
-//         dispatch(setResponsesAuth(response.data));
-//       }); */
-//         if (!response.ok) {
-//             return rejectWithValue('Server Error!');
-//         }
-//         const dataAuth = await response.json();
-//         console.log(dataAuth.results);
+type CreateToken = {
+  login: string;
+  password: string;
+}
 
-//         return dataAuth.results;
-//     }
-// );
+interface MyKnownError {
+  message: string;
+  statusCode: number;
 
-// async function (_, { rejectWithValue }) {
-//     const response = await fetch(`${BASE_URL}`);
-//     if (!response.ok) {
-//       return rejectWithValue('Server Error!');
-//     }
-//     const data: IData = await response.json();
-//     return data.results;
-//   }
+}
+
+export const registerUser = createAsyncThunk<ResCreateUser, FormData, { rejectValue: MyKnownError }>(
+  'auth/registerUser',
+  async (dataSignIn, { rejectWithValue }) => {
+    const response = await fetch(`${BASE_URL}/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dataSignIn),
+    })
+
+    if (!response.ok) {
+      return rejectWithValue((await response.json()) as MyKnownError)
+    }
+
+    return (await response.json()) as ResCreateUser
+  }
+)
+
+export const login = createAsyncThunk<string, CreateToken, { rejectValue: MyKnownError }>(
+  'auth/login',
+  async (formData, { rejectWithValue }) => {
+    const response = await fetch(`${BASE_URL}/signin`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    })
+    if (!response.ok) {
+      return rejectWithValue((await response.json()) as MyKnownError)
+    }
+    const res = await response.json() as { token: string }
+
+    return res.token;
+  }
+)
+
+// export const logout = createAsyncThunk('auth/logout', async () => {
+//   localStorage.removeItem('user')
+//   // logoutTest()
+// })
+

@@ -32,9 +32,7 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: '',
-
   token: '',
-  serverError: null,
 } as IinitialState
 
 const sliceAuth = createSlice({

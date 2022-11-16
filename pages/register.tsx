@@ -1,5 +1,5 @@
 import Head from "next/head";
-import SignUp from "../src/components/auth/signup";
+import SignUp from "../src/components/auth/registerUser";
 import styles from "../styles/Home.module.css";
 
 export default function Register() {

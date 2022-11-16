@@ -1,13 +1,8 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useAppSelector } from "../src/hooks/hooks";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
-  const { token, password, responsesAuth } = useAppSelector(
-    (state) => state.auth
-  );
-
   return (
     <div className={styles.container}>
       <Head>
@@ -17,7 +12,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Welcome {responsesAuth.login}</h1>
+        <h1 className={styles.title}>Welcome</h1>
       </main>
 
       <footer className={styles.footer}>
@@ -26,7 +21,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{" "}
+          Powered by
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>

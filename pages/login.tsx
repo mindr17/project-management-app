@@ -1,20 +1,10 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
-import SignIn from "../src/components/auth/signin";
-import { useAppSelector } from "../src/hooks/hooks";
+import SignIn from "../src/components/auth/loginUser";
 import styles from "../styles/Home.module.css";
 
 export default function Login() {
-  const router = useRouter();
-  const { token } = useAppSelector((state) => state.auth);
-
-  /*   if (token) {
-    router.push("/");
-    return;
-  } else */
   return (
     <>
-      {token && router.push("/")}
       <div className={styles.container}>
         <Head>
           <title>Auth</title>

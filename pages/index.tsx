@@ -45,7 +45,6 @@ export default function Home() {
             <h1 className={styles.title}>You need to login</h1>
           </>
         )}
-        {/* <h1 className={styles.title}>Welcome</h1> */}
       </main>
 
       <footer className={styles.footer}>

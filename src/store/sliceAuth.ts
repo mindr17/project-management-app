@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
-import { login, registerUser } from './thunk';
+import { login, logout, registerUser } from './thunk';
 
-type ResponsesAuth = {
+export type ResponsesAuth = {
   id?: string;
   name?: string;
   login?: string;
@@ -17,14 +17,6 @@ interface IinitialState {
   serverError: string | null;
   loading: string | null
 }
-
-// let user: ResponsesAuth | null = '' || {}
-// if (typeof window !== 'undefined') {
-//    user = JSON.parse(localStorage.getItem('user') || '')
-// }
-// const  user = JSON.parse(localStorage.getItem('user') || '')
-
-
 
 const initialState = {
   user: null,
@@ -46,6 +38,9 @@ const sliceAuth = createSlice({
       state.isSuccess = false;
       state.message = '';
     },
+    setUser(state, action: PayloadAction<ResponsesAuth>) {
+      state.user = action.payload
+    }
 
   },
   extraReducers: (builder) => {
@@ -88,11 +83,16 @@ const sliceAuth = createSlice({
           state.message = 'Error Server.'
         }
       })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.user = null
+        state.token = ''
+      })
   },
 });
 
 export const {
   callReset,
+  setUser,
 } = sliceAuth.actions;
 
 export default sliceAuth.reducer;

@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useForm } from "react-hook-form";
-
 import s from "./auth.module.scss";
 import { useRouter } from "next/router";
 import { registerUser } from "../../store/thunk";
 import { useEffect } from "react";
-import { callReset } from "../../store/sliceAuth";
+import { callReset, ResponsesAuth, setUser } from "../../store/sliceAuth";
 import Preloader from "../preloader/Preloader";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface IFormSignUp {
   name: string;
@@ -30,10 +31,19 @@ export default function SignUp() {
   } = useForm<IFormSignUp>();
 
   useEffect(() => {
+    const user =
+      localStorage.getItem("user") &&
+      (JSON.parse(localStorage.getItem("user") || "") as ResponsesAuth | null);
+    console.log(user);
+    user && dispatch(setUser(user));
+  }, []);
+
+  useEffect(() => {
     if (isError) {
-      console.log("error message", message); // TO DO
+      toast.error(message);
     }
     if (isSuccess || user) {
+      localStorage.setItem("user", JSON.stringify(user));
       router.push("/login");
     }
     dispatch(callReset());
@@ -101,6 +111,7 @@ export default function SignUp() {
 
         <button>Register</button>
       </form>
+      <ToastContainer autoClose={false}/>
       <Link href={"/login"}>login</Link>
     </>
   );

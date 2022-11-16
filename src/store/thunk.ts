@@ -59,8 +59,7 @@ export const login = createAsyncThunk<string, CreateToken, { rejectValue: MyKnow
   }
 )
 
-// export const logout = createAsyncThunk('auth/logout', async () => {
-//   localStorage.removeItem('user')
-//   // logoutTest()
-// })
+export const logout = createAsyncThunk('auth/logout', async () => {
+  localStorage.removeItem('user')
+})
 

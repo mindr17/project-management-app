@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { login } from "../../store/thunk";
 import { callReset } from "../../store/sliceAuth";
 import { useEffect } from "react";
-import Preloader from "../Preloader/Preloader";
+import Preloader from "../preloader/Preloader";
 import s from "./auth.module.scss";
 
 interface IFormSignIn {

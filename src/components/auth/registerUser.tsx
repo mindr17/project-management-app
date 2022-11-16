@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { registerUser } from "../../store/thunk";
 import { useEffect } from "react";
 import { callReset } from "../../store/sliceAuth";
-import Preloader from "../Preloader/Preloader";
+import Preloader from "../preloader/Preloader";
 
 interface IFormSignUp {
   name: string;

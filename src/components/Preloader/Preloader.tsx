@@ -1,8 +1,9 @@
-import React from 'react';
+import React from "react";
+import s from "./preloader.module.scss";
 
 const Preloader = () => {
   return (
-    <div className="load" data-testid={'preloaderTest'}>
+    <div className={s.load}>
       <hr />
       <hr />
       <hr />

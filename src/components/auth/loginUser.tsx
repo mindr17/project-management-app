@@ -16,7 +16,7 @@ interface IFormSignIn {
   password: string;
 }
 interface IParseToken {
-  userId: string;
+  id: string;
   iat: number;
   login: string;
 }
@@ -54,7 +54,9 @@ export default function SignIn() {
   useEffect(() => {
     if (token) {
       const parseToken: IParseToken = parseJwt(token);
-      const idAndToken = { id: parseToken.userId, token: token };
+      console.log(parseToken);
+
+      const idAndToken = { id: parseToken.id, token: token };
       dispatch(getUserById(idAndToken));
     }
   }, [token]);

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { BASE_URL } from '../components/server/server';
+import { BASE_URL } from '../config';
 
 
 type ResCreateUser = {
@@ -32,7 +32,7 @@ interface ITokenAndId {
 export const registerUser = createAsyncThunk<ResCreateUser, FormData, { rejectValue: MyKnownError }>(
   'auth/registerUser',
   async (dataForm, { rejectWithValue }) => {
-    const response = await fetch(`${BASE_URL}/signup`, {
+    const response = await fetch(`${BASE_URL}/auth/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dataForm),
@@ -43,7 +43,7 @@ export const registerUser = createAsyncThunk<ResCreateUser, FormData, { rejectVa
     }
     const user: ResCreateUser = await response.json()
     localStorage.setItem("user", JSON.stringify(user));
-    
+
     return user
   }
 )
@@ -51,7 +51,7 @@ export const registerUser = createAsyncThunk<ResCreateUser, FormData, { rejectVa
 export const login = createAsyncThunk<string, CreateToken, { rejectValue: MyKnownError }>(
   'auth/login',
   async (formData, { rejectWithValue }) => {
-    const response = await fetch(`${BASE_URL}/signin`, {
+    const response = await fetch(`${BASE_URL}/auth/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
@@ -68,6 +68,8 @@ export const login = createAsyncThunk<string, CreateToken, { rejectValue: MyKnow
 export const getUserById = createAsyncThunk<ResCreateUser, ITokenAndId, { rejectValue: MyKnownError }>(
   'auth/getUserById',
   async (tokenAndId, { rejectWithValue }) => {
+    console.log('tokenAndId', tokenAndId);
+
     const response = await fetch(`${BASE_URL}/users/${tokenAndId.id}`, {
       method: 'GET',
       headers: {

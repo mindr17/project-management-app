@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../src/hooks/hooks";
-import { callReset, ResponsesAuth, setUser } from "../src/store/sliceAuth";
+import { callReset, ResponsesAuth, setToken, setUser } from "../src/store/sliceAuth";
 import { logout } from "../src/store/thunk";
 import styles from "../styles/Home.module.css";
 
@@ -13,12 +13,17 @@ export default function Home() {
   const router = useRouter();
   const { user, token } = useAppSelector((state) => state.auth);
 
+
   useEffect(() => {
-    const user =
+    const lsUser =
       localStorage.getItem("user") &&
       (JSON.parse(localStorage.getItem("user") || "") as ResponsesAuth | null);
-    user && dispatch(setUser(user));
-  }, []);
+      lsUser && dispatch(setUser(lsUser));
+    const lsToken =
+      localStorage.getItem("token") &&
+      (JSON.parse(localStorage.getItem("token") || "") as string | null);
+      lsToken && dispatch(setToken(lsToken));
+  }, []); // Нужно добавить в каждую новую страницу
 
   const onLogout = () => {
     dispatch(logout());

@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { login, logout, registerUser } from './thunk';
+import { getUserById, login, logout, registerUser } from './thunk';
 
 export type ResponsesAuth = {
-  id?: string;
-  name?: string;
-  login?: string;
+  id: string;
+  name: string;
+  login: string;
 }
 interface IinitialState {
   user: ResponsesAuth | null;
@@ -40,6 +40,9 @@ const sliceAuth = createSlice({
     },
     setUser(state, action: PayloadAction<ResponsesAuth>) {
       state.user = action.payload
+    },
+    setToken(state, action: PayloadAction<string>) {
+      state.token = action.payload
     }
 
   },
@@ -83,9 +86,12 @@ const sliceAuth = createSlice({
           state.message = 'Error Server.'
         }
       })
-      .addCase(logout.fulfilled, (state, action) => {
+      .addCase(logout.fulfilled, (state) => {
         state.user = null
         state.token = ''
+      })
+      .addCase(getUserById.fulfilled, (state, action) => {
+        state.user = action.payload
       })
   },
 });
@@ -93,6 +99,8 @@ const sliceAuth = createSlice({
 export const {
   callReset,
   setUser,
+  setToken,
 } = sliceAuth.actions;
 
 export default sliceAuth.reducer;
+

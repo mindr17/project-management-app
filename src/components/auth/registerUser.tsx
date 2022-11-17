@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useForm } from "react-hook-form";
 import s from "./auth.module.scss";
 import { useRouter } from "next/router";
-import { registerUser } from "../../store/thunk";
+import { login, registerUser } from "../../store/thunk";
 import { useEffect } from "react";
 import { callReset, ResponsesAuth, setUser } from "../../store/sliceAuth";
 import Preloader from "../preloader/Preloader";
@@ -42,14 +42,15 @@ export default function SignUp() {
       toast.error(message);
     }
     if (isSuccess || user) {
-      localStorage.setItem("user", JSON.stringify(user));
-      router.push("/login");
+      router.push("/");
     }
     dispatch(callReset());
   }, [user, isError, isSuccess, message, router, dispatch]);
 
-  const onSubmit = (formData: IFormSignUp) => {
-    dispatch(registerUser(formData));
+  const onSubmit = async (formData: IFormSignUp) => {
+    await dispatch(registerUser(formData));
+    const loginAndPass = { login: formData.login, password: formData.password };
+    await dispatch(login(loginAndPass));
     reset();
   };
 

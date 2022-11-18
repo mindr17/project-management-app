@@ -40,7 +40,7 @@ export default function Home() {
       </Head>
       <header>
         <button onClick={onLogout}>Logout</button>
-        <Link href={"login"}> go to login</Link>
+        <Link href={"signin"}> go to login</Link>
       </header>
       <main className={styles.main}>
         {user ? (

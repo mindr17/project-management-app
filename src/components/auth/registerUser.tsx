@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { login, registerUser } from "../../store/thunk";
 import { useEffect } from "react";
 import { callReset, ResponsesAuth, setUser } from "../../store/sliceAuth";
-import Preloader from "../preloader/Preloader";
+import Preloader from "../Preloader/Preloader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -112,7 +112,7 @@ export default function SignUp() {
         <button>Register</button>
       </form>
       <ToastContainer autoClose={false} />
-      <Link href={"/login"}>login</Link>
+      <Link href={"/signin"}>login</Link>
     </>
   );
 }

@@ -68,8 +68,6 @@ export const login = createAsyncThunk<string, CreateToken, { rejectValue: MyKnow
 export const getUserById = createAsyncThunk<ResCreateUser, ITokenAndId, { rejectValue: MyKnownError }>(
   'auth/getUserById',
   async (tokenAndId, { rejectWithValue }) => {
-    console.log('tokenAndId', tokenAndId);
-
     const response = await fetch(`${BASE_URL}/users/${tokenAndId.id}`, {
       method: 'GET',
       headers: {

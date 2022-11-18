@@ -61,8 +61,6 @@ export default function SignIn() {
   useEffect(() => {
     if (token) {
       const parseToken: IParseToken = parseJwt(token);
-      console.log(parseToken);
-
       const idAndToken = { id: parseToken.id, token: token };
       dispatch(getUserById(idAndToken));
     }

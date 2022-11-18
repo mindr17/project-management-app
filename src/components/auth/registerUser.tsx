@@ -67,7 +67,7 @@ export default function SignUp() {
         })}
       >
         <section>
-          <label className={s.label} htmlFor="name">name</label>
+          <label className={s.label} htmlFor="name">Name</label>
           <input
             id="name"
             type="text"

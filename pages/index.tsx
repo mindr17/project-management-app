@@ -11,18 +11,18 @@ import styles from "../styles/Home.module.css";
 export default function Home() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { user, token } = useAppSelector((state) => state.auth);
-
+  const { user } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     const lsUser =
       localStorage.getItem("user") &&
       (JSON.parse(localStorage.getItem("user") || "") as ResponsesAuth | null);
-      lsUser && dispatch(setUser(lsUser));
+    lsUser && dispatch(setUser(lsUser));
+
     const lsToken =
       localStorage.getItem("token") &&
       (JSON.parse(localStorage.getItem("token") || "") as string | null);
-      lsToken && dispatch(setToken(lsToken));
+    lsToken && dispatch(setToken(lsToken));
   }, []); // Нужно добавить в каждую новую страницу
 
   const onLogout = () => {

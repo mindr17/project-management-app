@@ -31,10 +31,10 @@ export default function SignUp() {
   } = useForm<IFormSignUp>();
 
   useEffect(() => {
-    const user =
+    const lsUser =
       localStorage.getItem("user") &&
       (JSON.parse(localStorage.getItem("user") || "") as ResponsesAuth | null);
-    user && dispatch(setUser(user));
+      lsUser && dispatch(setUser(lsUser));
   }, []);
 
   useEffect(() => {

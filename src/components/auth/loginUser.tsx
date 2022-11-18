@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useForm } from "react-hook-form";
 import { getUserById, login } from "../../store/thunk";
-import { callReset } from "../../store/sliceAuth";
+import { callReset, setToken } from "../../store/sliceAuth";
 import { useEffect } from "react";
 import Preloader from "../Preloader/Preloader";
 import s from "./auth.module.scss";
@@ -34,6 +34,13 @@ export default function SignIn() {
     reset,
     formState: { errors },
   } = useForm<IFormSignIn>();
+
+  useEffect(() => {
+    const lsToken =
+      localStorage.getItem("token") &&
+      (JSON.parse(localStorage.getItem("token") || "") as string | null);
+    lsToken && dispatch(setToken(lsToken));
+  }, []);
 
   useEffect(() => {
     if (isError) {

@@ -34,7 +34,7 @@ export default function SignUp() {
     const lsUser =
       localStorage.getItem("user") &&
       (JSON.parse(localStorage.getItem("user") || "") as ResponsesAuth | null);
-      lsUser && dispatch(setUser(lsUser));
+    lsUser && dispatch(setUser(lsUser));
   }, []);
 
   useEffect(() => {
@@ -49,6 +49,7 @@ export default function SignUp() {
 
   const onSubmit = async (formData: IFormSignUp) => {
     await dispatch(registerUser(formData));
+
     const loginAndPass = { login: formData.login, password: formData.password };
     await dispatch(login(loginAndPass));
     reset();
@@ -67,7 +68,9 @@ export default function SignUp() {
         })}
       >
         <section>
-          <label className={s.label} htmlFor="name">Name</label>
+          <label className={s.label} htmlFor="name">
+            Name
+          </label>
           <input
             id="name"
             type="text"
@@ -87,7 +90,9 @@ export default function SignUp() {
           <div className={s.errorForm}>{errors.name?.message}</div>
         </section>
         <section>
-          <label className={s.label} htmlFor="login">Login</label>
+          <label className={s.label} htmlFor="login">
+            Login
+          </label>
           <input
             id="login"
             type="text"
@@ -103,7 +108,9 @@ export default function SignUp() {
           <div className={s.errorForm}>{errors.login?.message}</div>
         </section>
         <section>
-          <label className={s.label} htmlFor="password">Password</label>
+          <label className={s.label} htmlFor="password">
+            Password
+          </label>
           <input
             id="password"
             type="password"
@@ -121,7 +128,12 @@ export default function SignUp() {
         <button className={s.btn}>Register</button>
       </form>
       <ToastContainer autoClose={false} />
-      <p className={s.signUpLink}>Already have an account? <strong><Link href={"/signin"}>Sign in</Link></strong></p>
+      <p className={s.signUpLink}>
+        Already have an account?{" "}
+        <strong>
+          <Link href={"/signin"}>Sign in</Link>
+        </strong>
+      </p>
     </>
   );
 }

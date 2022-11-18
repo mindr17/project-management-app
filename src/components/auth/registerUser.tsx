@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { login, registerUser } from "../../store/thunk";
 import { useEffect } from "react";
 import { callReset, ResponsesAuth, setUser } from "../../store/sliceAuth";
-import Preloader from "../preloader/Preloader";
+import Preloader from "../Preloader/Preloader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -61,58 +61,67 @@ export default function SignUp() {
   return (
     <>
       <form
+        className={s.form}
         onSubmit={handleSubmit((formData) => {
           onSubmit(formData);
         })}
       >
-        <input
-          type="text"
-          {...register("name", {
-            required: "Please enter name",
-            minLength: {
-              value: 3,
-              message: "name must contain more than 3 letters",
-            },
-            pattern: {
-              value: /^[a-zA-Zа-яёА-ЯЁ\s\-]+$/u,
-              message: "name must be alphabetic",
-            },
-          })}
-          placeholder="Enter your name"
-        />
-
-        <div className={s.errorForm}>{errors.name?.message}</div>
-
-        <input
-          type="text"
-          {...register("login", {
-            required: "Please enter login",
-            minLength: {
-              value: 3,
-              message: "login must contain more than 3 letters",
-            },
-          })}
-          placeholder="Enter your login"
-        />
-        <div className={s.errorForm}>{errors.login?.message}</div>
-
-        <input
-          type="password"
-          {...register("password", {
-            required: "Please enter password",
-            minLength: {
-              value: 5,
-              message: "password must contain more than 5 characters",
-            },
-          })}
-          placeholder="Enter your password"
-        />
-        <div className={s.errorForm}>{errors.password?.message}</div>
-
-        <button>Register</button>
+        <section>
+          <label className={s.label} htmlFor="name">name</label>
+          <input
+            id="name"
+            type="text"
+            className={s.input}
+            {...register("name", {
+              required: "Please enter name",
+              minLength: {
+                value: 3,
+                message: "name must contain more than 3 letters",
+              },
+              pattern: {
+                value: /^[a-zA-Zа-яёА-ЯЁ\s\-]+$/u,
+                message: "name must be alphabetic",
+              },
+            })}
+          />
+          <div className={s.errorForm}>{errors.name?.message}</div>
+        </section>
+        <section>
+          <label className={s.label} htmlFor="login">Login</label>
+          <input
+            id="login"
+            type="text"
+            className={s.input}
+            {...register("login", {
+              required: "Please enter login",
+              minLength: {
+                value: 3,
+                message: "login must contain more than 3 letters",
+              },
+            })}
+          />
+          <div className={s.errorForm}>{errors.login?.message}</div>
+        </section>
+        <section>
+          <label className={s.label} htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            className={s.input}
+            {...register("password", {
+              required: "Please enter password",
+              minLength: {
+                value: 5,
+                message: "password must contain more than 5 characters",
+              },
+            })}
+          />
+          <div className={s.errorForm}>{errors.password?.message}</div>
+        </section>
+        <button className={s.btn}>Register</button>
       </form>
       <ToastContainer autoClose={false} />
-      <Link href={"/login"}>login</Link>
+      <Link href={"/signin"}>login</Link>
     </>
   );
 }

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { getUserById, login } from "../../store/thunk";
 import { callReset } from "../../store/sliceAuth";
 import { useEffect } from "react";
-import Preloader from "../preloader/Preloader";
+import Preloader from "../Preloader/Preloader";
 import s from "./auth.module.scss";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -108,7 +108,7 @@ export default function SignIn() {
         <button className={s.btn}>Sign in</button>
       </form>
       <ToastContainer autoClose={false} />
-      <Link className={s.signUpLink} href={"/register"}>Create an account</Link>
+      <Link href={"signin"}> go to login</Link>
     </>
   );
 }

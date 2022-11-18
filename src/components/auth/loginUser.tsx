@@ -68,39 +68,47 @@ export default function SignIn() {
   return (
     <>
       <form
+        className={s.form}
         onSubmit={handleSubmit((formData) => {
           onSubmit(formData);
         })}
       >
-        <input
-          type="text"
-          {...register("login", {
-            required: "Please enter login",
-            minLength: {
-              value: 3,
-              message: "login must contain more than 3 letters",
-            },
-          })}
-          placeholder="login"
-        />
-        <div className={s.errorForm}>{errors.login?.message}</div>
-
-        <input
-          type="password"
-          placeholder="password"
-          {...register("password", {
-            required: "Please enter password",
-            minLength: {
-              value: 5,
-              message: "password must contain more than 5 characters",
-            },
-          })}
-        />
-        <div className={s.errorForm}>{errors.password?.message}</div>
-        <button>Login</button>
+        <section>
+          <label className={s.label} htmlFor="login">Login</label>
+          <input
+            id="login"
+            type="text"
+            className={s.input}
+            {...register("login", {
+              required: "Please enter login",
+              minLength: {
+                value: 3,
+                message: "login must contain more than 3 letters",
+              },
+            })}
+          />
+          <div className={s.errorForm}>{errors.login?.message ? errors.login?.message : ''}</div>
+        </section>
+        <section>
+          <label className={s.label} htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            className={s.input}
+            {...register("password", {
+              required: "Please enter password",
+              minLength: {
+                value: 5,
+                message: "password must contain more than 5 characters",
+              },
+            })}
+          />
+          <div className={s.errorForm}>{errors.password?.message}</div>
+        </section>
+        <button className={s.btn}>Sign in</button>
       </form>
       <ToastContainer autoClose={false} />
-      <Link href={"/register"}>Register</Link>
+      <Link className={s.signUpLink} href={"/register"}>Create an account</Link>
     </>
   );
 }

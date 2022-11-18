@@ -121,7 +121,7 @@ export default function SignUp() {
         <button className={s.btn}>Register</button>
       </form>
       <ToastContainer autoClose={false} />
-      <Link href={"/signin"}>login</Link>
+      <p className={s.signUpLink}>Already have an account? <strong><Link href={"/signin"}>Sign in</Link></strong></p>
     </>
   );
 }

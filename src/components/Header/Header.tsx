@@ -37,7 +37,10 @@ export const Header = () => {
       </nav>
       {user ? (
         <>
-          <Link onClick={onLogout} className={s.navLink} href={'/'}>
+          <Link className={s.navLink} href={'/'}>
+          Go to Main Page
+          </Link>
+          <Link onClick={onLogout} className={s.navLink} href={'/signin'}>
             Logout
           </Link>
         </>

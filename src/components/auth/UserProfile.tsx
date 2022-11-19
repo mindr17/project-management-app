@@ -29,7 +29,7 @@ export default function UserProfile() {
   const {
     register,
     handleSubmit,
-    reset,
+    resetField,
     formState: { errors },
   } = useForm<IFormSignUp>({
     defaultValues: {
@@ -39,11 +39,17 @@ export default function UserProfile() {
   });
 
   useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, []);
+
+  useEffect(() => {
     if (isDelete) {
       toast.success('Profile Deleted!');
       dispatch(logout());
       dispatch(setIsDelete());
-      // reset()
+      router.push('/');
     }
   }, [isDelete]);
 
@@ -52,6 +58,7 @@ export default function UserProfile() {
       dispatch(setUser(updatedUserData));
       toast.success('Profile changed!');
       dispatch(resetUpdateData());
+      resetField('password');
     }
   }, [updatedUserData]);
 
@@ -64,14 +71,7 @@ export default function UserProfile() {
   }, [user, isError, isSuccess, message, router, dispatch]);
 
   const onSubmit = (formData: IFormSignUp) => {
-    user &&
-      dispatch(
-        updateUser({
-          formData,
-          token,
-          id: user._id,
-        })
-      );
+    user && dispatch(updateUser({ formData, token, id: user._id }));
   };
 
   const hendleDelete = () => {

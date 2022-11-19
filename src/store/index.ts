@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import sliceAuth from './sliceAuth';
+import profileSlice from './profile/profileSlice';
 
 const store = configureStore({
   reducer: {
     auth: sliceAuth,
+    profile: profileSlice
 
   },
 });

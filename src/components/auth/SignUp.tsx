@@ -1,14 +1,14 @@
-import Link from "next/link";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { useForm } from "react-hook-form";
-import s from "./auth.module.scss";
-import { useRouter } from "next/router";
-import { login, registerUser } from "../../store/auth/authThunk";
-import { useEffect, useState } from "react";
-import { callReset, ResponsesAuth, setUser } from "../../store/auth/sliceAuth";
-import Preloader from "../Preloader/Preloader";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Link from 'next/link';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { useForm } from 'react-hook-form';
+import s from './auth.module.scss';
+import { useRouter } from 'next/router';
+import { login, registerUser } from '../../store/auth/authThunk';
+import { useEffect, useState } from 'react';
+import { callReset, ResponsesAuth, setUser } from '../../store/auth/sliceAuth';
+import Preloader from '../Preloader/Preloader';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface IFormSignUp {
   name: string;
@@ -18,12 +18,10 @@ interface IFormSignUp {
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
-  const { isError, isLoading, isSuccess, message, user } = useAppSelector(
-    (state) => state.auth
-  );
+  const { isError, isLoading, isSuccess, message, user } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
-  const [loginAndPass, setLoginAndPass] = useState({ login: "", password: "" });
+  const [loginAndPass, setLoginAndPass] = useState({ login: '', password: '' });
 
   const {
     register,
@@ -34,8 +32,8 @@ export default function SignUp() {
 
   useEffect(() => {
     const lsUser =
-      localStorage.getItem("user") &&
-      (JSON.parse(localStorage.getItem("user") || "") as ResponsesAuth | null);
+      localStorage.getItem('user') &&
+      (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
     lsUser && dispatch(setUser(lsUser));
   }, []);
 
@@ -45,10 +43,10 @@ export default function SignUp() {
     }
     if (isSuccess || user) {
       dispatch(login(loginAndPass));
-      setLoginAndPass({ login: "", password: "" });
-      router.push("/");
+      setLoginAndPass({ login: '', password: '' });
+      router.push('/');
     }
-    setLoginAndPass({ login: "", password: "" });
+    setLoginAndPass({ login: '', password: '' });
     dispatch(callReset());
   }, [user, isError, isSuccess, message, router, dispatch]);
 
@@ -72,58 +70,58 @@ export default function SignUp() {
         })}
       >
         <section>
-          <label className={s.label} htmlFor="name">
+          <label className={s.label} htmlFor='name'>
             Name
           </label>
           <input
-            id="name"
-            type="text"
+            id='name'
+            type='text'
             className={s.input}
-            {...register("name", {
-              required: "Please enter name",
+            {...register('name', {
+              required: 'Please enter name',
               minLength: {
                 value: 3,
-                message: "name must contain more than 3 letters",
+                message: 'name must contain more than 3 letters',
               },
               pattern: {
                 value: /^[a-zA-Zа-яёА-ЯЁ\s\-]+$/u,
-                message: "name must be alphabetic",
+                message: 'name must be alphabetic',
               },
             })}
           />
           <div className={s.errorForm}>{errors.name?.message}</div>
         </section>
         <section>
-          <label className={s.label} htmlFor="login">
+          <label className={s.label} htmlFor='login'>
             Login
           </label>
           <input
-            id="login"
-            type="text"
+            id='login'
+            type='text'
             className={s.input}
-            {...register("login", {
-              required: "Please enter login",
+            {...register('login', {
+              required: 'Please enter login',
               minLength: {
                 value: 3,
-                message: "login must contain more than 3 letters",
+                message: 'login must contain more than 3 letters',
               },
             })}
           />
           <div className={s.errorForm}>{errors.login?.message}</div>
         </section>
         <section>
-          <label className={s.label} htmlFor="password">
+          <label className={s.label} htmlFor='password'>
             Password
           </label>
           <input
-            id="password"
-            type="password"
+            id='password'
+            type='password'
             className={s.input}
-            {...register("password", {
-              required: "Please enter password",
+            {...register('password', {
+              required: 'Please enter password',
               minLength: {
                 value: 5,
-                message: "password must contain more than 5 characters",
+                message: 'password must contain more than 5 characters',
               },
             })}
           />
@@ -133,9 +131,9 @@ export default function SignUp() {
       </form>
       <ToastContainer autoClose={false} />
       <p className={s.signUpLink}>
-        Already have an account?{" "}
+        Already have an account?{' '}
         <strong>
-          <Link href={"/signin"}>Sign in</Link>
+          <Link href={'/signin'}>Sign in</Link>
         </strong>
       </p>
     </>

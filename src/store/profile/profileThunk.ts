@@ -44,7 +44,6 @@ export const updateUser = createAsyncThunk<ResCreateUser, IUpdateUser, { rejectV
       },
       body: JSON.stringify(formData),
     })
-    console.log(response);
 
     if (!response.ok) {
       return rejectWithValue((await response.json()) as MyKnownError)

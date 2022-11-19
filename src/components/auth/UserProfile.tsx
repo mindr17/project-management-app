@@ -42,8 +42,10 @@ export default function UserProfile() {
 
   useEffect(() => {
     if (isDelete) {
+      toast.success("Profile Deleted!");
       dispatch(logout());
       dispatch(setIsDelete());
+      // reset()
     }
   }, [isDelete]);
 
@@ -159,8 +161,7 @@ export default function UserProfile() {
       >
         Delete
       </button>
-      <ToastContainer autoClose={false} />
-      {/* <p className={s.signUpLink}>Already have an account? <strong><Link href={"/signin"}>Sign in</Link></strong></p> */}
+      <ToastContainer position="top-center" autoClose={false} style={{ fontSize: "2rem" }}/>
     </>
   );
 }

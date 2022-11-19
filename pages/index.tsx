@@ -4,7 +4,8 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { Header } from "../src/components/Header/Header";
 import { useAppDispatch, useAppSelector } from "../src/hooks/hooks";
-import { ResponsesAuth, setToken, setUser } from "../src/store/sliceAuth";
+import { ResponsesAuth, setToken, setUser } from "../src/store/auth/sliceAuth";
+
 import styles from "../styles/Home.module.css";
 
 export default function Home() {

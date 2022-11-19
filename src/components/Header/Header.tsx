@@ -2,8 +2,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { callReset } from "../../store/sliceAuth";
-import { logout } from "../../store/thunk";
+import { callReset } from "../../store/auth/sliceAuth";
+import { logout } from "../../store/auth/authThunk";
 import s from "./header.module.scss";
 
 export const Header = () => {

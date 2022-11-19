@@ -1,5 +1,5 @@
 import Head from "next/head";
-import SignUp from "../src/components/auth/registerUser";
+import SignUp from "../src/components/Auth/SignUp";
 import { Header } from "../src/components/Header/Header";
 import s from "../styles/signin.module.scss";
 

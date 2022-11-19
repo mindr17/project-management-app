@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ResponsesAuth } from '../authSlice';
+import { ResponsesAuth } from '../sliceAuth';
 import { deleteUser, updateUser } from './profileThunk';
 
 interface IinitialState {

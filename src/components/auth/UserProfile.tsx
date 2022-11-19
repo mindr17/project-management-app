@@ -4,12 +4,12 @@ import s from "./auth.module.scss";
 import { useRouter } from "next/router";
 import { logout } from "../../store/thunk";
 import { useEffect } from "react";
-import { callReset } from "../../store/authSlice";
 import Preloader from "../Preloader/Preloader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteUser, updateUser } from "../../store/profile/profileThunk";
 import { setIsDelete } from "../../store/profile/profileSlice";
+import { callReset } from "../../store/sliceAuth";
 
 export interface IFormSignUp {
   name: string;

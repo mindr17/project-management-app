@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getUserById, login, logout, registerUser } from './thunk';
+import { getUserById, login, logout, registerUser } from './authThunk';
 
 export type ResponsesAuth = {
   _id: string;

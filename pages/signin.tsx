@@ -1,5 +1,5 @@
 import Head from "next/head";
-import SignIn from "../src/components/auth/loginUser";
+import SignIn from "../src/components/Auth/SignIn";
 import s from "../styles/signin.module.scss";
 
 export default function Login() {

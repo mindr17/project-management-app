@@ -2,14 +2,14 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useForm } from "react-hook-form";
 import s from "./auth.module.scss";
 import { useRouter } from "next/router";
-import { logout } from "../../store/thunk";
 import { useEffect } from "react";
 import Preloader from "../Preloader/Preloader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteUser, updateUser } from "../../store/profile/profileThunk";
 import { resetUpdateData, setIsDelete } from "../../store/profile/profileSlice";
-import { callReset, setUser } from "../../store/sliceAuth";
+import { logout } from "../../store/auth/authThunk";
+import { callReset, setUser } from "../../store/auth/sliceAuth";
 
 export interface IFormSignUp {
   name: string;

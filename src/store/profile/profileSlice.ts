@@ -1,5 +1,5 @@
 import { createSlice} from '@reduxjs/toolkit';
-import { ResponsesAuth } from '../sliceAuth';
+import { ResponsesAuth } from '../auth/sliceAuth';
 import { deleteUser, updateUser } from './profileThunk';
 
 interface IinitialState {

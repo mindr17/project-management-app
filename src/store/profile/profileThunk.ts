@@ -1,7 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { IFormSignUp } from "../../components/auth/UserProfile";
+import { IFormSignUp } from "../../components/Auth/UserProfile";
+
+
 import { BASE_URL } from "../../config"
-import { ITokenAndId, MyKnownError, ResCreateUser } from "../thunk"
+import { ITokenAndId, MyKnownError, ResCreateUser } from "../auth/authThunk";
+
 
 interface IUpdateUser {
   token: string;

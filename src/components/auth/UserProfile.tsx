@@ -8,8 +8,8 @@ import Preloader from "../Preloader/Preloader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteUser, updateUser } from "../../store/profile/profileThunk";
-import { setIsDelete } from "../../store/profile/profileSlice";
-import { callReset } from "../../store/sliceAuth";
+import { resetUpdateData, setIsDelete } from "../../store/profile/profileSlice";
+import { callReset, setUser } from "../../store/sliceAuth";
 
 export interface IFormSignUp {
   name: string;
@@ -19,11 +19,13 @@ export interface IFormSignUp {
 
 export default function UserProfile() {
   const dispatch = useAppDispatch();
-  const { isError, isSuccess, message, user, token } = useAppSelector(
+  const { isSuccess, user, token } = useAppSelector(
     (state) => state.auth
   );
-  const { isLoading } = useAppSelector((state) => state.profile);
-  const { isDelete } = useAppSelector((state) => state.profile);
+
+  const { message, isError, isDelete, isLoading, updatedUserData } = useAppSelector(
+    (state) => state.profile
+  );
   const router = useRouter();
 
   const {
@@ -42,25 +44,26 @@ export default function UserProfile() {
     if (isDelete) {
       dispatch(logout());
       dispatch(setIsDelete());
-      router.push("/");
     }
   }, [isDelete]);
+
+  useEffect(() => {
+    if (updatedUserData) {
+      dispatch(setUser(updatedUserData));
+      toast.success("Profile changed!");
+      dispatch(resetUpdateData());
+    }
+  }, [updatedUserData]);
 
   useEffect(() => {
     if (isError) {
       toast.error(message);
     }
     dispatch(callReset());
+    dispatch(resetUpdateData());
   }, [user, isError, isSuccess, message, router, dispatch]);
 
   const onSubmit = (formData: IFormSignUp) => {
-    user &&
-      console.log('user from', {
-        formData,
-        token,
-        id: user._id,
-      });
-
     user &&
       dispatch(
         updateUser({
@@ -69,11 +72,6 @@ export default function UserProfile() {
           id: user._id,
         })
       );
-
-    // await dispatch(registerUser(formData));
-    // const loginAndPass = { login: formData.login, password: formData.password };
-    // await dispatch(login(loginAndPass));
-    // reset();
   };
 
   const hendleDelete = () => {
@@ -86,6 +84,8 @@ export default function UserProfile() {
 
   return (
     <>
+      <h1>Name: {user?.name}</h1>
+      <h2>Login: {user?.login}</h2>
       <form
         className={s.form}
         onSubmit={handleSubmit((formData) => {

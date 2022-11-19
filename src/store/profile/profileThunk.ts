@@ -32,8 +32,6 @@ export const deleteUser = createAsyncThunk<ResCreateUser, ITokenAndId, { rejectV
 export const updateUser = createAsyncThunk<ResCreateUser, IUpdateUser, { rejectValue: MyKnownError }>(
   'profile/updateUser',
   async (data, { rejectWithValue }) => {
-    console.log('data', data);
-
     const { formData, id, token } = data
     const response = await fetch(`${BASE_URL}/users/${id}`, {
       method: 'PUT',
@@ -48,8 +46,8 @@ export const updateUser = createAsyncThunk<ResCreateUser, IUpdateUser, { rejectV
     if (!response.ok) {
       return rejectWithValue((await response.json()) as MyKnownError)
     }
-    const user: ResCreateUser = await response.json()
+    const updatedUserData: ResCreateUser = await response.json()
 
-    return user
+    return updatedUserData
   }
 )

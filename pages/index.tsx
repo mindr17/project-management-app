@@ -39,6 +39,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <header>
+        <Link href={"profile"}> go to profile</Link>
         <button onClick={onLogout}>Logout</button>
         <Link href={"signin"}> go to login</Link>
       </header>

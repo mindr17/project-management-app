@@ -1,17 +1,21 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice} from '@reduxjs/toolkit';
 import { ResponsesAuth } from '../sliceAuth';
 import { deleteUser, updateUser } from './profileThunk';
 
 interface IinitialState {
-  user: ResponsesAuth,
+  updatedUserData: ResponsesAuth | null,
   isDelete: boolean;
   isLoading: boolean;
+  isError: boolean,
+  message: string;
 }
 
 const initialState = {
-  user: {},
+  updatedUserData: null,
   isDelete: false,
   isLoading: false,
+  isError: false,
+  message: '',
 } as IinitialState
 
 const profileSlice = createSlice({
@@ -21,6 +25,11 @@ const profileSlice = createSlice({
   reducers: {
     setIsDelete(state) {
       state.isDelete = false
+    },
+    resetUpdateData(state) {
+      state.updatedUserData = null
+      state.isError = false
+      state.message = '';
     }
   },
   extraReducers: (builder) => {
@@ -31,17 +40,29 @@ const profileSlice = createSlice({
       .addCase(deleteUser.fulfilled, (state) => {
         state.isLoading = false;
         state.isDelete = true
-        console.log('User Delete');
         state = initialState
       })
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true
+      })
       .addCase(updateUser.fulfilled, (state, action) => {
-        state.user = action.payload
+        state.isLoading = false
+        state.updatedUserData = action.payload
         localStorage.setItem("user", JSON.stringify(action.payload));
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        if (action.payload) {
+          state.message = action.payload.message
+        } else {
+          state.message = 'Error Server.'
+        }
       })
   },
 });
 
-export const { setIsDelete } = profileSlice.actions;
+export const { setIsDelete, resetUpdateData } = profileSlice.actions;
 
 export default profileSlice.reducer;
 

@@ -1,29 +1,11 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { Header } from "../src/components/Header/Header";
-import { useAppDispatch, useAppSelector } from "../src/hooks/hooks";
-import { ResponsesAuth, setToken, setUser } from "../src/store/auth/sliceAuth";
-
+import { useAppSelector } from "../src/hooks/hooks";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
-  const dispatch = useAppDispatch();
-  const router = useRouter();
   const { user } = useAppSelector((state) => state.auth);
-
-  useEffect(() => {
-    const lsUser =
-      localStorage.getItem("user") &&
-      (JSON.parse(localStorage.getItem("user") || "") as ResponsesAuth | null);
-    lsUser && dispatch(setUser(lsUser));
-
-    const lsToken =
-      localStorage.getItem("token") &&
-      (JSON.parse(localStorage.getItem("token") || "") as string | null);
-    lsToken && dispatch(setToken(lsToken));
-  }, []); // Нужно добавить в каждую новую страницу
 
   return (
     <div className={styles.container}>

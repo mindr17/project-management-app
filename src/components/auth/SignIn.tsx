@@ -23,7 +23,7 @@ interface IParseToken {
 
 export default function SignIn() {
   const dispatch = useAppDispatch();
-  const { isError, isLoading, isSuccess, message, token } = useAppSelector((state) => state.auth);
+  const { isError, isLoading, message, token, user } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   const {
@@ -37,24 +37,22 @@ export default function SignIn() {
     const lsToken =
       localStorage.getItem('token') &&
       (JSON.parse(localStorage.getItem('token') || '') as string | null);
-    lsToken && dispatch(setToken(lsToken));
-  }, []);
+    if (lsToken && !token) {
+      dispatch(setToken(lsToken));
+    }
+  }, []); // при появлении хедара -> перенести в хедер
 
   useEffect(() => {
     if (isError) {
       toast.error(message);
+      dispatch(callReset());
     }
-    if (isSuccess || token) {
+
+    if (user && token) {
+      dispatch(callReset());
       router.push('/');
     }
-
-    dispatch(callReset());
-  }, [token, isError, isSuccess, message, router, dispatch]);
-
-  const onSubmit = (formData: IFormSignIn) => {
-    dispatch(login(formData));
-    reset();
-  };
+  }, [token, isError, user]);
 
   useEffect(() => {
     if (token) {
@@ -63,6 +61,11 @@ export default function SignIn() {
       dispatch(getUserById(idAndToken));
     }
   }, [token]);
+
+  const onSubmit = (formData: IFormSignIn) => {
+    dispatch(login(formData));
+    reset();
+  };
 
   if (isLoading) {
     return <Preloader />;

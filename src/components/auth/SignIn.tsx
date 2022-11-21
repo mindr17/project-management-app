@@ -35,26 +35,23 @@ export default function SignIn() {
 
   useEffect(() => {
     const lsToken =
-      localStorage.getItem('token') &&
-      (JSON.parse(localStorage.getItem('token') || '') as string | null);
-    lsToken && dispatch(setToken(lsToken));
-  }, []);
-
+      localStorage.getItem("token") &&
+      (JSON.parse(localStorage.getItem("token") || "") as string | null);
+    if (lsToken && !token) {
+      dispatch(setToken(lsToken));
+    }
+  }, []); // при появлении хедара -> перенести в хедер
   useEffect(() => {
     if (isError) {
       toast.error(message);
+      dispatch(callReset());
     }
-    if (isSuccess || token) {
-      router.push('/');
+    if (user && token) {
+      dispatch(callReset());
+      router.push("/");
+
     }
-
-    dispatch(callReset());
-  }, [token, isError, isSuccess, message, router, dispatch]);
-
-  const onSubmit = (formData: IFormSignIn) => {
-    dispatch(login(formData));
-    reset();
-  };
+  }, [token, isError, user]);
 
   useEffect(() => {
     if (token) {
@@ -63,6 +60,11 @@ export default function SignIn() {
       dispatch(getUserById(idAndToken));
     }
   }, [token]);
+
+  const onSubmit = (formData: IFormSignIn) => {
+    dispatch(login(formData));
+    reset();
+  };
 
   if (isLoading) {
     return <Preloader />;
@@ -77,7 +79,7 @@ export default function SignIn() {
         })}
       >
         <section>
-          <label className={s.label} htmlFor='login'>
+          <label className={s.label} htmlFor="login">
             Login
           </label>
           <input
@@ -92,10 +94,12 @@ export default function SignIn() {
               },
             })}
           />
-          <div className={s.errorForm}>{errors.login?.message ? errors.login?.message : ''}</div>
+          <div className={s.errorForm}>
+            {errors.login?.message ? errors.login?.message : ""}
+          </div>
         </section>
         <section>
-          <label className={s.label} htmlFor='password'>
+          <label className={s.label} htmlFor="password">
             Password
           </label>
           <input
@@ -114,8 +118,12 @@ export default function SignIn() {
         </section>
         <button className={s.btn}>Sign in</button>
       </form>
-      <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
-      <Link className={s.signUpLink} href={'/signup'}>
+      <ToastContainer
+        position="top-center"
+        autoClose={false}
+        style={{ fontSize: "2rem" }}
+      />
+      <Link className={s.signUpLink} href={"/signup"}>
         <strong>Create an account</strong>
       </Link>
     </>

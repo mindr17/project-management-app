@@ -1,14 +1,19 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE_URL } from '../../config';
 
-
-type ResCreateUser = {
+interface IUpdateUser {
+  token: string;
   id: string;
+  formData: FormData;
+}
+
+export type ResCreateUser = {
+  _id: string;
   name: string;
   login: string;
 }
 
-type FormData = {
+export type FormData = {
   name: string;
   login: string;
   password: string;
@@ -19,12 +24,12 @@ type CreateToken = {
   password: string;
 }
 
-interface MyKnownError {
+export interface MyKnownError {
   message: string;
   statusCode: number;
 }
 
-interface ITokenAndId {
+export interface ITokenAndId {
   token: string;
   id: string;
 }
@@ -42,7 +47,6 @@ export const registerUser = createAsyncThunk<ResCreateUser, FormData, { rejectVa
       return rejectWithValue((await response.json()) as MyKnownError)
     }
     const user: ResCreateUser = await response.json()
-    localStorage.setItem("user", JSON.stringify(user));
 
     return user
   }
@@ -60,7 +64,6 @@ export const login = createAsyncThunk<string, CreateToken, { rejectValue: MyKnow
       return rejectWithValue((await response.json()) as MyKnownError)
     }
     const res = await response.json() as { token: string }
-    localStorage.setItem("token", JSON.stringify(res.token));
     return res.token;
   }
 )
@@ -80,8 +83,49 @@ export const getUserById = createAsyncThunk<ResCreateUser, ITokenAndId, { reject
       return rejectWithValue((await response.json()) as MyKnownError)
     }
     const user: ResCreateUser = await response.json()
-    localStorage.setItem("user", JSON.stringify(user));
     return (user)
+  }
+)
+
+export const deleteUser = createAsyncThunk<ResCreateUser, ITokenAndId, { rejectValue: MyKnownError }>(
+  'profile/deleteUser',
+  async (tokenAndId, { rejectWithValue }) => {
+    const response = await fetch(`${BASE_URL}/users/${tokenAndId.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${tokenAndId.token}`
+      },
+    })
+
+    if (!response.ok) {
+      return rejectWithValue((await response.json()) as MyKnownError)
+    }
+    const user: ResCreateUser = await response.json()
+
+    return user
+  }
+)
+
+export const updateUser = createAsyncThunk<ResCreateUser, IUpdateUser, { rejectValue: MyKnownError }>(
+  'profile/updateUser',
+  async (data, { rejectWithValue }) => {
+    const { formData, id, token } = data
+    const response = await fetch(`${BASE_URL}/users/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(formData),
+    })
+
+    if (!response.ok) {
+      return rejectWithValue((await response.json()) as MyKnownError)
+    }
+    const updatedUserData: ResCreateUser = await response.json()
+
+    return updatedUserData
   }
 )
 

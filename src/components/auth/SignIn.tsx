@@ -1,15 +1,15 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { useForm } from "react-hook-form";
-import { getUserById, login } from "../../store/auth/authThunk";
-import { callReset, setToken } from "../../store/auth/sliceAuth";
-import { useEffect } from "react";
-import Preloader from "../Preloader/Preloader";
-import s from "./auth.module.scss";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { parseJwt } from "../utilities/parseJwt";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { useForm } from 'react-hook-form';
+import { getUserById, login } from '../../store/auth/authThunk';
+import { callReset, setToken } from '../../store/auth/sliceAuth';
+import { useEffect } from 'react';
+import Preloader from '../Preloader/Preloader';
+import s from './auth.module.scss';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { parseJwt } from '../utilities/parseJwt';
 
 interface IFormSignIn {
   login: string;
@@ -23,9 +23,7 @@ interface IParseToken {
 
 export default function SignIn() {
   const dispatch = useAppDispatch();
-  const { isError, isLoading, message, token, user } = useAppSelector(
-    (state) => state.auth
-  );
+  const { isError, isLoading, isSuccess, message, token } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   const {
@@ -43,16 +41,15 @@ export default function SignIn() {
       dispatch(setToken(lsToken));
     }
   }, []); // при появлении хедара -> перенести в хедер
-
   useEffect(() => {
     if (isError) {
       toast.error(message);
       dispatch(callReset());
     }
-
     if (user && token) {
       dispatch(callReset());
       router.push("/");
+
     }
   }, [token, isError, user]);
 
@@ -86,14 +83,14 @@ export default function SignIn() {
             Login
           </label>
           <input
-            id="login"
-            type="text"
+            id='login'
+            type='text'
             className={s.input}
-            {...register("login", {
-              required: "Please enter login",
+            {...register('login', {
+              required: 'Please enter login',
               minLength: {
                 value: 3,
-                message: "login must contain more than 3 letters",
+                message: 'login must contain more than 3 letters',
               },
             })}
           />
@@ -106,14 +103,14 @@ export default function SignIn() {
             Password
           </label>
           <input
-            id="password"
-            type="password"
+            id='password'
+            type='password'
             className={s.input}
-            {...register("password", {
-              required: "Please enter password",
+            {...register('password', {
+              required: 'Please enter password',
               minLength: {
                 value: 5,
-                message: "password must contain more than 5 characters",
+                message: 'password must contain more than 5 characters',
               },
             })}
           />

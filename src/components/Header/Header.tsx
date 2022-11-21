@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { callReset, ResponsesAuth, setToken, setUser } from '../../store/auth/sliceAuth';
@@ -9,7 +8,6 @@ import s from './header.module.scss';
 export const Header = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const router = useRouter();
 
   const onLogout = () => {
     dispatch(logout());
@@ -38,7 +36,7 @@ export const Header = () => {
       {user ? (
         <>
           <Link className={s.navLink} href={'/'}>
-          Go to Main Page
+            Go to Main Page
           </Link>
           <Link onClick={onLogout} className={s.navLink} href={'/signin'}>
             Logout

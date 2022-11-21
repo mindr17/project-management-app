@@ -5,7 +5,12 @@ import s from "./auth.module.scss";
 import { useRouter } from "next/router";
 import { login, registerUser } from "../../store/auth/authThunk";
 import { useEffect, useState } from "react";
-import { callReset, ResponsesAuth, setUser } from "../../store/auth/sliceAuth";
+import {
+  callReset,
+  ResponsesAuth,
+  setToken,
+  setUser,
+} from "../../store/auth/sliceAuth";
 import Preloader from "../Preloader/Preloader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,12 +23,11 @@ interface IFormSignUp {
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
-  const { isError, isLoading, isSuccess, message, user } = useAppSelector(
-    (state) => state.auth
-  );
+  const { isError, isLoading, isSuccess, message, user, token } =
+    useAppSelector((state) => state.auth);
   const router = useRouter();
-
-  const [loginAndPass, setLoginAndPass] = useState({ login: "", password: "" });
+  const defaultFile = { login: "", password: "" };
+  const [loginAndPass, setLoginAndPass] = useState(defaultFile);
 
   const {
     register,
@@ -36,21 +40,36 @@ export default function SignUp() {
     const lsUser =
       localStorage.getItem("user") &&
       (JSON.parse(localStorage.getItem("user") || "") as ResponsesAuth | null);
-    lsUser && dispatch(setUser(lsUser));
+    if (lsUser && !user) {
+      dispatch(setUser(lsUser));
+    }
+
+    const lsToken =
+      localStorage.getItem("token") &&
+      (JSON.parse(localStorage.getItem("token") || "") as string | null);
+    if (lsToken && !token) {
+      dispatch(setToken(lsToken));
+    }
   }, []);
 
   useEffect(() => {
     if (isError) {
       toast.error(message);
+      dispatch(callReset());
     }
-    if (isSuccess || user) {
-      dispatch(login(loginAndPass));
-      setLoginAndPass({ login: "", password: "" });
+
+    if (isSuccess) {
+      dispatch(callReset());
+      if (!token) {
+        dispatch(login(loginAndPass));
+      }
+    }
+
+    if (user && token) {
       router.push("/");
     }
-    setLoginAndPass({ login: "", password: "" });
-    dispatch(callReset());
-  }, [user, isError, isSuccess, message, router, dispatch]);
+    setLoginAndPass(defaultFile);
+  }, [token, isError, user]);
 
   const onSubmit = (formData: IFormSignUp) => {
     const { login, password } = formData;
@@ -131,7 +150,11 @@ export default function SignUp() {
         </section>
         <button className={s.btn}>Register</button>
       </form>
-      <ToastContainer autoClose={false} />
+      <ToastContainer
+        position="top-center"
+        autoClose={false}
+        style={{ fontSize: "2rem" }}
+      />
       <p className={s.signUpLink}>
         Already have an account?{" "}
         <strong>

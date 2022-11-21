@@ -1,60 +1,81 @@
-import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { useForm } from 'react-hook-form';
 import s from './auth.module.scss';
 import { useRouter } from 'next/router';
-import { login, registerUser } from '../../store/auth/authThunk';
-import { useEffect, useState } from 'react';
-import { callReset, ResponsesAuth, setUser } from '../../store/auth/sliceAuth';
+import { useEffect } from 'react';
 import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { deleteUser, updateUser } from '../../store/profile/profileThunk';
+import { resetUpdateData, setIsDelete } from '../../store/profile/profileSlice';
+import { logout } from '../../store/auth/authThunk';
+import { callReset, setUser } from '../../store/auth/sliceAuth';
 
-interface IFormSignUp {
+export interface IFormSignUp {
   name: string;
   login: string;
   password: string;
 }
 
-export default function SignUp() {
+export default function UserProfile() {
   const dispatch = useAppDispatch();
-  const { isError, isLoading, isSuccess, message, user } = useAppSelector((state) => state.auth);
-  const router = useRouter();
+  const { isSuccess, user, token } = useAppSelector((state) => state.auth);
 
-  const [loginAndPass, setLoginAndPass] = useState({ login: '', password: '' });
+  const { message, isError, isDelete, isLoading, updatedUserData } = useAppSelector(
+    (state) => state.profile
+  );
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
-    reset,
+    resetField,
     formState: { errors },
-  } = useForm<IFormSignUp>();
+  } = useForm<IFormSignUp>({
+    defaultValues: {
+      name: user?.name || '',
+      login: user?.login || '',
+    },
+  });
 
   useEffect(() => {
-    const lsUser =
-      localStorage.getItem('user') &&
-      (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
-    lsUser && dispatch(setUser(lsUser));
+    if (!user) {
+      router.push('/');
+    }
   }, []);
+
+  useEffect(() => {
+    if (isDelete) {
+      toast.success('Profile Deleted!');
+      dispatch(logout());
+      dispatch(setIsDelete());
+      router.push('/');
+    }
+  }, [isDelete]);
+
+  useEffect(() => {
+    if (updatedUserData) {
+      dispatch(setUser(updatedUserData));
+      toast.success('Profile changed!');
+      dispatch(resetUpdateData());
+      resetField('password');
+    }
+  }, [updatedUserData]);
 
   useEffect(() => {
     if (isError) {
       toast.error(message);
     }
-    if (isSuccess || user) {
-      dispatch(login(loginAndPass));
-      setLoginAndPass({ login: '', password: '' });
-      router.push('/');
-    }
-    setLoginAndPass({ login: '', password: '' });
     dispatch(callReset());
+    dispatch(resetUpdateData());
   }, [user, isError, isSuccess, message, router, dispatch]);
 
   const onSubmit = (formData: IFormSignUp) => {
-    const { login, password } = formData;
-    setLoginAndPass({ login, password });
-    dispatch(registerUser(formData));
-    reset();
+    user && dispatch(updateUser({ formData, token, id: user._id }));
+  };
+
+  const hendleDelete = () => {
+    user && dispatch(deleteUser({ id: user._id, token }));
   };
 
   if (isLoading) {
@@ -63,6 +84,8 @@ export default function SignUp() {
 
   return (
     <>
+      <h1>Name: {user?.name}</h1>
+      <h2>Login: {user?.login}</h2>
       <form
         className={s.form}
         onSubmit={handleSubmit((formData) => {
@@ -127,15 +150,12 @@ export default function SignUp() {
           />
           <div className={s.errorForm}>{errors.password?.message}</div>
         </section>
-        <button className={s.btn}>Register</button>
+        <button className={s.btn}>Change</button>
       </form>
+      <button onClick={hendleDelete} className={s.btn} style={{ background: 'red' }}>
+        Delete
+      </button>
       <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
-      <p className={s.signUpLink}>
-        Already have an account?{' '}
-        <strong>
-          <Link href={'/signin'}>Sign in</Link>
-        </strong>
-      </p>
     </>
   );
 }

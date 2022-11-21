@@ -11,19 +11,24 @@ import styles from '../styles/Home.module.css';
 export default function Home() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, token } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     const lsUser =
       localStorage.getItem('user') &&
       (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
-    lsUser && dispatch(setUser(lsUser));
 
+    if (lsUser && !user) {
+      dispatch(setUser(lsUser));
+    }
     const lsToken =
       localStorage.getItem('token') &&
       (JSON.parse(localStorage.getItem('token') || '') as string | null);
-    lsToken && dispatch(setToken(lsToken));
-  }, []); // Нужно добавить в каждую новую страницу
+
+    if (lsToken && !token) {
+      dispatch(setToken(lsToken));
+    }
+  }, []); // при появлении хедара -> перенести в хедер
 
   const onLogout = () => {
     dispatch(logout());

@@ -1,6 +1,4 @@
-import Link from 'next/link';
 import s from './footer.module.scss';
-
 
 export const Footer = () => {
   return (
@@ -23,7 +21,7 @@ export const Footer = () => {
         </section>
       </section>
       <section className={s.courseLogoSection}>
-        <a href="https://rs.school/" ><img className={s.rssLogo} src="/rss-logo.png" alt="rs-school"></img></a>
+        <a href="https://rs.school/react/" ><img className={s.rssLogo} src="/rss-logo.png" alt="rs-school"></img></a>
       </section>
     </footer>
   );

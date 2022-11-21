@@ -1,13 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE_URL } from '../../config';
 
+
 type ResCreateUser = {
   id: string;
   name: string;
   login: string;
 };
 
-type FormData = {
+export type FormData = {
   name: string;
   login: string;
   password: string;
@@ -18,12 +19,12 @@ type CreateToken = {
   password: string;
 };
 
-interface MyKnownError {
+export interface MyKnownError {
   message: string;
   statusCode: number;
 }
 
-interface ITokenAndId {
+export interface ITokenAndId {
   token: string;
   id: string;
 }

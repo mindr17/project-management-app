@@ -1,77 +1,81 @@
-import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { useForm } from 'react-hook-form';
 import s from './auth.module.scss';
 import { useRouter } from 'next/router';
-import { login, registerUser } from '../../store/auth/authThunk';
-import { useEffect, useState } from 'react';
-import { callReset, ResponsesAuth, setToken, setUser } from '../../store/auth/sliceAuth';
+import { useEffect } from 'react';
 import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-interface IFormSignUp {
+import { deleteUser, updateUser } from '../../store/profile/profileThunk';
+import { resetUpdateData, setIsDelete } from '../../store/profile/profileSlice';
+import { logout } from '../../store/auth/authThunk';
+import { callReset, setUser } from '../../store/auth/sliceAuth';
+
+export interface IFormSignUp {
   name: string;
   login: string;
   password: string;
 }
 
-export default function SignUp() {
+export default function UserProfile() {
   const dispatch = useAppDispatch();
-  const { isError, isLoading, isSuccess, message, user, token } = useAppSelector(
-    (state) => state.auth
+  const { isSuccess, user, token } = useAppSelector((state) => state.auth);
+
+  const { message, isError, isDelete, isLoading, updatedUserData } = useAppSelector(
+    (state) => state.profile
   );
   const router = useRouter();
-  const defaultFile = { login: '', password: '' };
-  const [loginAndPass, setLoginAndPass] = useState(defaultFile);
+
   const {
     register,
     handleSubmit,
-    reset,
+    resetField,
     formState: { errors },
-  } = useForm<IFormSignUp>();
+  } = useForm<IFormSignUp>({
+    defaultValues: {
+      name: user?.name || '',
+      login: user?.login || '',
+    },
+  });
 
   useEffect(() => {
-    const lsUser =
-      localStorage.getItem('user') &&
-      (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
-    if (lsUser && !user) {
-      dispatch(setUser(lsUser));
-    }
-
-    const lsToken =
-      localStorage.getItem('token') &&
-      (JSON.parse(localStorage.getItem('token') || '') as string | null);
-    if (lsToken && !token) {
-      dispatch(setToken(lsToken));
+    if (!user) {
+      router.push('/');
     }
   }, []);
 
   useEffect(() => {
-    if (isError) {
-      toast.error(message);
-      dispatch(callReset());
-    }
-
-    if (isSuccess) {
-      dispatch(callReset());
-
-      if (!token) {
-        dispatch(login(loginAndPass));
-      }
-    }
-
-    if (user && token) {
+    if (isDelete) {
+      toast.success('Profile Deleted!');
+      dispatch(logout());
+      dispatch(setIsDelete());
       router.push('/');
     }
+  }, [isDelete]);
 
-    setLoginAndPass(defaultFile);
-  }, [token, isError, user]);
+  useEffect(() => {
+    if (updatedUserData) {
+      dispatch(setUser(updatedUserData));
+      toast.success('Profile changed!');
+      dispatch(resetUpdateData());
+      resetField('password');
+    }
+  }, [updatedUserData]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+    dispatch(callReset());
+    dispatch(resetUpdateData());
+  }, [user, isError, isSuccess, message, router, dispatch]);
 
   const onSubmit = (formData: IFormSignUp) => {
-    const { login, password } = formData;
-    setLoginAndPass({ login, password });
-    dispatch(registerUser(formData));
-    reset();
+    user && dispatch(updateUser({ formData, token, id: user._id }));
+  };
+
+  const hendleDelete = () => {
+    user && dispatch(deleteUser({ id: user._id, token }));
   };
 
   if (isLoading) {
@@ -80,6 +84,8 @@ export default function SignUp() {
 
   return (
     <>
+      <h1>Name: {user?.name}</h1>
+      <h2>Login: {user?.login}</h2>
       <form
         className={s.form}
         onSubmit={handleSubmit((formData) => {
@@ -144,15 +150,12 @@ export default function SignUp() {
           />
           <div className={s.errorForm}>{errors.password?.message}</div>
         </section>
-        <button className={s.btn}>Register</button>
+        <button className={s.btn}>Change</button>
       </form>
+      <button onClick={hendleDelete} className={s.btn} style={{ background: 'red' }}>
+        Delete
+      </button>
       <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
-      <p className={s.signUpLink}>
-        Already have an account?{' '}
-        <strong>
-          <Link href={'/signin'}>Sign in</Link>
-        </strong>
-      </p>
     </>
   );
 }

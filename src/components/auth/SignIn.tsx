@@ -23,7 +23,7 @@ interface IParseToken {
 
 export default function SignIn() {
   const dispatch = useAppDispatch();
-  const { isError, isLoading, isSuccess, message, token } = useAppSelector((state) => state.auth);
+  const { isError, isLoading, user, message, token } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   const {
@@ -37,31 +37,33 @@ export default function SignIn() {
     const lsToken =
       localStorage.getItem('token') &&
       (JSON.parse(localStorage.getItem('token') || '') as string | null);
-    lsToken && dispatch(setToken(lsToken));
-  }, []);
-
+    if (lsToken && !token) {
+      dispatch(setToken(lsToken));
+    }
+  }, []); // при появлении хедара -> перенести в хедер
   useEffect(() => {
     if (isError) {
       toast.error(message);
+      dispatch(callReset());
     }
-    if (isSuccess || token) {
+    if (user && token) {
+      dispatch(callReset());
       router.push('/');
     }
+  }, [token, isError, user]);
+
+  useEffect(() => {
     if (token) {
       const parseToken: IParseToken = parseJwt(token);
       const idAndToken = { id: parseToken.id, token: token };
       dispatch(getUserById(idAndToken));
     }
-
-    dispatch(callReset());
-  }, [token, isError, isSuccess, message, router, dispatch]);
+  }, [token]);
 
   const onSubmit = (formData: IFormSignIn) => {
     dispatch(login(formData));
     reset();
   };
-
-  useEffect(() => {}, [token]);
 
   if (isLoading) {
     return <Preloader />;
@@ -113,7 +115,7 @@ export default function SignIn() {
         </section>
         <button className={s.btn}>Sign in</button>
       </form>
-      <ToastContainer autoClose={false} />
+      <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
       <Link className={s.signUpLink} href={'/signup'}>
         <strong>Create an account</strong>
       </Link>

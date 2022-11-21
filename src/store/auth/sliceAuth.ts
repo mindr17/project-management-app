@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getUserById, login, logout, registerUser } from './authThunk';
 
 export type ResponsesAuth = {
-  id: string;
+  _id: string;
   name: string;
   login: string;
 };

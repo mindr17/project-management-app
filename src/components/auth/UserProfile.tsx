@@ -6,10 +6,14 @@ import { useEffect } from 'react';
 import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { deleteUser, updateUser } from '../../store/profile/profileThunk';
-import { resetUpdateData, setIsDelete } from '../../store/profile/profileSlice';
-import { logout } from '../../store/auth/authThunk';
-import { callReset, setUser } from '../../store/auth/sliceAuth';
+import { deleteUser, logout, updateUser } from '../../store/auth/authThunk';
+import {
+  callReset,
+  ResponsesAuth,
+  setIsDelete,
+  setToken,
+  setUser,
+} from '../../store/auth/sliceAuth';
 
 export interface IFormSignUp {
   name: string;
@@ -19,11 +23,10 @@ export interface IFormSignUp {
 
 export default function UserProfile() {
   const dispatch = useAppDispatch();
-  const { isSuccess, user, token } = useAppSelector((state) => state.auth);
-
-  const { message, isError, isDelete, isLoading, updatedUserData } = useAppSelector(
-    (state) => state.profile
+  const { isSuccess, user, token, message, isError, isDelete, isLoading } = useAppSelector(
+    (state) => state.auth
   );
+
   const router = useRouter();
 
   const {
@@ -39,6 +42,23 @@ export default function UserProfile() {
   });
 
   useEffect(() => {
+    const lsUser =
+      localStorage.getItem('user') &&
+      (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
+
+    if (lsUser && !user) {
+      dispatch(setUser(lsUser));
+    }
+    const lsToken =
+      localStorage.getItem('token') &&
+      (JSON.parse(localStorage.getItem('token') || '') as string | null);
+
+    if (lsToken && !token) {
+      dispatch(setToken(lsToken));
+    }
+  }, []); // при появлении хедара -> перенести в хедер
+
+  useEffect(() => {
     if (!user) {
       router.push('/');
     }
@@ -46,29 +66,24 @@ export default function UserProfile() {
 
   useEffect(() => {
     if (isDelete) {
+      dispatch(callReset());
       toast.success('Profile Deleted!');
       dispatch(logout());
       dispatch(setIsDelete());
       router.push('/');
     }
-  }, [isDelete]);
 
-  useEffect(() => {
-    if (updatedUserData) {
-      dispatch(setUser(updatedUserData));
+    if (isSuccess) {
+      dispatch(callReset());
       toast.success('Profile changed!');
-      dispatch(resetUpdateData());
       resetField('password');
     }
-  }, [updatedUserData]);
 
-  useEffect(() => {
     if (isError) {
       toast.error(message);
+      dispatch(callReset());
     }
-    dispatch(callReset());
-    dispatch(resetUpdateData());
-  }, [user, isError, isSuccess, message, router, dispatch]);
+  }, [isDelete, isSuccess, isError]);
 
   const onSubmit = (formData: IFormSignUp) => {
     user && dispatch(updateUser({ formData, token, id: user._id }));

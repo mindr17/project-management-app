@@ -14,8 +14,10 @@ body {
 }
 
 #__next {
-  width: 100%;
+  position: relative;
+  max-width: 144rem;
   height: 100%;
+  margin: 0 auto;
 }
 
 a {

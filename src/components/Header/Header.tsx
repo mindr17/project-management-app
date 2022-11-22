@@ -7,7 +7,7 @@ import s from './header.module.scss';
 
 export const Header = () => {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, token } = useAppSelector((state) => state.auth);
 
   const onLogout = () => {
     dispatch(logout());
@@ -18,12 +18,17 @@ export const Header = () => {
     const lsUser =
       localStorage.getItem('user') &&
       (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
-    lsUser && dispatch(setUser(lsUser));
 
+    if (lsUser && !user) {
+      dispatch(setUser(lsUser));
+    }
     const lsToken =
       localStorage.getItem('token') &&
       (JSON.parse(localStorage.getItem('token') || '') as string | null);
-    lsToken && dispatch(setToken(lsToken));
+
+    if (lsToken && !token) {
+      dispatch(setToken(lsToken));
+    }
   }, []);
 
   return (

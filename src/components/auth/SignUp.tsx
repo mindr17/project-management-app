@@ -9,12 +9,13 @@ import { callReset } from '../../store/auth/sliceAuth';
 import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { IFormData } from './interfaceAuth';
 
-interface IFormSignUp {
-  name: string;
-  login: string;
-  password: string;
-}
+// interface IFormSignUp {
+//   name: string;
+//   login: string;
+//   password: string;
+// }
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
@@ -30,7 +31,7 @@ export default function SignUp() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<IFormSignUp>();
+  } = useForm<IFormData>();
 
   useEffect(() => {
     if (isError) {
@@ -52,7 +53,7 @@ export default function SignUp() {
     setLoginAndPass(defaultFile);
   }, [token, isError, user]);
 
-  const onSubmit = (formData: IFormSignUp) => {
+  const onSubmit = (formData: IFormData) => {
     const { login, password } = formData;
     setLoginAndPass({ login, password });
     dispatch(registerUser(formData));

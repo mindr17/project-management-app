@@ -1,43 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE_URL } from '../../config';
-
-interface IUpdateUser {
-  token: string;
-  id: string;
-  formData: FormData;
-}
-
-type ResCreateUser = {
-  id: string;
-  name: string;
-  login: string;
-};
-
-export type FormData = {
-  name: string;
-  login: string;
-  password: string;
-};
-
-type CreateToken = {
-  login: string;
-  password: string;
-};
-
-export interface MyKnownError {
-  message: string;
-  statusCode: number;
-}
-
-export interface ITokenAndId {
-  token: string;
-  id: string;
-}
+import {
+  ICreateToken,
+  IFormData,
+  IKnownError,
+  IResponseUser,
+  ITokenAndId,
+  IUpdateUser,
+} from './interfaceAuthStore';
 
 export const registerUser = createAsyncThunk<
-  ResCreateUser,
-  FormData,
-  { rejectValue: MyKnownError }
+  IResponseUser,
+  IFormData,
+  { rejectValue: IKnownError }
 >('auth/registerUser', async (dataForm, { rejectWithValue }) => {
   const response = await fetch(`${BASE_URL}/auth/signup`, {
     method: 'POST',
@@ -46,14 +21,14 @@ export const registerUser = createAsyncThunk<
   });
 
   if (!response.ok) {
-    return rejectWithValue((await response.json()) as MyKnownError);
+    return rejectWithValue((await response.json()) as IKnownError);
   }
-  const user: ResCreateUser = await response.json();
+  const user: IResponseUser = await response.json();
 
   return user;
 });
 
-export const login = createAsyncThunk<string, CreateToken, { rejectValue: MyKnownError }>(
+export const login = createAsyncThunk<string, ICreateToken, { rejectValue: IKnownError }>(
   'auth/login',
   async (formData, { rejectWithValue }) => {
     const response = await fetch(`${BASE_URL}/auth/signin`, {
@@ -63,7 +38,7 @@ export const login = createAsyncThunk<string, CreateToken, { rejectValue: MyKnow
     });
 
     if (!response.ok) {
-      return rejectWithValue((await response.json()) as MyKnownError);
+      return rejectWithValue((await response.json()) as IKnownError);
     }
     const res = (await response.json()) as { token: string };
 
@@ -72,9 +47,9 @@ export const login = createAsyncThunk<string, CreateToken, { rejectValue: MyKnow
 );
 
 export const getUserById = createAsyncThunk<
-  ResCreateUser,
+  IResponseUser,
   ITokenAndId,
-  { rejectValue: MyKnownError }
+  { rejectValue: IKnownError }
 >('auth/getUserById', async (tokenAndId, { rejectWithValue }) => {
   const response = await fetch(`${BASE_URL}/users/${tokenAndId.id}`, {
     method: 'GET',
@@ -85,17 +60,17 @@ export const getUserById = createAsyncThunk<
   });
 
   if (!response.ok) {
-    return rejectWithValue((await response.json()) as MyKnownError);
+    return rejectWithValue((await response.json()) as IKnownError);
   }
-  const user: ResCreateUser = await response.json();
+  const user: IResponseUser = await response.json();
 
   return user;
 });
 
 export const deleteUser = createAsyncThunk<
-  ResCreateUser,
+  IResponseUser,
   ITokenAndId,
-  { rejectValue: MyKnownError }
+  { rejectValue: IKnownError }
 >('profile/deleteUser', async (tokenAndId, { rejectWithValue }) => {
   const response = await fetch(`${BASE_URL}/users/${tokenAndId.id}`, {
     method: 'DELETE',
@@ -106,17 +81,17 @@ export const deleteUser = createAsyncThunk<
   });
 
   if (!response.ok) {
-    return rejectWithValue((await response.json()) as MyKnownError);
+    return rejectWithValue((await response.json()) as IKnownError);
   }
-  const user: ResCreateUser = await response.json();
+  const user: IResponseUser = await response.json();
 
   return user;
 });
 
 export const updateUser = createAsyncThunk<
-  ResCreateUser,
+  IResponseUser,
   IUpdateUser,
-  { rejectValue: MyKnownError }
+  { rejectValue: IKnownError }
 >('profile/updateUser', async (data, { rejectWithValue }) => {
   const { formData, id, token } = data;
   const response = await fetch(`${BASE_URL}/users/${id}`, {
@@ -129,9 +104,9 @@ export const updateUser = createAsyncThunk<
   });
 
   if (!response.ok) {
-    return rejectWithValue((await response.json()) as MyKnownError);
+    return rejectWithValue((await response.json()) as IKnownError);
   }
-  const updatedUserData: ResCreateUser = await response.json();
+  const updatedUserData: IResponseUser = await response.json();
 
   return updatedUserData;
 });

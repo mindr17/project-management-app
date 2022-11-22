@@ -1,22 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deleteUser, getUserById, login, logout, registerUser, updateUser } from './authThunk';
+import { IinitialStateAuth, IResponseUser } from './interfaceAuthStore';
 
-export type ResponsesAuth = {
-  _id: string;
-  name: string;
-  login: string;
-};
-interface IinitialState {
-  user: ResponsesAuth | null;
-  isError: boolean;
-  isSuccess: boolean;
-  isLoading: boolean;
-  message: string;
-  isDelete: boolean;
-  token: string;
-}
-
-const initialState: IinitialState = {
+const initialState: IinitialStateAuth = {
   user: null,
   isError: false,
   isSuccess: false,
@@ -24,7 +10,7 @@ const initialState: IinitialState = {
   message: '',
   token: '',
   isDelete: false,
-} as IinitialState;
+};
 
 const sliceAuth = createSlice({
   name: 'auth',
@@ -37,7 +23,7 @@ const sliceAuth = createSlice({
       state.isSuccess = false;
       state.message = '';
     },
-    setUser(state, action: PayloadAction<ResponsesAuth>) {
+    setUser(state, action: PayloadAction<IResponseUser>) {
       state.user = action.payload;
     },
     setToken(state, action: PayloadAction<string>) {
@@ -62,6 +48,7 @@ const sliceAuth = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.user = null;
+
         if (action.payload) {
           state.message = action.payload.message;
         } else {
@@ -80,6 +67,7 @@ const sliceAuth = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+
         if (action.payload) {
           state.message = action.payload.message;
         } else {
@@ -120,6 +108,7 @@ const sliceAuth = createSlice({
       .addCase(updateUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+
         if (action.payload) {
           state.message = action.payload.message;
         } else {

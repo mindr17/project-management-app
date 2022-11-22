@@ -23,7 +23,7 @@ interface IParseToken {
 
 export default function SignIn() {
   const dispatch = useAppDispatch();
-  const { isError, isLoading, isSuccess, message, token } = useAppSelector((state) => state.auth);
+  const { isError, isLoading, user, message, token } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   const {
@@ -35,8 +35,9 @@ export default function SignIn() {
 
   useEffect(() => {
     const lsToken =
-      localStorage.getItem("token") &&
-      (JSON.parse(localStorage.getItem("token") || "") as string | null);
+      localStorage.getItem('token') &&
+      (JSON.parse(localStorage.getItem('token') || '') as string | null);
+
     if (lsToken && !token) {
       dispatch(setToken(lsToken));
     }
@@ -46,10 +47,10 @@ export default function SignIn() {
       toast.error(message);
       dispatch(callReset());
     }
+
     if (user && token) {
       dispatch(callReset());
-      router.push("/");
-
+      router.push('/');
     }
   }, [token, isError, user]);
 
@@ -79,7 +80,7 @@ export default function SignIn() {
         })}
       >
         <section>
-          <label className={s.label} htmlFor="login">
+          <label className={s.label} htmlFor='login'>
             Login
           </label>
           <input
@@ -94,12 +95,10 @@ export default function SignIn() {
               },
             })}
           />
-          <div className={s.errorForm}>
-            {errors.login?.message ? errors.login?.message : ""}
-          </div>
+          <div className={s.errorForm}>{errors.login?.message ? errors.login?.message : ''}</div>
         </section>
         <section>
-          <label className={s.label} htmlFor="password">
+          <label className={s.label} htmlFor='password'>
             Password
           </label>
           <input
@@ -118,12 +117,8 @@ export default function SignIn() {
         </section>
         <button className={s.btn}>Sign in</button>
       </form>
-      <ToastContainer
-        position="top-center"
-        autoClose={false}
-        style={{ fontSize: "2rem" }}
-      />
-      <Link className={s.signUpLink} href={"/signup"}>
+      <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
+      <Link className={s.signUpLink} href={'/signup'}>
         <strong>Create an account</strong>
       </Link>
     </>

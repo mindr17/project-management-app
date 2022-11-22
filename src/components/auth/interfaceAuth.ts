@@ -2,6 +2,7 @@ export interface IFormSignIn {
   login: string;
   password: string;
 }
+
 export interface IParseToken {
   id: string;
   iat: number;

@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { callReset, ResponsesAuth, setToken, setUser } from '../../store/auth/sliceAuth';
+import { callReset, setToken, setUser } from '../../store/auth/sliceAuth';
 import { logout } from '../../store/auth/authThunk';
 import s from './header.module.scss';
+import { IUserDataLs } from './interfaceHeader';
 
 export const Header = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +18,7 @@ export const Header = () => {
   useEffect(() => {
     const lsUser =
       localStorage.getItem('user') &&
-      (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
+      (JSON.parse(localStorage.getItem('user') || '') as IUserDataLs | null);
 
     if (lsUser && !user) {
       dispatch(setUser(lsUser));

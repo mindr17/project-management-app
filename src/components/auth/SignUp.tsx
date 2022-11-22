@@ -11,12 +11,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IFormData } from './interfaceAuth';
 
-// interface IFormSignUp {
-//   name: string;
-//   login: string;
-//   password: string;
-// }
-
 export default function SignUp() {
   const dispatch = useAppDispatch();
   const { isError, isLoading, isSuccess, message, user, token } = useAppSelector(

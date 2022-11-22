@@ -4,12 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { callReset, setToken, setUser } from '../../store/auth/sliceAuth';
 import { logout } from '../../store/auth/authThunk';
 import s from './header.module.scss';
-
-export interface IUserDataLs {
-  _id: string;
-  name: string;
-  login: string;
-}
+import { IUserDataLs } from './interfaceHeader';
 
 export const Header = () => {
   const dispatch = useAppDispatch();

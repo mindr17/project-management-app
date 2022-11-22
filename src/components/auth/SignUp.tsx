@@ -5,7 +5,7 @@ import s from './auth.module.scss';
 import { useRouter } from 'next/router';
 import { login, registerUser } from '../../store/auth/authThunk';
 import { useEffect, useState } from 'react';
-import { callReset, ResponsesAuth, setToken, setUser } from '../../store/auth/sliceAuth';
+import { callReset } from '../../store/auth/sliceAuth';
 import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -31,24 +31,6 @@ export default function SignUp() {
     reset,
     formState: { errors },
   } = useForm<IFormSignUp>();
-
-  useEffect(() => {
-    const lsUser =
-      localStorage.getItem('user') &&
-      (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
-
-    if (lsUser && !user) {
-      dispatch(setUser(lsUser));
-    }
-
-    const lsToken =
-      localStorage.getItem('token') &&
-      (JSON.parse(localStorage.getItem('token') || '') as string | null);
-
-    if (lsToken && !token) {
-      dispatch(setToken(lsToken));
-    }
-  }, []);
 
   useEffect(() => {
     if (isError) {

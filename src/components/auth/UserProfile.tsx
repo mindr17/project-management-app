@@ -7,19 +7,8 @@ import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, logout, updateUser } from '../../store/auth/authThunk';
-import {
-  callReset,
-  ResponsesAuth,
-  setIsDelete,
-  setToken,
-  setUser,
-} from '../../store/auth/sliceAuth';
-
-export interface IFormSignUp {
-  name: string;
-  login: string;
-  password: string;
-}
+import { callReset, setIsDelete } from '../../store/auth/sliceAuth';
+import { IFormData } from './interfaceAuth';
 
 export default function UserProfile() {
   const dispatch = useAppDispatch();
@@ -34,29 +23,12 @@ export default function UserProfile() {
     handleSubmit,
     resetField,
     formState: { errors },
-  } = useForm<IFormSignUp>({
+  } = useForm<IFormData>({
     defaultValues: {
       name: user?.name || '',
       login: user?.login || '',
     },
   });
-
-  useEffect(() => {
-    const lsUser =
-      localStorage.getItem('user') &&
-      (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
-
-    if (lsUser && !user) {
-      dispatch(setUser(lsUser));
-    }
-    const lsToken =
-      localStorage.getItem('token') &&
-      (JSON.parse(localStorage.getItem('token') || '') as string | null);
-
-    if (lsToken && !token) {
-      dispatch(setToken(lsToken));
-    }
-  }, []); // при появлении хедара -> перенести в хедер
 
   useEffect(() => {
     if (!user) {
@@ -85,7 +57,7 @@ export default function UserProfile() {
     }
   }, [isDelete, isSuccess, isError]);
 
-  const onSubmit = (formData: IFormSignUp) => {
+  const onSubmit = (formData: IFormData) => {
     user && dispatch(updateUser({ formData, token, id: user._id }));
   };
 

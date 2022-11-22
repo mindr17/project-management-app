@@ -3,27 +3,18 @@ import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { useForm } from 'react-hook-form';
 import { getUserById, login } from '../../store/auth/authThunk';
-import { callReset, setToken } from '../../store/auth/sliceAuth';
+import { callReset } from '../../store/auth/sliceAuth';
 import { useEffect } from 'react';
 import Preloader from '../Preloader/Preloader';
 import s from './auth.module.scss';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { parseJwt } from '../utilities/parseJwt';
-
-interface IFormSignIn {
-  login: string;
-  password: string;
-}
-interface IParseToken {
-  id: string;
-  iat: number;
-  login: string;
-}
+import { IFormSignIn, IParseToken } from './interfaceAuth';
 
 export default function SignIn() {
   const dispatch = useAppDispatch();
-  const { isError, isLoading, isSuccess, message, token } = useAppSelector((state) => state.auth);
+  const { isError, isLoading, user, message, token } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   const {
@@ -34,22 +25,14 @@ export default function SignIn() {
   } = useForm<IFormSignIn>();
 
   useEffect(() => {
-    const lsToken =
-      localStorage.getItem("token") &&
-      (JSON.parse(localStorage.getItem("token") || "") as string | null);
-    if (lsToken && !token) {
-      dispatch(setToken(lsToken));
-    }
-  }, []); // при появлении хедара -> перенести в хедер
-  useEffect(() => {
     if (isError) {
       toast.error(message);
       dispatch(callReset());
     }
+
     if (user && token) {
       dispatch(callReset());
-      router.push("/");
-
+      router.push('/');
     }
   }, [token, isError, user]);
 
@@ -79,7 +62,7 @@ export default function SignIn() {
         })}
       >
         <section>
-          <label className={s.label} htmlFor="login">
+          <label className={s.label} htmlFor='login'>
             Login
           </label>
           <input
@@ -94,12 +77,10 @@ export default function SignIn() {
               },
             })}
           />
-          <div className={s.errorForm}>
-            {errors.login?.message ? errors.login?.message : ""}
-          </div>
+          <div className={s.errorForm}>{errors.login?.message ? errors.login?.message : ''}</div>
         </section>
         <section>
-          <label className={s.label} htmlFor="password">
+          <label className={s.label} htmlFor='password'>
             Password
           </label>
           <input
@@ -118,12 +99,8 @@ export default function SignIn() {
         </section>
         <button className={s.btn}>Sign in</button>
       </form>
-      <ToastContainer
-        position="top-center"
-        autoClose={false}
-        style={{ fontSize: "2rem" }}
-      />
-      <Link className={s.signUpLink} href={"/signup"}>
+      <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
+      <Link className={s.signUpLink} href={'/signup'}>
         <strong>Create an account</strong>
       </Link>
     </>

@@ -36,6 +36,7 @@ export default function SignUp() {
     const lsUser =
       localStorage.getItem('user') &&
       (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
+
     if (lsUser && !user) {
       dispatch(setUser(lsUser));
     }
@@ -43,6 +44,7 @@ export default function SignUp() {
     const lsToken =
       localStorage.getItem('token') &&
       (JSON.parse(localStorage.getItem('token') || '') as string | null);
+
     if (lsToken && !token) {
       dispatch(setToken(lsToken));
     }
@@ -56,6 +58,7 @@ export default function SignUp() {
 
     if (isSuccess) {
       dispatch(callReset());
+
       if (!token) {
         dispatch(login(loginAndPass));
       }

@@ -9,5 +9,6 @@ export const parseJwt = (token: string) => {
       })
       .join('')
   );
+
   return JSON.parse(jsonPayload);
 };

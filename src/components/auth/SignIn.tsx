@@ -23,7 +23,7 @@ interface IParseToken {
 
 export default function SignIn() {
   const dispatch = useAppDispatch();
-  const { isError, isLoading, message, token, user } = useAppSelector((state) => state.auth);
+  const { isError, isLoading, user, message, token } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
   const {
@@ -37,11 +37,11 @@ export default function SignIn() {
     const lsToken =
       localStorage.getItem('token') &&
       (JSON.parse(localStorage.getItem('token') || '') as string | null);
+
     if (lsToken && !token) {
       dispatch(setToken(lsToken));
     }
   }, []); // при появлении хедара -> перенести в хедер
-
   useEffect(() => {
     if (isError) {
       toast.error(message);

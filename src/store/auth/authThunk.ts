@@ -7,8 +7,8 @@ interface IUpdateUser {
   formData: FormData;
 }
 
-export type ResCreateUser = {
-  _id: string;
+type ResCreateUser = {
+  id: string;
   name: string;
   login: string;
 };

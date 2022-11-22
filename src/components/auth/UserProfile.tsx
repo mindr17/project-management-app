@@ -7,13 +7,7 @@ import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, logout, updateUser } from '../../store/auth/authThunk';
-import {
-  callReset,
-  ResponsesAuth,
-  setIsDelete,
-  setToken,
-  setUser,
-} from '../../store/auth/sliceAuth';
+import { callReset, setIsDelete } from '../../store/auth/sliceAuth';
 
 export interface IFormSignUp {
   name: string;
@@ -40,23 +34,6 @@ export default function UserProfile() {
       login: user?.login || '',
     },
   });
-
-  useEffect(() => {
-    const lsUser =
-      localStorage.getItem('user') &&
-      (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
-
-    if (lsUser && !user) {
-      dispatch(setUser(lsUser));
-    }
-    const lsToken =
-      localStorage.getItem('token') &&
-      (JSON.parse(localStorage.getItem('token') || '') as string | null);
-
-    if (lsToken && !token) {
-      dispatch(setToken(lsToken));
-    }
-  }, []); // при появлении хедара -> перенести в хедер
 
   useEffect(() => {
     if (!user) {

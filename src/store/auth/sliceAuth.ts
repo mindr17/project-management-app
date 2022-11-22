@@ -13,13 +13,10 @@ interface IinitialState {
   isLoading: boolean;
   message: string;
   isDelete: boolean;
-
   token: string;
-  serverError: string | null;
-  loading: string | null;
 }
 
-const initialState = {
+const initialState: IinitialState = {
   user: null,
   isError: false,
   isSuccess: false,

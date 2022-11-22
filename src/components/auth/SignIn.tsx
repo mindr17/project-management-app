@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { useForm } from 'react-hook-form';
 import { getUserById, login } from '../../store/auth/authThunk';
-import { callReset, setToken } from '../../store/auth/sliceAuth';
+import { callReset } from '../../store/auth/sliceAuth';
 import { useEffect } from 'react';
 import Preloader from '../Preloader/Preloader';
 import s from './auth.module.scss';
@@ -33,15 +33,6 @@ export default function SignIn() {
     formState: { errors },
   } = useForm<IFormSignIn>();
 
-  useEffect(() => {
-    const lsToken =
-      localStorage.getItem('token') &&
-      (JSON.parse(localStorage.getItem('token') || '') as string | null);
-
-    if (lsToken && !token) {
-      dispatch(setToken(lsToken));
-    }
-  }, []); // при появлении хедара -> перенести в хедер
   useEffect(() => {
     if (isError) {
       toast.error(message);

@@ -10,16 +10,7 @@ import s from './auth.module.scss';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { parseJwt } from '../utilities/parseJwt';
-
-interface IFormSignIn {
-  login: string;
-  password: string;
-}
-interface IParseToken {
-  id: string;
-  iat: number;
-  login: string;
-}
+import { IFormSignIn, IParseToken } from './interfaceAuth';
 
 export default function SignIn() {
   const dispatch = useAppDispatch();

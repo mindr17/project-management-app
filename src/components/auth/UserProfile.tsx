@@ -8,12 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, logout, updateUser } from '../../store/auth/authThunk';
 import { callReset, setIsDelete } from '../../store/auth/sliceAuth';
-
-export interface IFormSignUp {
-  name: string;
-  login: string;
-  password: string;
-}
+import { IFormData } from './interfaceAuth';
 
 export default function UserProfile() {
   const dispatch = useAppDispatch();
@@ -28,7 +23,7 @@ export default function UserProfile() {
     handleSubmit,
     resetField,
     formState: { errors },
-  } = useForm<IFormSignUp>({
+  } = useForm<IFormData>({
     defaultValues: {
       name: user?.name || '',
       login: user?.login || '',
@@ -62,7 +57,7 @@ export default function UserProfile() {
     }
   }, [isDelete, isSuccess, isError]);
 
-  const onSubmit = (formData: IFormSignUp) => {
+  const onSubmit = (formData: IFormData) => {
     user && dispatch(updateUser({ formData, token, id: user._id }));
   };
 

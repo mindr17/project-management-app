@@ -4,7 +4,6 @@ import sliceAuth from './auth/sliceAuth';
 const store = configureStore({
   reducer: {
     auth: sliceAuth,
-
   },
 });
 

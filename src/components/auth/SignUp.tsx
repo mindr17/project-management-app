@@ -9,6 +9,7 @@ import { callReset, ResponsesAuth, setToken, setUser } from '../../store/auth/sl
 import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 interface IFormSignUp {
   name: string;
   login: string;
@@ -23,6 +24,7 @@ export default function SignUp() {
   const router = useRouter();
   const defaultFile = { login: '', password: '' };
   const [loginAndPass, setLoginAndPass] = useState(defaultFile);
+
   const {
     register,
     handleSubmit,
@@ -34,6 +36,7 @@ export default function SignUp() {
     const lsUser =
       localStorage.getItem('user') &&
       (JSON.parse(localStorage.getItem('user') || '') as ResponsesAuth | null);
+
     if (lsUser && !user) {
       dispatch(setUser(lsUser));
     }
@@ -41,6 +44,7 @@ export default function SignUp() {
     const lsToken =
       localStorage.getItem('token') &&
       (JSON.parse(localStorage.getItem('token') || '') as string | null);
+
     if (lsToken && !token) {
       dispatch(setToken(lsToken));
     }
@@ -63,7 +67,6 @@ export default function SignUp() {
     if (user && token) {
       router.push('/');
     }
-
     setLoginAndPass(defaultFile);
   }, [token, isError, user]);
 

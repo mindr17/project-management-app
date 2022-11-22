@@ -37,6 +37,7 @@ export default function SignIn() {
     const lsToken =
       localStorage.getItem('token') &&
       (JSON.parse(localStorage.getItem('token') || '') as string | null);
+
     if (lsToken && !token) {
       dispatch(setToken(lsToken));
     }
@@ -46,6 +47,7 @@ export default function SignIn() {
       toast.error(message);
       dispatch(callReset());
     }
+
     if (user && token) {
       dispatch(callReset());
       router.push('/');

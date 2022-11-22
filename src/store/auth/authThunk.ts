@@ -49,6 +49,7 @@ export const registerUser = createAsyncThunk<
     return rejectWithValue((await response.json()) as MyKnownError);
   }
   const user: ResCreateUser = await response.json();
+
   return user;
 });
 
@@ -60,10 +61,12 @@ export const login = createAsyncThunk<string, CreateToken, { rejectValue: MyKnow
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
     });
+
     if (!response.ok) {
       return rejectWithValue((await response.json()) as MyKnownError);
     }
     const res = (await response.json()) as { token: string };
+
     return res.token;
   }
 );

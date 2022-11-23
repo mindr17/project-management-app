@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import SignIn from '../src/components/Auth/SignIn';
+import SignIn from '../src/components/Auth1/SignIn';
 import s from '../styles/signin.module.scss';
 import g from '../styles/global.module.css';
 

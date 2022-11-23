@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { BoardList } from '../src/components/BoardList/BoardList';
 import { useAppSelector } from '../src/hooks/hooks';
 import styles from '../styles/Home.module.css';
 
@@ -14,7 +15,7 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         {user ? (
-          <h1 className={styles.title}> {`Welcome ${user.name}`}</h1>
+          <BoardList />
         ) : (
           <h1 className={styles.title}>You need to login</h1>
         )}

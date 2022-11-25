@@ -148,7 +148,7 @@ export default function UserProfile() {
       <button onClick={hendleOpenModal} className={s.btn} style={{ background: 'red' }}>
         Delete
       </button>
-      <Modal modalBtnTrue={hendleDelete} title={'Are you sure you want to delete your account'} />
+      <Modal handleBtnClick={hendleDelete} title={'Are you sure you want to delete your account'} />
       <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
     </>
   );

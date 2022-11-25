@@ -3,11 +3,11 @@ import { isModal } from '../../store/modal/sliceModal';
 import s from './modal.module.scss';
 
 interface IProps {
-  modalBtnTrue: () => void; // как назвать эту функцию, она выполняеться при agree
+  handleBtnClick: () => void;
   title: string;
 }
 
-const Modal = ({ modalBtnTrue, title }: IProps) => {
+const Modal = ({ handleBtnClick, title }: IProps) => {
   const dispatch = useAppDispatch();
   const { activeModal } = useAppSelector((state) => state.modal);
 
@@ -16,7 +16,7 @@ const Modal = ({ modalBtnTrue, title }: IProps) => {
   };
 
   const hendleBtnTrue = () => {
-    modalBtnTrue();
+    handleBtnClick();
     dispatch(isModal(false));
   };
 

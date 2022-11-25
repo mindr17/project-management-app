@@ -1,0 +1,62 @@
+.board {
+  width: 27rem;
+  height: 23rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #ffffff;
+  background: radial-gradient(61.64% 82.92% at 50% 50%, #17374D 0%, #446985 100%);
+  box-shadow: 0px 1rem .6rem rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+}
+
+.headerWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.boardHeader {
+  margin: 0;
+  font-family: 'Inter';
+  font-weight: 700;
+  font-size: 2.4rem;
+}
+
+.trashBin {
+  width: 2rem;
+  height: 2.3rem;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.description {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+.btn {
+  width: 100%;
+  height: 5.1rem;
+  padding: 1.5rem 4.5rem;
+  border: 0.1rem solid #bad1e7;
+  border-radius: 10rem;
+  background: #17374d;
+  font-family: 'Inter';
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 130%;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+
+  &:hover {
+    cursor: pointer;
+    background: lighten(#17374d, 2%);
+  }
+}

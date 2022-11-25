@@ -10,14 +10,15 @@ export const BoardList = () => {
   const { boards } = useAppSelector((state) => state.boards);
 
   useEffect(() =>{
-    dispatch(getBoards());   
+    dispatch(getBoards());
   }, []);
   
+  console.log('boardlist')
   return (
     <div className={s.boardList}>
       {
       boards.length > 0 &&
-        boards.map((board: IBoard, index) => <Board key={index + 1} board={board} />)
+        boards.map((board: IBoard) => <Board key={board._id} board={board} />)
       }
       <section className={s.addBoard}>
         <div className={s.plus}>+</div>

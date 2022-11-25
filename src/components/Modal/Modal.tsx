@@ -7,35 +7,35 @@ interface IProps {
   title: string;
 }
 
-const Modal = ({ modalBtnTrue, title }: IProps) => {
+const Modal = ({ onConfirm, title }: IProps) => {
   const dispatch = useAppDispatch();
   const { activeModal } = useAppSelector((state) => state.modal);
 
-  const hendleCloseModal = () => {
+  const handleCloseModal = () => {
     dispatch(isModal(false));
   };
 
-  const hendleBtnTrue = () => {
-    modalBtnTrue();
+  const handleBtnTrue = () => {
+    onConfirm();
     dispatch(isModal(false));
   };
 
   return (
-    <div className={activeModal ? `${s.modal} ${s.active}` : s.modal} onClick={hendleCloseModal}>
+    <div className={activeModal ? `${s.modal} ${s.active}` : s.modal} onClick={handleCloseModal}>
       <div
         className={activeModal ? `${s.modalContent} ${s.active}` : s.modalContent}
         onClick={(e) => e.stopPropagation()}
       >
         <h2>{title}</h2>
         <div className={s.btnContent}>
-          <button onClick={hendleBtnTrue} className={s.btn} style={{ background: 'red' }}>
+          <button onClick={handleBtnTrue} className={s.btn} style={{ background: 'red' }}>
             agree
           </button>
-          <button onClick={hendleCloseModal} className={s.btn}>
+          <button onClick={handleCloseModal} className={s.btn}>
             cancel
           </button>
         </div>
-        <div className={s.closeBtn} onClick={hendleCloseModal}></div>
+        <div className={s.closeBtn} onClick={handleCloseModal}></div>
       </div>
     </div>
   );

@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, logout, updateUser } from '../../store/auth/authThunk';
 import { callReset, setIsDelete } from '../../store/auth/sliceAuth';
 import { IFormData } from './interfaceAuth';
+import Modal from '../Modal/Modal';
+import { isModal } from '../../store/modal/sliceModal';
 
 export default function UserProfile() {
   const dispatch = useAppDispatch();
@@ -63,6 +65,10 @@ export default function UserProfile() {
 
   const hendleDelete = () => {
     user && dispatch(deleteUser({ id: user._id, token }));
+  };
+
+  const hendleOpenModal = () => {
+    dispatch(isModal(true));
   };
 
   if (isLoading) {
@@ -139,9 +145,10 @@ export default function UserProfile() {
         </section>
         <button className={s.btn}>Change</button>
       </form>
-      <button onClick={hendleDelete} className={s.btn} style={{ background: 'red' }}>
+      <button onClick={hendleOpenModal} className={s.btn} style={{ background: 'red' }}>
         Delete
       </button>
+      <Modal modalBtnTrue={hendleDelete} title={'Are you sure you want to delete your account'} />
       <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
     </>
   );

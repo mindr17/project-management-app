@@ -73,6 +73,7 @@ export default function SignUp() {
           <input
             id='name'
             type='text'
+            autoComplete='off'
             className={s.input}
             {...register('name', {
               required: 'Please enter name',
@@ -94,7 +95,7 @@ export default function SignUp() {
           </label>
           <input
             id='login'
-            type='text'
+            type='username'
             className={s.input}
             {...register('login', {
               required: 'Please enter login',

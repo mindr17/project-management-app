@@ -5,6 +5,7 @@ import s from './board.module.scss';
 import { deleteBoard } from '../../store/boards/boardsThunk';
 import Modal from '../Modal/Modal';
 import { useState } from 'react';
+import { parseTitle } from '../utilities/boardInfo';
 
 export const Board = (props: {board: IBoard}) => {
   const dispatch = useAppDispatch();
@@ -22,12 +23,11 @@ export const Board = (props: {board: IBoard}) => {
   return (
     <section className={s.board}>
       <div className={s.headerWrapper}>
-        <h2 className={s.boardHeader}>{props.board.title}</h2>
+        <h2 className={s.boardHeader}>{parseTitle(props.board.title).title}</h2>
         <img className={s.trashBin} src='/trash-bin.png' alt='trash-bin' onClick={onTrashClick}></img>
       </div>
       <div className={s.description}>
-        Description of board. It is a small preview of 
-        {props.board._id}
+        {parseTitle(props.board.title).description}
       </div>
       <button className={s.btn}>See details</button>
       <Modal

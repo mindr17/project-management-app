@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getBoards, deleteBoard } from './boardsThunk';
+import { getBoards, deleteBoard, createBoard } from './boardsThunk';
 import { IBoard } from './IBoard';
 
 
@@ -26,6 +26,9 @@ const sliceBoards = createSlice({
       })
       .addCase(deleteBoard.fulfilled, (state, action) => {
         state.boards = [...state.boards.filter(x => x._id !== action.payload._id)];
+      })
+      .addCase(createBoard.fulfilled, (state, action) => {
+        state.boards.push(action.payload);
       })
   }
 })

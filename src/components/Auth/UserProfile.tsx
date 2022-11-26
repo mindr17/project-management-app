@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { useForm } from 'react-hook-form';
 import s from './auth.module.scss';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,15 +10,15 @@ import { deleteUser, logout, updateUser } from '../../store/auth/authThunk';
 import { callReset, setIsDelete } from '../../store/auth/sliceAuth';
 import { IFormData } from './interfaceAuth';
 import Modal from '../Modal/Modal';
-import { isModal } from '../../store/modal/sliceModal';
 
 export default function UserProfile() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const [isShowModal, setIsShowModal] = useState(false);
+
   const { isSuccess, user, token, message, isError, isDelete, isLoading } = useAppSelector(
     (state) => state.auth
   );
-
-  const router = useRouter();
 
   const {
     register,
@@ -63,12 +63,12 @@ export default function UserProfile() {
     user && dispatch(updateUser({ formData, token, id: user._id }));
   };
 
-  const hendleDelete = () => {
+  const handleDelete = () => {
     user && dispatch(deleteUser({ id: user._id, token }));
   };
 
-  const hendleOpenModal = () => {
-    dispatch(isModal(true));
+  const handleOpenModal = () => {
+    setIsShowModal(true);
   };
 
   if (isLoading) {
@@ -145,10 +145,15 @@ export default function UserProfile() {
         </section>
         <button className={s.btn}>Change</button>
       </form>
-      <button onClick={hendleOpenModal} className={s.btn} style={{ background: 'red' }}>
+      <button onClick={handleOpenModal} className={s.btn} style={{ background: 'red' }}>
         Delete
       </button>
-      <Modal handleBtnClick={hendleDelete} title={'Are you sure you want to delete your account'} />
+      <Modal
+        onConfirm={handleDelete}
+        title={'Are you sure you want to delete your account'}
+        isShowModal={isShowModal}
+        setIsShowModal={setIsShowModal}
+      />
       <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
     </>
   );

@@ -1,29 +1,28 @@
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { isModal } from '../../store/modal/sliceModal';
+
+import { Dispatch, SetStateAction } from 'react';
 import s from './modal.module.scss';
 
 interface IProps {
-  modalBtnTrue: () => void; // как назвать эту функцию, она выполняеться при agree
+  onConfirm: () => void;
   title: string;
+  isShowModal: boolean;
+  setIsShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const Modal = ({ onConfirm, title }: IProps) => {
-  const dispatch = useAppDispatch();
-  const { activeModal } = useAppSelector((state) => state.modal);
-
+const Modal = ({ onConfirm, title, isShowModal, setIsShowModal }: IProps) => {
   const handleCloseModal = () => {
-    dispatch(isModal(false));
+    setIsShowModal(false);
   };
 
   const handleBtnTrue = () => {
     onConfirm();
-    dispatch(isModal(false));
+    setIsShowModal(false);
   };
 
   return (
-    <div className={activeModal ? `${s.modal} ${s.active}` : s.modal} onClick={handleCloseModal}>
+    <div className={isShowModal ? `${s.modal} ${s.active}` : s.modal} onClick={handleCloseModal}>
       <div
-        className={activeModal ? `${s.modalContent} ${s.active}` : s.modalContent}
+        className={isShowModal ? `${s.modalContent} ${s.active}` : s.modalContent}
         onClick={(e) => e.stopPropagation()}
       >
         <h2>{title}</h2>

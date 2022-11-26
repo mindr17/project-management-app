@@ -1,41 +1,39 @@
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { isModal } from '../../store/modal/sliceModal';
+import { Dispatch, SetStateAction } from 'react';
 import s from './modal.module.scss';
 
 interface IProps {
-  modalBtnTrue: () => void; // как назвать эту функцию, она выполняеться при agree
+  onConfirm: () => void;
   title: string;
+  isShowModal: boolean;
+  setIsShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const Modal = ({ modalBtnTrue, title }: IProps) => {
-  const dispatch = useAppDispatch();
-  const { activeModal } = useAppSelector((state) => state.modal);
-
-  const hendleCloseModal = () => {
-    dispatch(isModal(false));
+const Modal = ({ onConfirm, title, isShowModal, setIsShowModal }: IProps) => {
+  const handleCloseModal = () => {
+    setIsShowModal(false);
   };
 
-  const hendleBtnTrue = () => {
-    modalBtnTrue();
-    dispatch(isModal(false));
+  const handleBtnTrue = () => {
+    onConfirm();
+    setIsShowModal(false);
   };
 
   return (
-    <div className={activeModal ? `${s.modal} ${s.active}` : s.modal} onClick={hendleCloseModal}>
+    <div className={isShowModal ? `${s.modal} ${s.active}` : s.modal} onClick={handleCloseModal}>
       <div
-        className={activeModal ? `${s.modalContent} ${s.active}` : s.modalContent}
+        className={isShowModal ? `${s.modalContent} ${s.active}` : s.modalContent}
         onClick={(e) => e.stopPropagation()}
       >
         <h2>{title}</h2>
         <div className={s.btnContent}>
-          <button onClick={hendleBtnTrue} className={s.btn} style={{ background: 'red' }}>
+          <button onClick={handleBtnTrue} className={s.btn} style={{ background: 'red' }}>
             agree
           </button>
-          <button onClick={hendleCloseModal} className={s.btn}>
+          <button onClick={handleCloseModal} className={s.btn}>
             cancel
           </button>
         </div>
-        <div className={s.closeBtn} onClick={hendleCloseModal}></div>
+        <div className={s.closeBtn} onClick={handleCloseModal}></div>
       </div>
     </div>
   );

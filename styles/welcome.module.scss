@@ -1,0 +1,46 @@
+$breakpoint-desktop: 1280px;
+$breakpoint-tablet: 768px;
+$breakpoint-phone: 480px;
+
+.main {
+  width: 100%;
+  height: calc(100vh - 6rem - 13rem);
+  background: url('/background.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.mainText,
+.remark {
+  position: absolute;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  color: #17374D;
+}
+
+.mainText {
+  margin-top: 14.4rem;
+  margin-left: 7.1rem;
+  font-size: 6.4rem;
+  line-height: 7.7rem;
+
+  @media (max-width: $breakpoint-tablet) {
+    font-size: 2.4rem;
+  }
+}
+
+.remark {
+  font-size: 1.6rem;
+  line-height: 1.9rem;
+  margin: 0;
+  margin-top: 22.1rem;
+  margin-left: 53.3rem;
+
+  @media (max-width: $breakpoint-tablet) {
+    margin-top: 19.5rem;
+    margin-left: 20.3rem;
+    font-size: 1.2rem;
+  }
+}

@@ -3,16 +3,16 @@
 .footer {
   height: $footer-height;
   width: 100%;
-  padding: 2.9rem 10.9rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   background-color: $color-primary;
+  padding: 12px;
   
-  @media (max-width: $breakpoint-tablet) {
-    padding: 1.1rem 2rem;
-  }
+  // @media (max-width: $breakpoint-tablet) {
+  //   padding: 1.1rem 2rem;
+  // }
 }
 
 .year,
@@ -27,70 +27,68 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 2.7rem;
+  // gap: 2.7rem;
 
-  @media (max-width: $breakpoint-tablet) {
-    width: 33%;
-    gap: initial;
-   }
+  // @media (max-width: $breakpoint-tablet) {
+  //   width: 33%;
+  //   gap: initial;
+  //  }
 }
 
 .wrapper {
   display: flex;
-  align-items: center;
+  gap: 12px;
 }
 
 .wrapper p {
-  @media (max-width: $breakpoint-desktop) {
-   display: none;
+  display: none;
+
+  @media (min-width: $breakpoint-desktop) {
+    display: flex;
   }
 }
 
 .link {
   display: flex;
   align-items: center;
+  gap: 12px;
+}
+
+.githubSection {
+  gap: 12px;
 }
 
 .githubLogo {
-  width: 3.9rem;
-  height: 3.8rem;
+  width: 24px;
+  height: 24px;
 
-  @media (max-width: $breakpoint-tablet) {
-    width: 2.3rem;
-    height: 2.2rem;
-  }
+  // @media (max-width: $breakpoint-tablet) {
+  //   width: 2.3rem;
+  //   height: 2.2rem;
+  // }
 }
 
 .rssLogo {
+  flex: 0 1 auto;
   width: 60px;
   height: 22px;
 
-  @media (max-width: $breakpoint-desktop) {
-    width: 60px;
-    height: 22px;
-  }
-}
-
-.yearSection,
-.courseLogoSection {
-  width: 30%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  @media (max-width: $breakpoint-tablet) {
-    width: 33%;
-  }
-
-  @media (max-width: $breakpoint-phone) {
-    width: auto;
-  }  
+  // @media (max-width: $breakpoint-desktop) {
+  //   width: 60px;
+  //   height: 22px;
+  // }
 }
 
 .yearSection {
+  display: flex;
+  align-items: center;
+  flex: 0 1 100%;
   justify-content: start;
 }
 
 .courseLogoSection {
+  display: flex;
+  align-items: center;
+  flex: 0 1 100%;
   justify-content: end;
 }

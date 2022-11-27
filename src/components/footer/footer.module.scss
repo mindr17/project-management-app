@@ -1,15 +1,14 @@
-$breakpoint-desktop: 1280px;
-$breakpoint-tablet: 768px;
-$breakpoint-phone: 480px;
+@import '../../styles/variables.scss';
 
 .footer {
-  // position: absolute;
+  height: $footer-height;
   width: 100%;
   padding: 2.9rem 10.9rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  background-color: $color-primary;
   
   @media (max-width: $breakpoint-tablet) {
     padding: 1.1rem 2rem;
@@ -63,12 +62,12 @@ $breakpoint-phone: 480px;
 }
 
 .rssLogo {
-  width: 17.5rem;
-  height: 6.5rem;
+  width: 60px;
+  height: 22px;
 
   @media (max-width: $breakpoint-desktop) {
-    width: 6rem;
-    height: 2.2rem;
+    width: 60px;
+    height: 22px;
   }
 }
 

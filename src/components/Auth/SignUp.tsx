@@ -1,15 +1,15 @@
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { useForm } from 'react-hook-form';
-import s from './auth.module.scss';
 import { useRouter } from 'next/router';
 import { login, registerUser } from '../../store/auth/authThunk';
 import { useEffect, useState } from 'react';
 import { callReset } from '../../store/auth/sliceAuth';
 import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { IFormData } from './interfaceAuth';
+import 'react-toastify/dist/ReactToastify.css';
+import s from './auth.module.scss';
 
 export default function SignUp() {
   const dispatch = useAppDispatch();

@@ -1,0 +1,176 @@
+@import '../../styles/variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 6rem - $footer-height);
+}
+
+.boardHeader {
+  font-size: 2rem;
+  padding: 10px;
+  height: 42px;
+}
+
+.columnsWrapper {
+  display: flex;
+  flex: 1 0 auto;
+  width: 100%;
+  gap: 10px;
+  padding: 10px;
+  max-height: calc(100% - 42px);
+  overflow-X: auto;
+}
+
+.columnsList {
+  flex-grow: 0;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  max-height: 100%;
+}
+
+.column {
+  flex-direction: column;
+  width: 300px;
+  max-height: 100%;
+  font-size: 1.6rem;
+  background-color: green;
+  border-radius: 6px;
+  padding: 6px;
+  display: flex;
+  gap: 4px;
+  cursor: grab;
+
+  .columnHeader {
+    border-color: transparent;
+    border-radius: 10px;
+    width: 100%;
+    display: flex;
+    gap: 4px;
+    
+    .columnTitleArea {
+      flex: 1 1 100%;
+      font-size: 2rem;
+      min-height: 30px;
+      resize: none;
+      border-radius: 10px;
+      border-color: transparent;
+      cursor: pointer;
+      overflow-Y: scroll;
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .columnDeleteBtn {
+      border-color: transparent;
+      border-radius: 10px;
+      height: 32px;
+      width: 32px;
+      color: black;
+      cursor: pointer;
+
+      &:hover {
+        background-color: red;
+      }
+    }
+  }
+
+  .cardsList {
+    position: relative;
+    max-height: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    overflow-Y: auto;
+
+    .card {
+      flex: 1 0 auto;
+      height: 32px;
+      background-color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      padding-left: 6px;
+      justify-content: space-between;
+      cursor: pointer;
+
+      .cardText {
+        color: $color-font-secondary;
+      }
+
+      .cardDeleteBtn {
+        height: 100%;
+        aspect-ratio: 1;
+        border-radius: 10px;
+        background-color: blue;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+          background-color: red;
+        }
+      }
+    }
+  }
+
+  .cardsList::-webkit-scrollbar {
+    background: $color-primary;
+  }
+  
+  .cardsList::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  .cardAddBtn {
+    height: 32px;
+    font-size: 1.2em;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid black;
+    cursor: pointer;
+    color: $color-font-secondary;
+
+    &:hover {
+      background-color: red;
+      color: white;
+    }
+  }
+}
+
+.columnAddBtn {
+  flex: 1 0 auto;
+  width: 300px;
+  height: 60px;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: blue;
+  
+  &:hover {
+    background-color: red;
+    cursor: pointer;
+  }
+}
+
+.columnsList::-webkit-scrollbar {
+  // width: auto;
+  background: $color-primary;
+}
+
+.columnsList::-webkit-scrollbar-thumb {
+  background: #888;
+}

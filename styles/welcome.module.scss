@@ -5,15 +5,34 @@ $breakpoint-phone: 480px;
 .main {
   width: 100%;
   height: calc(100vh - 6rem - 13rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
   background: url('/background.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+
+    
+  @media (max-width: $breakpoint-desktop) {
+    overflow: hidden;
+  }
+}
+
+.textSection {
+  position: relative;
+  width: 56.3rem;
+
+  @media (max-width: $breakpoint-tablet) {
+    width: auto;
+  }
 }
 
 .mainText,
 .remark {
-  position: absolute;
+  margin: 0;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
@@ -21,10 +40,11 @@ $breakpoint-phone: 480px;
 }
 
 .mainText {
-  margin-top: 14.4rem;
-  margin-left: 7.1rem;
   font-size: 6.4rem;
-  line-height: 7.7rem;
+
+  @media (max-width: $breakpoint-desktop) {
+
+  }
 
   @media (max-width: $breakpoint-tablet) {
     font-size: 2.4rem;
@@ -35,12 +55,49 @@ $breakpoint-phone: 480px;
   font-size: 1.6rem;
   line-height: 1.9rem;
   margin: 0;
-  margin-top: 22.1rem;
-  margin-left: 53.3rem;
+  position: absolute;
+  right: 0;
+
+  @media (max-width: $breakpoint-desktop) {
+
+  }
 
   @media (max-width: $breakpoint-tablet) {
-    margin-top: 19.5rem;
-    margin-left: 20.3rem;
+
     font-size: 1.2rem;
   }
+}
+
+.wrapper {
+  display: flex;
+  gap: 3rem;
+}
+
+.aboutBlock,
+.descBlock,
+.techBlock {
+  width: 28.5rem;
+  height: 36.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background: #446985;
+  opacity: 0.9;
+  border-radius: 10px;
+}
+
+.blockHeader {
+  width: max-content;
+  padding: 1rem 0;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 2.4rem;
+  line-height: 130%;
+
+  color: #ffffff;
+
+  border-bottom: .1rem solid #ffffff;
 }

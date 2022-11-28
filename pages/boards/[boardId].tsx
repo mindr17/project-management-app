@@ -1,6 +1,6 @@
 import Head from 'next/head';;
 import { useRouter } from 'next/router';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { columns, tasks } from './mockupData';
 import s from '../../src/components/Board/Board.module.scss';
 
@@ -8,7 +8,7 @@ const Board = () => {
   const router = useRouter();
   const { bid } = router.query;
 
-  const initialCards = {
+  const onDragEnd = () => {
 
   };
 
@@ -31,54 +31,78 @@ const Board = () => {
       <h1 className={s.boardHeader}>
         Board title
       </h1>
-      
       <div className={s.columnsWrapper}>
-          <ul className={s.columnsList}>
-          {
-            columns.map((column, index) => {
-              return (
-                <li className={s.column}>
-                  <div className={s.columnContent}>
-                    <div className={s.columnHeader}>
-                      <textarea
-                        className={s.columnTitleArea}
-                        defaultValue={column.title}
-                        name=""
-                        rows={1}
-                        id=""
-                        onInput={handleKeyDown}
-                      >
-                      </textarea>
-                      <button className={s.columnDeleteBtn}>
-                        X
-                      </button>
-                    </div>
-                    <ul className={s.cardsList}>
-                      {
-                        tasks.filter(task => {
-                          return task.columnId === column._id
-                        }).map((task) => {
-                          return (
-                            <li className={s.card}>
-                              <div className={s.cardText}>{task.title}</div>
-                              <div
-                                className={s.cardDeleteBtn}
-                                onClick={handleCardDelete}
-                              >X</div>
-                            </li>
-                          )
-                        })
-                      }
-                    </ul>
-                    <button className={s.cardAddBtn}>
-                      Add card
-                    </button>
-                  </div>
-                </li>
-              )
-            })
-          }
-          </ul>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="columns">
+            {(provided, snapshot) => (
+              <ul
+                className={s.columnsList}
+                ref={provided.innerRef} 
+                {...provided.droppableProps}
+              >
+              {
+                columns.map((column, index) => (
+                  <Draggable
+                    key={index}
+                    draggableId={column._id}
+                    index={index}
+                  >
+                    {
+                      (provided) => (
+                        <li
+                          className={s.column}
+                          ref={provided.innerRef}
+                          {...provided.dragHandleProps}
+                          {...provided.draggableProps}
+                        >
+                          <div className={s.columnContent}>
+                            <div className={s.columnHeader}>
+                              <textarea
+                                className={s.columnTitleArea}
+                                defaultValue={column.title}
+                                name=""
+                                rows={1}
+                                id=""
+                                onInput={handleKeyDown}
+                              >
+                              </textarea>
+                              <button className={s.columnDeleteBtn}>
+                                X
+                              </button>
+                            </div>
+                            <ul className={s.cardsList}>
+                              {tasks.filter(task => {
+                                return task.columnId === column._id;
+                              }).map((task, index) => {
+                                return (
+                                  <li
+                                    key={index}
+                                    className={s.card}
+                                  >
+                                    <div className={s.cardText}>{task.title}</div>
+                                    <div
+                                      className={s.cardDeleteBtn}
+                                      onClick={handleCardDelete}
+                                    >X</div>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                            <button className={s.cardAddBtn}>
+                              Add card
+                            </button>
+                          </div>
+                        </li>
+                      )
+                    }
+                  </Draggable>
+                ))
+              }
+              {provided.placeholder}
+              </ul>
+            )}
+          </Droppable>
+        </DragDropContext>
           <div className={s.columnAddBtn}>
             Add Column
           </div>

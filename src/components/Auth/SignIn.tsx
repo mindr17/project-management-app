@@ -6,11 +6,11 @@ import { getUserById, login } from '../../store/auth/authThunk';
 import { callReset } from '../../store/auth/sliceAuth';
 import { useEffect } from 'react';
 import Preloader from '../Preloader/Preloader';
-import s from './auth.module.scss';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { parseJwt } from '../utilities/parseJwt';
 import { IFormSignIn, IParseToken } from './interfaceAuth';
+import s from './auth.module.scss';
 
 export default function SignIn() {
   const dispatch = useAppDispatch();

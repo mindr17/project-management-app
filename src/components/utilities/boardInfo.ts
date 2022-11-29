@@ -1,7 +1,7 @@
 type TitleDescription = {
-  title: string,
-  description: string,
-}
+  title: string;
+  description: string;
+};
 
 export const parseTitle = (boardTitle: string): TitleDescription => {
   return JSON.parse(boardTitle);

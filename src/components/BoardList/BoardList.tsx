@@ -12,7 +12,7 @@ export const BoardList = () => {
   const { boards } = useAppSelector((state) => state.boards);
   const { user } = useAppSelector((state) => state.auth);
 
-  useEffect(() =>{
+  useEffect(() => {
     dispatch(getBoards());
   }, []);
 
@@ -20,7 +20,7 @@ export const BoardList = () => {
 
   const onCreateClick = () => {
     setIsShowModal(true); // open modal view
-  }
+  };
 
   interface IFormData {
     title: string;
@@ -28,28 +28,27 @@ export const BoardList = () => {
   }
 
   const handleCreate = (formData: IFormData) => {
-
     const title = createTitle(formData.title, formData.desc);
-    console.log(formData)
-    dispatch(createBoard({
-      title: title,
-      owner: user?._id,
-      users: [user?._id],
-    })); // create board 
+    console.log(formData);
+    dispatch(
+      createBoard({
+        title: title,
+        owner: user?._id,
+        users: [user?._id],
+      })
+    ); // create board
     console.log({
       title: title,
       owner: user?._id,
       users: [user?._id],
-    })
-  }
-  
+    });
+  };
+
   return (
     <>
       <div className={s.boardList}>
-        {
-        boards.length > 0 &&
-          boards.map((board: IBoard) => <Board key={board._id} board={board} />)
-        }
+        {boards.length > 0 &&
+          boards.map((board: IBoard) => <Board key={board._id} board={board} />)}
         <section className={s.addBoard} onClick={onCreateClick}>
           <div className={s.plus}>+</div>
         </section>
@@ -61,4 +60,4 @@ export const BoardList = () => {
       />
     </>
   );
-}
+};

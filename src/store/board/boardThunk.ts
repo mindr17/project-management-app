@@ -3,7 +3,7 @@ import { BASE_URL } from '../../config';
 import { IKnownError } from '../auth/interfaceAuthStore';
 import { IColumn, ITask } from './Iboard';
 
-export const GetBoardData = createAsyncThunk(
+export const getBoardData = createAsyncThunk(
   'board/GetBoardData',
   async (boardId: string, { rejectWithValue }) => {
     const token: string = JSON.parse(localStorage.getItem('token') || '');
@@ -49,7 +49,7 @@ interface IBoardCreateColumn {
   };
 }
 
-export const CreateColumnInBoard = createAsyncThunk(
+export const createColumnInBoard = createAsyncThunk(
   'board/CreateColumnInBoard',
   async (data: IBoardCreateColumn, { rejectWithValue }) => {
     const token: string = JSON.parse(localStorage.getItem('token') || '');

@@ -1,6 +1,6 @@
 import Head from 'next/head';
-import { useAppDispatch, useAppSelector } from '../src/hooks/hooks';
-import { GetBoardData } from '../src/store/board/boardThunk';
+import { BoardList } from '../src/components/BoardList/BoardList';
+import { useAppSelector } from '../src/hooks/hooks';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
@@ -18,9 +18,8 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
-        <button onClick={handelClickColumns}> board data</button>
         {user ? (
-          <h1 className={styles.title}> {`Welcome ${user.name}`}</h1>
+          <BoardList />
         ) : (
           <h1 className={styles.title}>You need to login</h1>
         )}

@@ -1,3 +1,4 @@
+
 import { Dispatch, SetStateAction } from 'react';
 import s from './modal.module.scss';
 

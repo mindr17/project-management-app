@@ -1,16 +1,41 @@
 import Head from 'next/head';;
 import { useRouter } from 'next/router';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { columns, tasks } from './mockupData';
+import { columns as initialColumns, tasks as initialTasks } from './mockupData';
+import { useState } from 'react';
 import s from '../../src/components/Board/Board.module.scss';
 
 const Board = () => {
   const router = useRouter();
   const { bid } = router.query;
+  const [columnsState, setColumnsState] = useState(initialColumns);
+  const [tasksState, setTasksState] = useState(initialTasks);
 
-  const onDragEnd = () => {
+  const handleOnDragEnd = (result: any) => {
+    if (!result.destination) return;
 
+    // const columnsForEdit = Array.from(columnsState);
+    // const [movedColumn] = columnsForEdit.splice(result.source.index, 1);
+    // columnsForEdit.splice(result.destination.index, 0, movedColumn);
+    // console.log('columnsForEdit: ', columnsForEdit);
+
+    // setColumnsState(columnsForEdit);
+
+    const tasksCopy = Array.from(tasksState);
+    const [movedColumn] = tasksCopy.splice(result.source.index, 1);
+    tasksCopy.splice(result.destination.index, 0, movedColumn);
+    
+    tasksCopy.forEach((task, index) => {
+      task.order = index;
+    });
+    
+    tasksCopy.sort((a, b) => {
+      return a.order - b.order;
+    });
+
+    setTasksState(tasksCopy);
   };
+
 
   const handleCardDelete = () => {
     console.log('handleCardDelete: ', handleCardDelete);
@@ -32,28 +57,29 @@ const Board = () => {
         Board title
       </h1>
       <div className={s.columnsWrapper}>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="columns">
-            {(provided, snapshot) => (
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          {/* <Droppable droppableId="columns">
+            {(provided, snapshot) => ( */}
               <ul
                 className={s.columnsList}
-                ref={provided.innerRef} 
-                {...provided.droppableProps}
+                // ref={provided.innerRef} 
+                // {...provided.droppableProps}
               >
               {
-                columns.map((column, index) => (
-                  <Draggable
-                    key={index}
-                    draggableId={column._id}
-                    index={index}
-                  >
-                    {
-                      (provided) => (
+                columnsState.map((column, index) => (
+                  // <Draggable
+                  //   key={column._id}
+                  //   draggableId={column._id}
+                  //   index={index}
+                  // >
+                  //   {
+                  //     (provided) => (
                         <li
+                          key={column._id}
                           className={s.column}
-                          ref={provided.innerRef}
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
+                          // ref={provided.innerRef}
+                          // {...provided.dragHandleProps}
+                          // {...provided.draggableProps}
                         >
                           <div className={s.columnContent}>
                             <div className={s.columnHeader}>
@@ -70,38 +96,60 @@ const Board = () => {
                                 X
                               </button>
                             </div>
-                            <ul className={s.cardsList}>
-                              {tasks.filter(task => {
-                                return task.columnId === column._id;
-                              }).map((task, index) => {
-                                return (
-                                  <li
-                                    key={index}
-                                    className={s.card}
-                                  >
-                                    <div className={s.cardText}>{task.title}</div>
-                                    <div
-                                      className={s.cardDeleteBtn}
-                                      onClick={handleCardDelete}
-                                    >X</div>
-                                  </li>
-                                );
-                              })}
-                            </ul>
+                            <Droppable droppableId={column._id}>
+                              {(provided, snapshot) => (
+                                <ul
+                                  className={s.cardsList}
+                                  ref={provided.innerRef} 
+                                  {...provided.droppableProps}
+                                >
+                                  {tasksState.filter(task => {
+                                    return task.columnId === column._id;
+                                  }).map((task, index) => {
+                                    return (
+                                      <Draggable
+                                        key={task._id}
+                                        draggableId={task._id}
+                                        index={index}
+                                      >
+                                        {
+                                          (provided) => (
+                                            <li
+                                              key={index}
+                                              className={s.card}
+                                              ref={provided.innerRef}
+                                              {...provided.dragHandleProps}
+                                              {...provided.draggableProps}
+                                            >
+                                              <div className={s.cardText}>{task.title}</div>
+                                              <div
+                                                className={s.cardDeleteBtn}
+                                                onClick={handleCardDelete}
+                                              >X</div>
+                                            </li>
+                                          )
+                                        }
+                                      </Draggable>
+                                    );
+                                  })}
+                                  {provided.placeholder}
+                                </ul>
+                              )}
+                            </Droppable>
                             <button className={s.cardAddBtn}>
                               Add card
                             </button>
                           </div>
                         </li>
-                      )
-                    }
-                  </Draggable>
+                  //     )
+                  //   }
+                  // </Draggable>
                 ))
               }
-              {provided.placeholder}
+              {/* {provided.placeholder} */}
               </ul>
-            )}
-          </Droppable>
+            {/* )}
+          </Droppable> */}
         </DragDropContext>
           <div className={s.columnAddBtn}>
             Add Column

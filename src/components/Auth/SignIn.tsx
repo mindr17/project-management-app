@@ -67,8 +67,7 @@ export default function SignIn() {
           </label>
           <input
             id='login'
-            type='login'
-            autoComplete='on'
+            type='text'
             className={s.input}
             {...register('login', {
               required: 'Please enter login',

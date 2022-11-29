@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import SignUp from '../src/components/Auth/SignUp';
-import s from '../src/components/Auth/signup.module.scss';
+import s from '../styles/signup.module.scss';
 
 export default function Register() {
   return (

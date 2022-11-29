@@ -1,15 +1,15 @@
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { useForm } from 'react-hook-form';
+import s from './auth.module.scss';
 import { useRouter } from 'next/router';
 import { login, registerUser } from '../../store/auth/authThunk';
 import { useEffect, useState } from 'react';
 import { callReset } from '../../store/auth/sliceAuth';
 import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
-import { IFormData } from './interfaceAuth';
 import 'react-toastify/dist/ReactToastify.css';
-import s from './auth.module.scss';
+import { IFormData } from './interfaceAuth';
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
@@ -73,7 +73,6 @@ export default function SignUp() {
           <input
             id='name'
             type='text'
-            autoComplete='off'
             className={s.input}
             {...register('name', {
               required: 'Please enter name',
@@ -95,7 +94,7 @@ export default function SignUp() {
           </label>
           <input
             id='login'
-            type='username'
+            type='text'
             className={s.input}
             {...register('login', {
               required: 'Please enter login',

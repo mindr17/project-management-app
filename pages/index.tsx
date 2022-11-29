@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { BoardList } from '../src/components/BoardList/BoardList';
 import { useAppSelector } from '../src/hooks/hooks';
-import styles from '../src/styles/Home.module.scss';
+import styles from '../styles/Home.module.css';
 
 export default function Home() {
   const { user } = useAppSelector((state) => state.auth);

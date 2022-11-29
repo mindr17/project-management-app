@@ -1,18 +1,19 @@
-@import '../../styles/variables.scss';
+$breakpoint-desktop: 1280px;
+$breakpoint-tablet: 768px;
+$breakpoint-phone: 480px;
 
 .footer {
-  height: $footer-height;
+  position: absolute;
+  bottom: 0;
   width: 100%;
+  padding: 2.9rem 10.9rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: $color-primary;
-  padding: 12px;
-  
-  // @media (max-width: $breakpoint-tablet) {
-  //   padding: 1.1rem 2rem;
-  // }
+  @media (max-width: $breakpoint-tablet) {
+    padding: 1.1rem 2rem;
+  }
 }
 
 .year,
@@ -24,71 +25,77 @@
 }
 
 .githubSection {
+  width: 40%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  // gap: 2.7rem;
+  align-items: flex-end;
+  gap: 2.7rem;
 
-  // @media (max-width: $breakpoint-tablet) {
-  //   width: 33%;
-  //   gap: initial;
-  //  }
+  @media (max-width: $breakpoint-tablet) {
+    width: 33%;
+    gap: initial;
+   }
 }
 
 .wrapper {
+  width: 33%;
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
 }
 
 .wrapper p {
-  display: none;
+  margin: 0;
+  display: block;
+  letter-spacing: 0.16em;
 
-  @media (min-width: $breakpoint-desktop) {
-    display: flex;
+  @media (max-width: $breakpoint-desktop) {
+   display: none;
   }
 }
 
-.link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.githubSection {
-  gap: 12px;
-}
-
 .githubLogo {
-  width: 24px;
-  height: 24px;
+  width: 3.9rem;
+  height: 3.8rem;
 
-  // @media (max-width: $breakpoint-tablet) {
-  //   width: 2.3rem;
-  //   height: 2.2rem;
-  // }
+  @media (max-width: $breakpoint-tablet) {
+    width: 2.3rem;
+    height: 2.2rem;
+  }
 }
 
 .rssLogo {
-  flex: 0 1 auto;
-  width: 60px;
-  height: 22px;
+  width: 17.5rem;
+  height: 6.5rem;
 
-  // @media (max-width: $breakpoint-desktop) {
-  //   width: 60px;
-  //   height: 22px;
-  // }
+  @media (max-width: $breakpoint-desktop) {
+    width: 6rem;
+    height: 2.2rem;
+  }
+}
+
+.yearSection,
+.courseLogoSection {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: $breakpoint-tablet) {
+    width: 33%;
+  }
+
+  @media (max-width: $breakpoint-phone) {
+    width: auto;
+  }  
 }
 
 .yearSection {
-  display: flex;
-  align-items: center;
-  flex: 0 1 100%;
-  justify-content: flex-start;
+  justify-content: start;
 }
 
 .courseLogoSection {
-  display: flex;
-  align-items: center;
-  flex: 0 1 100%;
-  justify-content: flex-end;
+  justify-content: end;
 }

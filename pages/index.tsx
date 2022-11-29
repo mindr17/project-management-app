@@ -5,6 +5,10 @@ import styles from '../styles/Home.module.css';
 
 export default function Home() {
   const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const handelClickColumns = () => {
+    dispatch(GetBoardData('63824ac6cd1e87dffe860ee3'));
+  };
 
   return (
     <div className={styles.container}>

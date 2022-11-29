@@ -42,7 +42,7 @@ export const Header = () => {
       {user ? (
         <>
           <Link className={s.navLink} href={'/'}>
-            Go to Main Page
+            Main
           </Link>
           <Link className={s.navLink} href={'/profile'}>
             Profile

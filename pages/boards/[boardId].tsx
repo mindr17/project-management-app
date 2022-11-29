@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { initialBoardState, columns as initialColumns, tasks as initialTasks } from './mockupData';
 import { useState } from 'react';
-import s from '../../src/components/Board/Board.module.scss';
+import s from '../../src/components/BoardPage/BoardPage.module.scss';
 
 const Board = () => {
   const router = useRouter();

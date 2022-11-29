@@ -1,22 +1,21 @@
+@import '../../styles/variables.scss';
+
 .header {
-  position: absolute;
-  top: 0;
   background-color: #17374d;
   width: 100%;
-  height: 6rem;
+  height: $header-height;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 3.75rem;
-  z-index: 5;
+  padding: 0 12px;
+  gap: 12px;
 }
 
 .navLink {
-  margin-left: 3.75rem;
   font-family: 'Inter', sans-serif;
   font-style: normal;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1.8rem;
   line-height: 1.5rem;
   color: #bad1e7;
 }

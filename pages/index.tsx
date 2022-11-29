@@ -1,14 +1,11 @@
 import Head from 'next/head';
 import { BoardList } from '../src/components/BoardList/BoardList';
-import { useAppSelector } from '../src/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../src/hooks/hooks';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const handelClickColumns = () => {
-    dispatch(GetBoardData('63824ac6cd1e87dffe860ee3'));
-  };
 
   return (
     <div className={styles.container}>
@@ -18,11 +15,7 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
-        {user ? (
-          <BoardList />
-        ) : (
-          <h1 className={styles.title}>You need to login</h1>
-        )}
+        {user ? <BoardList /> : <h1 className={styles.title}>You need to login</h1>}
       </main>
     </div>
   );

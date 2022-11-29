@@ -41,6 +41,93 @@ export const GetBoardData = createAsyncThunk(
   }
 );
 
+interface IBoardCreateColumn {
+  boardId: string;
+  newParams: {
+    title: string;
+    order: number;
+  };
+}
+
+export const CreateColumnInBoard = createAsyncThunk(
+  'board/CreateColumnInBoard',
+  async (data: IBoardCreateColumn, { rejectWithValue }) => {
+    const token: string = JSON.parse(localStorage.getItem('token') || '');
+    const response = await fetch(`${BASE_URL}/boards/${data.boardId}/columns`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data.newParams),
+    });
+
+    if (!response.ok) {
+      return rejectWithValue((await response.json()) as IKnownError);
+    }
+    const column: IColumn = await response.json();
+
+    return column;
+  }
+);
+
+interface IParamsGetColumnById {
+  boardId: string;
+  columnId: string;
+}
+
+export const getColumnById = createAsyncThunk(
+  'board/getColumnById',
+  async (data: IParamsGetColumnById, { rejectWithValue }) => {
+    const token: string = JSON.parse(localStorage.getItem('token') || '');
+    const response = await fetch(`${BASE_URL}/boards/${data.boardId}/columns/${data.columnId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      return rejectWithValue((await response.json()) as IKnownError);
+    }
+    const column: IColumn = await response.json();
+
+    return column;
+  }
+);
+
+interface IParamsUpdateColumnById {
+  boardId: string;
+  columnId: string;
+  newParams: {
+    title: string;
+    order: number;
+  };
+}
+
+export const updateColumnById = createAsyncThunk(
+  'board/updateColumnById',
+  async (data: IParamsUpdateColumnById, { rejectWithValue }) => {
+    const token: string = JSON.parse(localStorage.getItem('token') || '');
+    const response = await fetch(`${BASE_URL}/boards/${data.boardId}/columns/${data.columnId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data.newParams),
+    });
+
+    if (!response.ok) {
+      return rejectWithValue((await response.json()) as IKnownError);
+    }
+    const updatedColumn: IColumn = await response.json();
+
+    return updatedColumn;
+  }
+);
+
 //========================================
 
 // export interface IResponseColumn {

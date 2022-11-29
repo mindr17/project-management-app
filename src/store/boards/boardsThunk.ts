@@ -6,9 +6,9 @@ export const getBoards = createAsyncThunk<Array<IBoard>>('boards/getBoards', asy
   const token = JSON.parse(localStorage.getItem('token'));
   const response = await fetch(`${BASE_URL}/boards`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
   });
- 
+
   return await response.json();
 });
 
@@ -17,38 +17,36 @@ export interface IKnownError {
   statusCode: number;
 }
 
-export const deleteBoard = createAsyncThunk<
-  IBoard,
-  string,
-  { rejectValue: IKnownError }
->('board/deleteBoard', async (id: string, { rejectWithValue }) => {
-  const token = JSON.parse(localStorage.getItem('token'));
-  
-  const response = await fetch(`${BASE_URL}/boards/${id}`, {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-  });
+export const deleteBoard = createAsyncThunk<IBoard, string, { rejectValue: IKnownError }>(
+  'board/deleteBoard',
+  async (id: string, { rejectWithValue }) => {
+    const token = JSON.parse(localStorage.getItem('token'));
 
-  return await response.json();
-});
+    const response = await fetch(`${BASE_URL}/boards/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    });
+
+    return await response.json();
+  }
+);
 
 interface IFormData {
   title: string;
   desc: string;
 }
 
-export const createBoard = createAsyncThunk<
-  IBoard,
-  IBoard,
-  { rejectValue: IKnownError }
->('board/createBoard', async (data: IBoard, { rejectWithValue }) => {
-  const token = JSON.parse(localStorage.getItem('token'));
-  
-  const response = await fetch(`${BASE_URL}/boards/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-    body: JSON.stringify(data),
-  });
+export const createBoard = createAsyncThunk<IBoard, IBoard, { rejectValue: IKnownError }>(
+  'board/createBoard',
+  async (data: IBoard, { rejectWithValue }) => {
+    const token = JSON.parse(localStorage.getItem('token'));
 
-  return await response.json();
-});
+    const response = await fetch(`${BASE_URL}/boards/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(data),
+    });
+
+    return await response.json();
+  }
+);

@@ -7,28 +7,31 @@ import Modal from '../Modal/Modal';
 import { useState } from 'react';
 import { parseTitle } from '../utilities/boardInfo';
 
-export const Board = (props: {board: IBoard}) => {
+export const Board = (props: { board: IBoard }) => {
   const dispatch = useAppDispatch();
 
   const [isShowModal, setIsShowModal] = useState(false);
 
   const onTrashClick = () => {
     setIsShowModal(true); // open modal view
-  }
+  };
 
   const handleDelete = () => {
-    dispatch(deleteBoard(props.board._id)); // delete board 
-  }
+    dispatch(deleteBoard(props.board._id)); // delete board
+  };
 
   return (
     <section className={s.board}>
       <div className={s.headerWrapper}>
         <h2 className={s.boardHeader}>{parseTitle(props.board.title).title}</h2>
-        <img className={s.trashBin} src='/trash-bin.png' alt='trash-bin' onClick={onTrashClick}></img>
+        <img
+          className={s.trashBin}
+          src='/trash-bin.png'
+          alt='trash-bin'
+          onClick={onTrashClick}
+        ></img>
       </div>
-      <div className={s.description}>
-        {parseTitle(props.board.title).description}
-      </div>
+      <div className={s.description}>{parseTitle(props.board.title).description}</div>
       <button className={s.btn}>See details</button>
       <Modal
         onConfirm={handleDelete}
@@ -38,4 +41,4 @@ export const Board = (props: {board: IBoard}) => {
       />
     </section>
   );
-}
+};

@@ -1,9 +1,14 @@
 import Head from 'next/head';
-import { useAppSelector } from '../src/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../src/hooks/hooks';
+import { GetBoardData } from '../src/store/board/boardThunk';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
   const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const handelClickColumns = () => {
+    dispatch(GetBoardData('63824ac6cd1e87dffe860ee3'));
+  };
 
   return (
     <div className={styles.container}>
@@ -13,6 +18,7 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
+        <button onClick={handelClickColumns}> board data</button>
         {user ? (
           <h1 className={styles.title}> {`Welcome ${user.name}`}</h1>
         ) : (

@@ -1,3 +1,7 @@
+export const initialBoardState = [
+
+];
+
 export const columns = [
   {
     "_id": "0",
@@ -78,6 +82,58 @@ export const tasks = [
     "order": 4,
     "boardId": "id of board",
     "columnId": "0",
+    "description": "Task decription",
+    "userId": "userId of task owner",
+    "users": [
+      "userId of responsible user #1",
+      "userId of responsible user #2"
+    ]
+  },
+  {
+    "_id": "13",
+    "title": "Task title 13",
+    "order": 1,
+    "boardId": "id of board",
+    "columnId": "1",
+    "description": "Task decription",
+    "userId": "userId of task owner",
+    "users": [
+      "userId of responsible user #1",
+      "userId of responsible user #2"
+    ]
+  },
+  {
+    "_id": "14",
+    "title": "Task title 14",
+    "order": 2,
+    "boardId": "id of board",
+    "columnId": "1",
+    "description": "Task decription",
+    "userId": "userId of task owner",
+    "users": [
+      "userId of responsible user #1",
+      "userId of responsible user #2"
+    ]
+  },
+  {
+    "_id": "15",
+    "title": "Task title 15",
+    "order": 3,
+    "boardId": "id of board",
+    "columnId": "1",
+    "description": "Task decription",
+    "userId": "userId of task owner",
+    "users": [
+      "userId of responsible user #1",
+      "userId of responsible user #2"
+    ]
+  },
+  {
+    "_id": "16",
+    "title": "Task title 16",
+    "order": 4,
+    "boardId": "id of board",
+    "columnId": "1",
     "description": "Task decription",
     "userId": "userId of task owner",
     "users": [

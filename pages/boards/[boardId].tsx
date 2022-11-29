@@ -1,7 +1,7 @@
 import Head from 'next/head';;
 import { useRouter } from 'next/router';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { columns as initialColumns, tasks as initialTasks } from './mockupData';
+import { initialBoardState, columns as initialColumns, tasks as initialTasks } from './mockupData';
 import { useState } from 'react';
 import s from '../../src/components/Board/Board.module.scss';
 
@@ -10,6 +10,8 @@ const Board = () => {
   const { bid } = router.query;
   const [columnsState, setColumnsState] = useState(initialColumns);
   const [tasksState, setTasksState] = useState(initialTasks);
+  
+  const [bolardState, setBoardState] = useState(initialBoardState);
 
   const handleOnDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -24,18 +26,13 @@ const Board = () => {
     const tasksCopy = Array.from(tasksState);
     const [movedColumn] = tasksCopy.splice(result.source.index, 1);
     tasksCopy.splice(result.destination.index, 0, movedColumn);
-    
+
     tasksCopy.forEach((task, index) => {
       task.order = index;
-    });
-    
-    tasksCopy.sort((a, b) => {
-      return a.order - b.order;
     });
 
     setTasksState(tasksCopy);
   };
-
 
   const handleCardDelete = () => {
     console.log('handleCardDelete: ', handleCardDelete);

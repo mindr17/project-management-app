@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-import { createColumnInBoard, getBoardData, updateColumnById } from './boardThunk';
+import { getBoardData } from './thunkBoard';
+import { createColumnInBoard, updateColumnById } from './thunkColumns';
 import { InitialState } from './Iboard';
 
 const initialState: InitialState = {

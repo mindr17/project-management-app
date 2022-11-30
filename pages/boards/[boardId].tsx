@@ -2,16 +2,38 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { initialBoardState, columns as initialColumns, tasks as initialTasks } from './mockupData';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import s from '../../src/components/BoardPage/BoardPage.module.scss';
+import { GetBoardData } from '../../src/store/board/boardThunk';
+import { useAppDispatch, useAppSelector } from '../../src/hooks/hooks';
 
 const Board = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
-  const { bid } = router.query;
-  const [columnsState, setColumnsState] = useState(initialColumns);
-  const [tasksState, setTasksState] = useState(initialTasks);
+  // const [columnsState, setColumnsState] = useState(initialColumns);
+  // const [tasksState, setTasksState] = useState(initialTasks);
+  // const [bolardState, setBoardState] = useState(initialBoardState);
+  
+  const { columns } = useAppSelector((state) => state.board);
 
-  const [bolardState, setBoardState] = useState(initialBoardState);
+  useEffect(() => {
+    const { boardId } = router.query;
+
+    if (
+      boardId === undefined
+      || typeof boardId !== 'string'
+    ) return;
+
+    dispatch(GetBoardData(boardId));
+  }, [router]);
+
+  // useEffect(() => {
+  //   const { bid } = router.query;
+
+  //   if (!bid) return;
+
+  //   dispatch(GetBoardData(bid));
+  // }, [boards]);
 
   const handleOnDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -23,15 +45,25 @@ const Board = () => {
 
     // setColumnsState(columnsForEdit);
 
-    const tasksCopy = Array.from(tasksState);
-    const [movedColumn] = tasksCopy.splice(result.source.index, 1);
-    tasksCopy.splice(result.destination.index, 0, movedColumn);
+    // const tasksCopy = Array.from(tasksState);
+    // const [movedColumn] = tasksCopy.splice(result.source.index, 1);
+    // tasksCopy.splice(result.destination.index, 0, movedColumn);
 
-    tasksCopy.forEach((task, index) => {
-      task.order = index;
-    });
+    // tasksCopy.forEach((task, index) => {
+    //   task.order = index;
+    // });
 
-    setTasksState(tasksCopy);
+    // setTasksState(tasksCopy);
+
+    // const tasksCopy = Array.from(column.tasks);
+    // const [movedColumn] = tasksCopy.splice(result.source.index, 1);
+    // tasksCopy.splice(result.destination.index, 0, movedColumn);
+
+    // tasksCopy.forEach((task, index) => {
+    //   task.order = index;
+    // });
+
+    // setTasksState(tasksCopy);
   };
 
   const handleCardDelete = () => {
@@ -60,7 +92,7 @@ const Board = () => {
             // ref={provided.innerRef}
             // {...provided.droppableProps}
           >
-            {columnsState.map((column, index) => (
+            {columns.map((column, index: number) => (
               // <Draggable
               //   key={column._id}
               //   draggableId={column._id}
@@ -94,30 +126,35 @@ const Board = () => {
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                       >
-                        {tasksState
-                          .filter((task) => {
-                            return task.columnId === column._id;
-                          })
-                          .map((task, index) => {
-                            return (
-                              <Draggable key={task._id} draggableId={task._id} index={index}>
-                                {(provided) => (
-                                  <li
-                                    key={index}
-                                    className={s.card}
-                                    ref={provided.innerRef}
-                                    {...provided.dragHandleProps}
-                                    {...provided.draggableProps}
-                                  >
-                                    <div className={s.cardText}>{task.title}</div>
-                                    <div className={s.cardDeleteBtn} onClick={handleCardDelete}>
-                                      X
-                                    </div>
-                                  </li>
-                                )}
-                              </Draggable>
-                            );
-                          })}
+                        {
+                          // tasksState
+                          //   .filter((task) => {
+                          //     return task.columnId === column._id;
+                          //   })
+
+                          column.tasks && column.tasks
+                            .map((task, index) => {
+                              return (
+                                <Draggable key={task._id} draggableId={task._id} index={index}>
+                                  {(provided) => (
+                                    <li
+                                      key={index}
+                                      className={s.card}
+                                      ref={provided.innerRef}
+                                      {...provided.dragHandleProps}
+                                      {...provided.draggableProps}
+                                    >
+                                      <div className={s.cardText}>{task.title}</div>
+                                      <div className={s.cardDeleteBtn} onClick={handleCardDelete}>
+                                        X
+                                      </div>
+                                    </li>
+                                  )}
+                                </Draggable>
+                              );
+                            }
+                          )
+                        }
                         {provided.placeholder}
                       </ul>
                     )}

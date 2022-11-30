@@ -1,4 +1,5 @@
 import s from './footer.module.scss';
+import Image from 'next/image';
 
 export const Footer = () => {
   return (
@@ -9,7 +10,13 @@ export const Footer = () => {
       <section className={s.githubSection}>
         <section className={s.wrapper}>
           <a href='https://github.com/mindr17'>
-            <img className={s.githubLogo} src='/github-logo.png' alt='github account' />
+            <Image
+              className={s.githubLogo}
+              src='/github-logo.png'
+              alt='github account'
+              width={39}
+              height={38}
+            />
           </a>
           <a href='https://github.com/mindr17'>
             <p>mindr17</p>
@@ -17,7 +24,13 @@ export const Footer = () => {
         </section>
         <section className={s.wrapper}>
           <a href='https://github.com/Andreyjkov'>
-            <img className={s.githubLogo} src='/github-logo.png' alt='github account' />
+            <Image
+              className={s.githubLogo}
+              src='/github-logo.png'
+              alt='github account'
+              width={39}
+              height={38}
+            />
           </a>
           <a href='https://github.com/Andreyjkov'>
             <p>Andreyjkov</p>
@@ -25,7 +38,13 @@ export const Footer = () => {
         </section>
         <section className={s.wrapper}>
           <a href='https://github.com/SergeyMikhalkin'>
-            <img className={s.githubLogo} src='/github-logo.png' alt='github account' />
+            <Image
+              className={s.githubLogo}
+              src='/github-logo.png'
+              alt='github account'
+              width={39}
+              height={38}
+            />
           </a>
           <a href='https://github.com/SergeyMikhalkin'>
             <p>sergeyMikhalkin</p>
@@ -34,7 +53,13 @@ export const Footer = () => {
       </section>
       <section className={s.courseLogoSection}>
         <a href='https://rs.school/react/'>
-          <img className={s.rssLogo} src='/rss-logo.png' alt='rs-school'></img>
+          <Image
+            className={s.rssLogo}
+            src='/rss-logo.png'
+            alt='rs-school'
+            width={175}
+            height={65}
+          />
         </a>
       </section>
     </footer>

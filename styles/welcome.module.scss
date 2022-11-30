@@ -1,4 +1,5 @@
 $breakpoint-desktop: 1280px;
+$breakpoint-desktop-1024: 1024px;
 $breakpoint-tablet: 768px;
 $breakpoint-phone: 480px;
 
@@ -59,9 +60,9 @@ $breakpoint-phone: 480px;
   display: flex;
   justify-content: center;
   gap: 3rem;
-  overflow-x: scroll;
 
-  @media (max-width: $breakpoint-tablet) {
+  @media (max-width: $breakpoint-desktop-1024) {
+    overflow-x: scroll;
     padding: 0 2rem;
     justify-content: start;
   }

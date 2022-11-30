@@ -46,9 +46,9 @@ export const createTask = createAsyncThunk(
     if (!response.ok) {
       return rejectWithValue((await response.json()) as IKnownError);
     }
-    const allTasksInColumn: ITask[] = await response.json();
+    const newTask: ITask = await response.json();
 
-    return allTasksInColumn;
+    return newTask;
   }
 );
 

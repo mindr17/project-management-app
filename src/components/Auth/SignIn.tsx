@@ -99,10 +99,10 @@ export default function SignIn() {
         </section>
         <button className={s.btn}>Sign in</button>
       </form>
-      <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
       <Link className={s.signUpLink} href={'/signup'}>
         <strong>Create an account</strong>
       </Link>
+      <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
     </>
   );
 }

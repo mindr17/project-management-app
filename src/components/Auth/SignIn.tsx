@@ -40,6 +40,7 @@ export default function SignIn() {
     if (token) {
       const parseToken: IParseToken = parseJwt(token);
       const idAndToken = { id: parseToken.id, token: token };
+      localStorage.setItem('exp', JSON.stringify(parseToken.exp));
       dispatch(getUserById(idAndToken));
     }
   }, [token]);

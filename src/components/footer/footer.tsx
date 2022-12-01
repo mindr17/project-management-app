@@ -9,7 +9,7 @@ export const Footer = () => {
       </section>
       <section className={s.githubSection}>
         <section className={s.wrapper}>
-          <a href='https://github.com/mindr17'>
+          <a href='https://github.com/mindr17' className={s.link}>
             <Image
               className={s.githubLogo}
               src='/github-logo.png'
@@ -23,7 +23,7 @@ export const Footer = () => {
           </a>
         </section>
         <section className={s.wrapper}>
-          <a href='https://github.com/Andreyjkov'>
+          <a href='https://github.com/Andreyjkov' className={s.link}>
             <Image
               className={s.githubLogo}
               src='/github-logo.png'
@@ -37,7 +37,7 @@ export const Footer = () => {
           </a>
         </section>
         <section className={s.wrapper}>
-          <a href='https://github.com/SergeyMikhalkin'>
+          <a href='https://github.com/SergeyMikhalkin' className={s.link}>
             <Image
               className={s.githubLogo}
               src='/github-logo.png'

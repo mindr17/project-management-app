@@ -29,7 +29,6 @@ export const BoardList = () => {
 
   const handleCreate = (formData: IFormData) => {
     const title = createTitle(formData.title, formData.desc);
-    console.log(formData);
     dispatch(
       createBoard({
         title: title,
@@ -37,11 +36,6 @@ export const BoardList = () => {
         users: [user?._id],
       })
     ); // create board
-    console.log({
-      title: title,
-      owner: user?._id,
-      users: [user?._id],
-    });
   };
 
   return (

@@ -56,15 +56,15 @@ const Board = () => {
 
     // setTasksState(tasksCopy);
 
-    // const tasksCopy = Array.from(column.tasks);
-    // const [movedColumn] = tasksCopy.splice(result.source.index, 1);
-    // tasksCopy.splice(result.destination.index, 0, movedColumn);
+    const tasksCopy = Array.from(columns.tasks);
+    const [movedColumn] = tasksCopy.splice(result.source.index, 1);
+    tasksCopy.splice(result.destination.index, 0, movedColumn);
 
-    // tasksCopy.forEach((task, index) => {
-    //   task.order = index;
-    // });
+    tasksCopy.forEach((task, index) => {
+      task.order = index;
+    });
 
-    // setTasksState(tasksCopy);
+    setTasksState(tasksCopy);
   };
 
   const handleCardDelete = () => {

@@ -34,7 +34,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     if (!user) {
-      router.push('/');
+      router.push('//boardslist');
     }
   }, []);
 

@@ -32,7 +32,7 @@ export default function SignIn() {
 
     if (user && token) {
       dispatch(callReset());
-      router.push('/');
+      router.push('/boardslist');
     }
   }, [token, isError, user]);
 

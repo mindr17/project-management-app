@@ -42,7 +42,7 @@ export default function SignUp() {
     }
 
     if (user && token) {
-      router.push('/');
+      router.push('/boards');
     }
     setLoginAndPass(defaultFile);
   }, [token, isError, user]);

@@ -1,30 +1,30 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { initialBoardState, columns as initialColumns, tasks as initialTasks } from './mockupData';
+// import { initialBoardState, columns as initialColumns, tasks as initialTasks } from './mockupData';
 import { useEffect, useState } from 'react';
 import s from '../../src/components/BoardPage/BoardPage.module.scss';
-import { GetBoardData } from '../../src/store/board/boardThunk';
+import { getBoardData } from '../../src/store/board/thunkBoard';
 import { useAppDispatch, useAppSelector } from '../../src/hooks/hooks';
+import { createColumnInBoard } from '../../src/store/board/thunkColumns';
+import { createTask } from '../../src/store/board/thunkTasks';
+import ModalTaskAdd from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 
 const Board = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  // const [columnsState, setColumnsState] = useState(initialColumns);
-  // const [tasksState, setTasksState] = useState(initialTasks);
-  // const [bolardState, setBoardState] = useState(initialBoardState);
-  
+  const { boardId } = router.query;
   const { columns } = useAppSelector((state) => state.board);
+  const [taskAddModalState, setTaskAddModalState] = useState<boolean>(false);
 
   useEffect(() => {
-    const { boardId } = router.query;
 
     if (
       boardId === undefined
       || typeof boardId !== 'string'
     ) return;
 
-    dispatch(GetBoardData(boardId));
+    dispatch(getBoardData(boardId));
   }, [router]);
 
   // useEffect(() => {
@@ -68,6 +68,25 @@ const Board = () => {
 
   const handleCardDelete = () => {
     console.log('handleCardDelete: ', handleCardDelete);
+  };
+  
+  const handleColumnAdd = () => {
+    // dispatch(createColumnInBoard());
+  };
+
+  const handleCardAdd = (e: any) => {
+
+    // dispatch(createTask({
+      // boardId: boardId,
+      // columnId: 
+      // newTaskParams: {
+        // title: ,
+        // order: ,
+        // description: ,
+        // userId: number;
+        // users: string[];
+      // },
+    // }));
   };
 
   const handleKeyDown = (e: any) => {
@@ -127,11 +146,6 @@ const Board = () => {
                         {...provided.droppableProps}
                       >
                         {
-                          // tasksState
-                          //   .filter((task) => {
-                          //     return task.columnId === column._id;
-                          //   })
-
                           column.tasks && column.tasks
                             .map((task, index) => {
                               return (

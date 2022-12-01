@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import SignIn from '../src/components/Auth/SignIn';
-import s from '../src/components/Auth/signin.module.scss';
+import s from '../src/components/Auth/auth.module.scss';
 
 export default function Login() {
   return (

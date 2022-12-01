@@ -4,6 +4,7 @@ export interface IFormSignIn {
 }
 
 export interface IParseToken {
+  exp: number;
   id: string;
   iat: number;
   login: string;

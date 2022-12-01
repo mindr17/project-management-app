@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
-import s from './modal.module.scss';
 import { useForm } from 'react-hook-form';
+import s from './ModalTaskAdd.module.scss';
 
 interface IProps {
   onConfirm: (formData: IFormData) => void;
@@ -8,7 +8,7 @@ interface IProps {
   setIsShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
-interface IFormData {
+export interface IFormData {
   [key: string]: string;
 }
 

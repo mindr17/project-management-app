@@ -2,20 +2,21 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 // import { initialBoardState, columns as initialColumns, tasks as initialTasks } from './mockupData';
-import { useEffect, useState } from 'react';
-import s from '../../src/components/BoardPage/BoardPage.module.scss';
+import { SetStateAction, useEffect, useState } from 'react';
 import { getBoardData } from '../../src/store/board/thunkBoard';
 import { useAppDispatch, useAppSelector } from '../../src/hooks/hooks';
 import { createColumnInBoard } from '../../src/store/board/thunkColumns';
 import { createTask } from '../../src/store/board/thunkTasks';
 import ModalTaskAdd from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
+import s from '../../src/components/BoardPage/BoardPage.module.scss';
+import IFormData from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 
 const Board = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { boardId } = router.query;
   const { columns } = useAppSelector((state) => state.board);
-  const [taskAddModalState, setTaskAddModalState] = useState<boolean>(false);
+  const [ModalTaskAddState, setModalTaskAddState] = useState<boolean>(false);
 
   useEffect(() => {
 
@@ -173,7 +174,12 @@ const Board = () => {
                       </ul>
                     )}
                   </Droppable>
-                  <button className={s.cardAddBtn}>Add card</button>
+                  <button
+                    className={s.cardAddBtn}
+                    onClick={() => {
+                      setModalTaskAddState(true);
+                    }}
+                  >Add card</button>
                 </div>
               </li>
               //     )
@@ -185,7 +191,17 @@ const Board = () => {
           {/* )}
           </Droppable> */}
         </DragDropContext>
-        <div className={s.columnAddBtn}>Add Column</div>
+        <div
+          className={s.columnAddBtn}
+          // onClick={() => {
+          //   setModalTaskAddState(true);
+          // }}
+        >Add Column</div>
+        <ModalTaskAdd
+          onConfirm={() => {}}
+          isShowModal={ModalTaskAddState}
+          setIsShowModal={setModalTaskAddState}
+        />
       </div>
     </div>
   );

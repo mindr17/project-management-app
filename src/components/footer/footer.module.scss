@@ -42,6 +42,7 @@
 
 .wrapper p {
   display: none;
+  margin: 0;
 
   @media (min-width: $breakpoint-desktop) {
     display: flex;

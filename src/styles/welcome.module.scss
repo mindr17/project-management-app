@@ -1,11 +1,8 @@
-$breakpoint-desktop: 1280px;
-$breakpoint-desktop-1024: 1024px;
-$breakpoint-tablet: 768px;
-$breakpoint-phone: 480px;
+@import './variables.scss';
 
 .main {
   width: 100%;
-  height: calc(100vh - 6rem - 10rem);
+  height: calc(100vh - 50px - 32px);
   display: flex;
   flex-direction: column;
   justify-content: space-around;

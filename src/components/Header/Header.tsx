@@ -5,6 +5,7 @@ import { callReset, setToken, setUser } from '../../store/auth/sliceAuth';
 import { logout } from '../../store/auth/authThunk';
 import s from './header.module.scss';
 import { IUserDataLs } from './interfaceHeader';
+import { getTokenValidness } from '../utilities/getTokenValidness';
 
 export const Header = () => {
   const dispatch = useAppDispatch();
@@ -29,6 +30,10 @@ export const Header = () => {
 
     if (lsToken && !token) {
       dispatch(setToken(lsToken));
+    }
+
+    if (lsToken && getTokenValidness()) {
+      onLogout();
     }
   }, []);
 

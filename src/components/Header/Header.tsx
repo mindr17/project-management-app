@@ -57,6 +57,8 @@ export const Header = () => {
             <Link className={s.navLink} href={'signin'}>
               Sign In
             </Link>
+          </nav>
+          <nav className={s.nav}>
             <Link className={s.navLink} href={'signup'}>
               Sign Up
             </Link>

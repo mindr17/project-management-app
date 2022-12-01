@@ -1,9 +1,11 @@
 import Head from 'next/head';
-import { useAppSelector } from '../src/hooks/hooks';
-import styles from '../styles/Home.module.css';
+import { BoardList } from '../src/components/BoardList/BoardList';
+import { useAppDispatch, useAppSelector } from '../src/hooks/hooks';
+import styles from '../src/styles/Home.module.scss';
 
 export default function Home() {
   const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   return (
     <div className={styles.container}>
@@ -13,11 +15,7 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
-        {user ? (
-          <h1 className={styles.title}> {`Welcome ${user.name}`}</h1>
-        ) : (
-          <h1 className={styles.title}>You need to login</h1>
-        )}
+        {user ? <BoardList /> : <h1 className={styles.title}>You need to login</h1>}
       </main>
     </div>
   );

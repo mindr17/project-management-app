@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import UserProfile from '../src/components/Auth/UserProfile';
-import s from '../styles/signin.module.scss';
+import s from '../src/components/Auth/auth.module.scss';
 
 export default function Profile() {
   return (

@@ -1,18 +1,18 @@
-$breakpoint-desktop: 1280px;
-$breakpoint-tablet: 768px;
-$breakpoint-phone: 480px;
+@import '../../styles/variables.scss';
 
 .footer {
+  height: $footer-height;
   width: 100%;
-  height: 10rem;
-  padding: 2.9rem 10.9rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  @media (max-width: $breakpoint-tablet) {
-    padding: 1.1rem 2rem;
-  }
+  background-color: $color-primary;
+  padding: 12px;
+  
+  // @media (max-width: $breakpoint-tablet) {
+  //   padding: 1.1rem 2rem;
+  // }
 }
 
 .year,
@@ -24,77 +24,71 @@ $breakpoint-phone: 480px;
 }
 
 .githubSection {
-  width: 40%;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  gap: 2.7rem;
+  align-items: center;
+  // gap: 2.7rem;
 
-  @media (max-width: $breakpoint-tablet) {
-    width: 33%;
-    gap: initial;
-   }
+  // @media (max-width: $breakpoint-tablet) {
+  //   width: 33%;
+  //   gap: initial;
+  //  }
 }
 
 .wrapper {
-  width: 33%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.8rem;
+  gap: 12px;
 }
 
 .wrapper p {
-  margin: 0;
-  display: block;
-  letter-spacing: 0.16em;
+  display: none;
 
-  @media (max-width: $breakpoint-desktop) {
-   display: none;
+  @media (min-width: $breakpoint-desktop) {
+    display: flex;
   }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.githubSection {
+  gap: 12px;
 }
 
 .githubLogo {
-  width: 3.9rem;
-  height: 3.8rem;
+  width: 24px;
+  height: 24px;
 
-  @media (max-width: $breakpoint-tablet) {
-    width: 2.3rem;
-    height: 2.2rem;
-  }
+  // @media (max-width: $breakpoint-tablet) {
+  //   width: 2.3rem;
+  //   height: 2.2rem;
+  // }
 }
 
 .rssLogo {
-  width: 17.5rem;
-  height: 6.5rem;
+  flex: 0 1 auto;
+  width: 60px;
+  height: 22px;
 
-  @media (max-width: $breakpoint-desktop) {
-    width: 6rem;
-    height: 2.2rem;
-  }
-}
-
-.yearSection,
-.courseLogoSection {
-  width: 30%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  @media (max-width: $breakpoint-tablet) {
-    width: 33%;
-  }
-
-  @media (max-width: $breakpoint-phone) {
-    width: auto;
-  }  
+  // @media (max-width: $breakpoint-desktop) {
+  //   width: 60px;
+  //   height: 22px;
+  // }
 }
 
 .yearSection {
-  justify-content: start;
+  display: flex;
+  align-items: center;
+  flex: 0 1 100%;
+  justify-content: flex-start;
 }
 
 .courseLogoSection {
-  justify-content: end;
+  display: flex;
+  align-items: center;
+  flex: 0 1 100%;
+  justify-content: flex-end;
 }

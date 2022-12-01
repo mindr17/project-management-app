@@ -6,11 +6,11 @@ import { getUserById, login } from '../../store/auth/authThunk';
 import { callReset } from '../../store/auth/sliceAuth';
 import { useEffect } from 'react';
 import Preloader from '../Preloader/Preloader';
-import s from './auth.module.scss';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { parseJwt } from '../utilities/parseJwt';
 import { IFormSignIn, IParseToken } from './interfaceAuth';
+import s from './auth.module.scss';
 
 export default function SignIn() {
   const dispatch = useAppDispatch();
@@ -40,6 +40,7 @@ export default function SignIn() {
     if (token) {
       const parseToken: IParseToken = parseJwt(token);
       const idAndToken = { id: parseToken.id, token: token };
+      localStorage.setItem('exp', JSON.stringify(parseToken.exp));
       dispatch(getUserById(idAndToken));
     }
   }, [token]);
@@ -99,10 +100,10 @@ export default function SignIn() {
         </section>
         <button className={s.btn}>Sign in</button>
       </form>
-      <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
       <Link className={s.signUpLink} href={'/signup'}>
         <strong>Create an account</strong>
       </Link>
+      <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
     </>
   );
 }

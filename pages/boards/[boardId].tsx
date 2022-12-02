@@ -1,17 +1,40 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { initialBoardState, columns as initialColumns, tasks as initialTasks } from './mockupData';
-import { useState } from 'react';
+// import { initialBoardState, columns as initialColumns, tasks as initialTasks } from './mockupData';
+import { SetStateAction, useEffect, useState } from 'react';
+import { getBoardData } from '../../src/store/board/thunkBoard';
+import { useAppDispatch, useAppSelector } from '../../src/hooks/hooks';
+import { createColumnInBoard } from '../../src/store/board/thunkColumns';
+import { createTask } from '../../src/store/board/thunkTasks';
+import ModalTaskAdd from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 import s from '../../src/components/BoardPage/BoardPage.module.scss';
+import IFormData from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 
 const Board = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
-  const { bid } = router.query;
-  const [columnsState, setColumnsState] = useState(initialColumns);
-  const [tasksState, setTasksState] = useState(initialTasks);
+  const { boardId } = router.query;
+  const { columns } = useAppSelector((state) => state.board);
+  const [ModalTaskAddState, setModalTaskAddState] = useState<boolean>(false);
 
-  const [bolardState, setBoardState] = useState(initialBoardState);
+  useEffect(() => {
+
+    if (
+      boardId === undefined
+      || typeof boardId !== 'string'
+    ) return;
+
+    dispatch(getBoardData(boardId));
+  }, [router]);
+
+  // useEffect(() => {
+  //   const { bid } = router.query;
+
+  //   if (!bid) return;
+
+  //   dispatch(GetBoardData(bid));
+  // }, [boards]);
 
   const handleOnDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -23,7 +46,17 @@ const Board = () => {
 
     // setColumnsState(columnsForEdit);
 
-    const tasksCopy = Array.from(tasksState);
+    // const tasksCopy = Array.from(tasksState);
+    // const [movedColumn] = tasksCopy.splice(result.source.index, 1);
+    // tasksCopy.splice(result.destination.index, 0, movedColumn);
+
+    // tasksCopy.forEach((task, index) => {
+    //   task.order = index;
+    // });
+
+    // setTasksState(tasksCopy);
+
+    const tasksCopy = Array.from(columns.tasks);
     const [movedColumn] = tasksCopy.splice(result.source.index, 1);
     tasksCopy.splice(result.destination.index, 0, movedColumn);
 
@@ -36,6 +69,25 @@ const Board = () => {
 
   const handleCardDelete = () => {
     console.log('handleCardDelete: ', handleCardDelete);
+  };
+  
+  const handleColumnAdd = () => {
+    // dispatch(createColumnInBoard());
+  };
+
+  const handleCardAdd = (e: any) => {
+
+    // dispatch(createTask({
+      // boardId: boardId,
+      // columnId: 
+      // newTaskParams: {
+        // title: ,
+        // order: ,
+        // description: ,
+        // userId: number;
+        // users: string[];
+      // },
+    // }));
   };
 
   const handleKeyDown = (e: any) => {
@@ -60,7 +112,7 @@ const Board = () => {
             // ref={provided.innerRef}
             // {...provided.droppableProps}
           >
-            {columnsState.map((column, index) => (
+            {columns.map((column, index: number) => (
               // <Draggable
               //   key={column._id}
               //   draggableId={column._id}
@@ -94,35 +146,40 @@ const Board = () => {
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                       >
-                        {tasksState
-                          .filter((task) => {
-                            return task.columnId === column._id;
-                          })
-                          .map((task, index) => {
-                            return (
-                              <Draggable key={task._id} draggableId={task._id} index={index}>
-                                {(provided) => (
-                                  <li
-                                    key={index}
-                                    className={s.card}
-                                    ref={provided.innerRef}
-                                    {...provided.dragHandleProps}
-                                    {...provided.draggableProps}
-                                  >
-                                    <div className={s.cardText}>{task.title}</div>
-                                    <div className={s.cardDeleteBtn} onClick={handleCardDelete}>
-                                      X
-                                    </div>
-                                  </li>
-                                )}
-                              </Draggable>
-                            );
-                          })}
+                        {
+                          column.tasks && column.tasks
+                            .map((task, index) => {
+                              return (
+                                <Draggable key={task._id} draggableId={task._id} index={index}>
+                                  {(provided) => (
+                                    <li
+                                      key={index}
+                                      className={s.card}
+                                      ref={provided.innerRef}
+                                      {...provided.dragHandleProps}
+                                      {...provided.draggableProps}
+                                    >
+                                      <div className={s.cardText}>{task.title}</div>
+                                      <div className={s.cardDeleteBtn} onClick={handleCardDelete}>
+                                        X
+                                      </div>
+                                    </li>
+                                  )}
+                                </Draggable>
+                              );
+                            }
+                          )
+                        }
                         {provided.placeholder}
                       </ul>
                     )}
                   </Droppable>
-                  <button className={s.cardAddBtn}>Add card</button>
+                  <button
+                    className={s.cardAddBtn}
+                    onClick={() => {
+                      setModalTaskAddState(true);
+                    }}
+                  >Add card</button>
                 </div>
               </li>
               //     )
@@ -134,7 +191,17 @@ const Board = () => {
           {/* )}
           </Droppable> */}
         </DragDropContext>
-        <div className={s.columnAddBtn}>Add Column</div>
+        <div
+          className={s.columnAddBtn}
+          // onClick={() => {
+          //   setModalTaskAddState(true);
+          // }}
+        >Add Column</div>
+        <ModalTaskAdd
+          onConfirm={() => {}}
+          isShowModal={ModalTaskAddState}
+          setIsShowModal={setModalTaskAddState}
+        />
       </div>
     </div>
   );

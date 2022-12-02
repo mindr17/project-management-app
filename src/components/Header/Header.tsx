@@ -46,13 +46,13 @@ export const Header = () => {
       </nav>
       {user ? (
         <>
-          <Link className={s.navLink} href={'/'}>
-            Main
+          <Link className={s.navLink} href={'/boardslist'}>
+            Boards
           </Link>
           <Link className={s.navLink} href={'/profile'}>
             Profile
           </Link>
-          <Link onClick={onLogout} className={s.navLink} href={'/signin'}>
+          <Link onClick={onLogout} className={s.navLink} href={'/'}>
             Logout
           </Link>
         </>

@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import { useAppDispatch } from '../../hooks/hooks';
-import { IBoard } from '../../store/boards/IBoard';
+import { useAppDispatch } from '../../../hooks/hooks';
+import { IBoard } from '../../../store/boards/IBoard';
 import s from './board.module.scss';
-import { deleteBoard } from '../../store/boards/boardsThunk';
-import Modal from '../Modal/Modal';
+import { deleteBoard } from '../../../store/boards/boardsThunk';
+import Modal from '../../ModalDelete/Modal';
 import { useState } from 'react';
-import { parseTitle } from '../utilities/boardInfo';
+import { parseTitle } from '../../utilities/boardInfo';
 
 export const Board = (props: { board: IBoard }) => {
   const dispatch = useAppDispatch();
@@ -32,7 +32,9 @@ export const Board = (props: { board: IBoard }) => {
         ></img>
       </div>
       <div className={s.description}>{parseTitle(props.board.title).description}</div>
-      <button className={s.btn}>See details</button>
+      <Link href={`/boards/${props.board._id}`}>
+        <button className={s.btn}>See details</button>
+      </Link>
       <Modal
         onConfirm={handleDelete}
         title={'Do you want to delete the board?'}

@@ -6,6 +6,7 @@ import { InitialState } from './Iboard';
 const initialState: InitialState = {
   columns: [],
   tasks: [],
+  isLoading: false,
 };
 
 const sliceBoard = createSlice({
@@ -15,12 +16,16 @@ const sliceBoard = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(getBoardData.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getBoardData.fulfilled, (state, action) => {
         state.columns = action.payload.columns;
         state.tasks = action.payload.tasks;
         state.columns.forEach((column) => {
           column.tasks = action.payload.tasks.filter((task) => task.columnId === column._id);
         });
+        state.isLoading = false;
       })
       .addCase(createColumnInBoard.fulfilled, (state, action) => {
         state.columns.push(action.payload);

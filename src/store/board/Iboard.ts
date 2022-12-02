@@ -20,6 +20,7 @@ export interface IColumn {
 export interface InitialState {
   columns: IColumn[];
   tasks: ITask[];
+  isLoading: boolean;
 }
 
 export interface IBoardCreateColumn {

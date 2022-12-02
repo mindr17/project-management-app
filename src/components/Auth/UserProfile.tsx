@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, logout, updateUser } from '../../store/auth/authThunk';
 import { callReset, setIsDelete } from '../../store/auth/sliceAuth';
 import { IFormData } from './interfaceAuth';
-import Modal from '../Modal/Modal';
+import Modal from '../ModalDelete/Modal';
 
 export default function UserProfile() {
   const dispatch = useAppDispatch();
@@ -34,7 +34,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     if (!user) {
-      router.push('/');
+      router.push('//boardslist');
     }
   }, []);
 

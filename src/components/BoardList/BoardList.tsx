@@ -2,10 +2,11 @@ import { use, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { getBoards, createBoard } from '../../store/boards/boardsThunk';
 import { IBoard } from '../../store/boards/IBoard';
-import { Board } from '../Board/Board';
-import CreateBoardModal from '../CreateBoardModal/Modal';
+import { Board } from './Board/Board';
+import CreateBoardModal from './CreateBoardModal/Modal';
 import { createTitle } from '../utilities/boardInfo';
 import s from './boardlist.module.scss';
+import Preloader from '../Preloader/Preloader';
 
 export const BoardList = () => {
   const dispatch = useAppDispatch();
@@ -37,6 +38,11 @@ export const BoardList = () => {
       })
     ); // create board
   };
+  const { isLoading } = useAppSelector((state) => state.boards);
+
+  if (isLoading) {
+    return <Preloader />;
+  }
 
   return (
     <>

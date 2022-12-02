@@ -1,3 +1,10 @@
+export interface IResponseUserAndToken {
+  user: IResponseUser;
+  token: {
+    token: string;
+  };
+}
+
 export interface IResponseUser {
   _id: string;
   name: string;

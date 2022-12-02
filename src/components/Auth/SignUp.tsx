@@ -3,8 +3,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { useForm } from 'react-hook-form';
 import s from './auth.module.scss';
 import { useRouter } from 'next/router';
-import { login, registerUser } from '../../store/auth/authThunk';
-import { useEffect, useState } from 'react';
+import { signUpAndSignIn } from '../../store/auth/authThunk';
+import { useEffect } from 'react';
 import { callReset } from '../../store/auth/sliceAuth';
 import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
@@ -17,8 +17,6 @@ export default function SignUp() {
     (state) => state.auth
   );
   const router = useRouter();
-  const defaultFile = { login: '', password: '' };
-  const [loginAndPass, setLoginAndPass] = useState(defaultFile);
 
   const {
     register,
@@ -35,22 +33,15 @@ export default function SignUp() {
 
     if (isSuccess) {
       dispatch(callReset());
-
-      if (!token) {
-        dispatch(login(loginAndPass));
-      }
     }
 
     if (user && token) {
-      router.push('/boards');
+      router.push('/boardslist');
     }
-    setLoginAndPass(defaultFile);
-  }, [token, isError, user]);
+  }, [token, isError, user, isSuccess, message, dispatch, router]);
 
   const onSubmit = (formData: IFormData) => {
-    const { login, password } = formData;
-    setLoginAndPass({ login, password });
-    dispatch(registerUser(formData));
+    dispatch(signUpAndSignIn(formData));
     reset();
   };
 

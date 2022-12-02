@@ -34,16 +34,15 @@ export default function SignIn() {
       dispatch(callReset());
       router.push('/boardslist');
     }
-  }, [token, isError, user]);
+  }, [token, isError, user, message, dispatch, router]);
 
   useEffect(() => {
     if (token) {
       const parseToken: IParseToken = parseJwt(token);
       const idAndToken = { id: parseToken.id, token: token };
-      localStorage.setItem('exp', JSON.stringify(parseToken.exp));
       dispatch(getUserById(idAndToken));
     }
-  }, [token]);
+  }, [dispatch, token]);
 
   const onSubmit = (formData: IFormSignIn) => {
     dispatch(login(formData));

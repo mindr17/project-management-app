@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { deleteUser, getUserById, login, logout, registerUser, updateUser } from './authThunk';
+import { IParseToken } from '../../components/Auth/interfaceAuth';
+import { parseJwt } from '../../components/utilities/parseJwt';
+import { deleteUser, getUserById, login, logout, signUpAndSignIn, updateUser } from './authThunk';
 import { IinitialStateAuth, IResponseUser } from './interfaceAuthStore';
 
 const initialState: IinitialStateAuth = {
@@ -35,16 +37,20 @@ const sliceAuth = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.pending, (state) => {
+      .addCase(signUpAndSignIn.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.isLoading = false;
+      .addCase(signUpAndSignIn.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.user = action.payload;
-        localStorage.setItem('user', JSON.stringify(action.payload));
+        state.isLoading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token.token;
+        const parseToken: IParseToken = parseJwt(action.payload.token.token);
+        localStorage.setItem('exp', JSON.stringify(parseToken.exp));
+        localStorage.setItem('user', JSON.stringify(action.payload.user));
+        localStorage.setItem('token', JSON.stringify(action.payload.token.token));
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(signUpAndSignIn.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.user = null;
@@ -62,6 +68,8 @@ const sliceAuth = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.token = action.payload;
+        const parseToken: IParseToken = parseJwt(action.payload);
+        localStorage.setItem('exp', JSON.stringify(parseToken.exp));
         localStorage.setItem('token', JSON.stringify(action.payload));
       })
       .addCase(login.rejected, (state, action) => {

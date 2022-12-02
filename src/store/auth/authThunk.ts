@@ -5,27 +5,43 @@ import {
   IFormData,
   IKnownError,
   IResponseUser,
+  IResponseUserAndToken,
   ITokenAndId,
   IUpdateUser,
 } from './interfaceAuthStore';
 
-export const registerUser = createAsyncThunk<
-  IResponseUser,
+export const signUpAndSignIn = createAsyncThunk<
+  IResponseUserAndToken,
   IFormData,
   { rejectValue: IKnownError }
->('auth/registerUser', async (dataForm, { rejectWithValue }) => {
-  const response = await fetch(`${BASE_URL}/auth/signup`, {
+>('auth/signUpAndSignIn', async (dataForm: IFormData, { rejectWithValue }) => {
+  const { login, password } = dataForm;
+
+  const responseSignUp = await fetch(`${BASE_URL}/auth/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(dataForm),
   });
 
-  if (!response.ok) {
-    return rejectWithValue((await response.json()) as IKnownError);
+  if (!responseSignUp.ok) {
+    return rejectWithValue(await responseSignUp.json());
   }
-  const user: IResponseUser = await response.json();
 
-  return user;
+  const user: IResponseUser = await responseSignUp.json();
+
+  const responseSignIn = await fetch(`${BASE_URL}/auth/signin`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ login, password }),
+  });
+
+  if (!responseSignIn.ok) {
+    return rejectWithValue(await responseSignIn.json());
+  }
+
+  const token: { token: string } = await responseSignIn.json();
+
+  return { user, token };
 });
 
 export const login = createAsyncThunk<string, ICreateToken, { rejectValue: IKnownError }>(
@@ -38,9 +54,9 @@ export const login = createAsyncThunk<string, ICreateToken, { rejectValue: IKnow
     });
 
     if (!response.ok) {
-      return rejectWithValue((await response.json()) as IKnownError);
+      return rejectWithValue(await response.json());
     }
-    const res = (await response.json()) as { token: string };
+    const res: { token: string } = await response.json();
 
     return res.token;
   }
@@ -60,7 +76,7 @@ export const getUserById = createAsyncThunk<
   });
 
   if (!response.ok) {
-    return rejectWithValue((await response.json()) as IKnownError);
+    return rejectWithValue(await response.json());
   }
   const user: IResponseUser = await response.json();
 
@@ -81,7 +97,7 @@ export const deleteUser = createAsyncThunk<
   });
 
   if (!response.ok) {
-    return rejectWithValue((await response.json()) as IKnownError);
+    return rejectWithValue(await response.json());
   }
   const user: IResponseUser = await response.json();
 
@@ -104,7 +120,7 @@ export const updateUser = createAsyncThunk<
   });
 
   if (!response.ok) {
-    return rejectWithValue((await response.json()) as IKnownError);
+    return rejectWithValue(await response.json());
   }
   const updatedUserData: IResponseUser = await response.json();
 
@@ -114,4 +130,5 @@ export const updateUser = createAsyncThunk<
 export const logout = createAsyncThunk('auth/logout', async () => {
   localStorage.removeItem('user');
   localStorage.removeItem('token');
+  localStorage.removeItem('exp');
 });

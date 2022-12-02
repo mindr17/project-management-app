@@ -33,12 +33,6 @@ export default function UserProfile() {
   });
 
   useEffect(() => {
-    if (!user) {
-      router.push('//boardslist');
-    }
-  }, []);
-
-  useEffect(() => {
     if (isDelete) {
       dispatch(callReset());
       toast.success('Profile Deleted!');
@@ -57,7 +51,7 @@ export default function UserProfile() {
       toast.error(message);
       dispatch(callReset());
     }
-  }, [isDelete, isSuccess, isError]);
+  }, [isDelete, isSuccess, isError, dispatch, router, resetField, message]);
 
   const onSubmit = (formData: IFormData) => {
     user && dispatch(updateUser({ formData, token, id: user._id }));

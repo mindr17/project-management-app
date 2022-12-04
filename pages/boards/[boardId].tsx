@@ -1,15 +1,16 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 // import { initialBoardState, columns as initialColumns, tasks as initialTasks } from './mockupData';
 import { SetStateAction, useEffect, useState } from 'react';
 import { getBoardData } from '../../src/store/board/thunkBoard';
 import { useAppDispatch, useAppSelector } from '../../src/hooks/hooks';
 import { createColumnInBoard } from '../../src/store/board/thunkColumns';
-import { createTask } from '../../src/store/board/thunkTasks';
+import { createTask, updateSetOfTasks } from '../../src/store/board/thunkTasks';
 import ModalTaskAdd from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 import s from '../../src/components/BoardPage/BoardPage.module.scss';
 import IFormData from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
+import { ITask } from '../../src/store/board/Iboard';
 
 const Board = () => {
   const dispatch = useAppDispatch();
@@ -18,79 +19,66 @@ const Board = () => {
   const { columns } = useAppSelector((state) => state.board);
   const [ModalTaskAddState, setModalTaskAddState] = useState<boolean>(false);
 
+  const [_columns, setTasksState] = useState();
+
   useEffect(() => {
-
-    if (
-      boardId === undefined
-      || typeof boardId !== 'string'
-    ) return;
-
+    if (boardId === undefined || typeof boardId !== 'string') return;
     dispatch(getBoardData(boardId));
   }, [router]);
 
-  // useEffect(() => {
-  //   const { bid } = router.query;
+  useEffect(() => {
+    setTasksState(columns);
+  }, [columns]);
 
-  //   if (!bid) return;
-
-  //   dispatch(GetBoardData(bid));
-  // }, [boards]);
-
-  const handleOnDragEnd = (result: any) => {
+  const handleOnDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
-    // const columnsForEdit = Array.from(columnsState);
-    // const [movedColumn] = columnsForEdit.splice(result.source.index, 1);
-    // columnsForEdit.splice(result.destination.index, 0, movedColumn);
-    // console.log('columnsForEdit: ', columnsForEdit);
+    if (result.destination.droppableId === result.source.droppableId) {
+      const column = _columns.filter((x) => x._id === result.source.droppableId);
 
-    // setColumnsState(columnsForEdit);
+      const tasksCopy = [...column[0].tasks];
 
-    // const tasksCopy = Array.from(tasksState);
-    // const [movedColumn] = tasksCopy.splice(result.source.index, 1);
-    // tasksCopy.splice(result.destination.index, 0, movedColumn);
+      const [movedColumn] = tasksCopy.splice(result.source.index, 1);
+      tasksCopy.splice(result.destination.index, 0, movedColumn);
 
-    // tasksCopy.forEach((task, index) => {
-    //   task.order = index;
-    // });
+      const newState = JSON.parse(JSON.stringify(_columns));
+      const newColumn = newState.filter((x) => x._id === result.source.droppableId);
+      newColumn[0].tasks = [...tasksCopy];
 
-    // setTasksState(tasksCopy);
+      setTasksState(newState);
 
-    const tasksCopy = Array.from(columns.tasks);
-    const [movedColumn] = tasksCopy.splice(result.source.index, 1);
-    tasksCopy.splice(result.destination.index, 0, movedColumn);
-
-    tasksCopy.forEach((task, index) => {
-      task.order = index;
-    });
-
-    setTasksState(tasksCopy);
+      const resToApi = newColumn[0].tasks.map((x, index) => ({
+        _id: x._id,
+        order: index,
+        columnId: x.columnId,
+      }));
+      dispatch(updateSetOfTasks(resToApi));
+    }
   };
 
   const handleCardDelete = () => {
-    console.log('handleCardDelete: ', handleCardDelete);
+    // console.log('handleCardDelete: ', handleCardDelete);
   };
-  
+
   const handleColumnAdd = () => {
     // dispatch(createColumnInBoard());
   };
 
-  const handleCardAdd = (e: any) => {
-
+  const handleCardAdd = () => {
     // dispatch(createTask({
-      // boardId: boardId,
-      // columnId: 
-      // newTaskParams: {
-        // title: ,
-        // order: ,
-        // description: ,
-        // userId: number;
-        // users: string[];
-      // },
+    // boardId: boardId,
+    // columnId:
+    // newTaskParams: {
+    // title: ,
+    // order: ,
+    // description: ,
+    // userId: number;
+    // users: string[];
+    // },
     // }));
   };
 
-  const handleKeyDown = (e: any) => {
+  const handleKeyDown = (e) => {
     e.target.style.height = 'inherit';
     e.target.style.height = `${e.target.scrollHeight + 2}px`;
   };
@@ -112,48 +100,48 @@ const Board = () => {
             // ref={provided.innerRef}
             // {...provided.droppableProps}
           >
-            {columns.map((column, index: number) => (
-              // <Draggable
-              //   key={column._id}
-              //   draggableId={column._id}
-              //   index={index}
-              // >
-              //   {
-              //     (provided) => (
-              <li
-                key={column._id}
-                className={s.column}
-                // ref={provided.innerRef}
-                // {...provided.dragHandleProps}
-                // {...provided.draggableProps}
-              >
-                <div className={s.columnContent}>
-                  <div className={s.columnHeader}>
-                    <textarea
-                      className={s.columnTitleArea}
-                      defaultValue={column.title}
-                      name=''
-                      rows={1}
-                      id=''
-                      onInput={handleKeyDown}
-                    ></textarea>
-                    <button className={s.columnDeleteBtn}>X</button>
-                  </div>
-                  <Droppable droppableId={column._id}>
-                    {(provided, snapshot) => (
-                      <ul
-                        className={s.cardsList}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                      >
-                        {
-                          column.tasks && column.tasks
-                            .map((task, index) => {
+            {_columns &&
+              _columns.map((column) => (
+                // <Draggable
+                //   key={column._id}
+                //   draggableId={column._id}
+                //   index={index}
+                // >
+                //   {
+                //     (provided) => (
+                <li
+                  key={column._id}
+                  className={s.column}
+                  // ref={provided.innerRef}
+                  // {...provided.dragHandleProps}
+                  // {...provided.draggableProps}
+                >
+                  <div className={s.columnContent}>
+                    <div className={s.columnHeader}>
+                      <textarea
+                        className={s.columnTitleArea}
+                        defaultValue={column.title}
+                        name=''
+                        rows={1}
+                        id=''
+                        onInput={handleKeyDown}
+                      ></textarea>
+                      <button className={s.columnDeleteBtn}>X</button>
+                    </div>
+                    <Droppable droppableId={column._id}>
+                      {(provided, snapshot) => (
+                        <ul
+                          className={s.cardsList}
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                        >
+                          {column.tasks &&
+                            column.tasks.map((task: ITask, index: number) => {
                               return (
                                 <Draggable key={task._id} draggableId={task._id} index={index}>
                                   {(provided) => (
                                     <li
-                                      key={index}
+                                      key={task._id}
                                       className={s.card}
                                       ref={provided.innerRef}
                                       {...provided.dragHandleProps}
@@ -167,25 +155,25 @@ const Board = () => {
                                   )}
                                 </Draggable>
                               );
-                            }
-                          )
-                        }
-                        {provided.placeholder}
-                      </ul>
-                    )}
-                  </Droppable>
-                  <button
-                    className={s.cardAddBtn}
-                    onClick={() => {
-                      setModalTaskAddState(true);
-                    }}
-                  >Add card</button>
-                </div>
-              </li>
-              //     )
-              //   }
-              // </Draggable>
-            ))}
+                            })}
+                          {provided.placeholder}
+                        </ul>
+                      )}
+                    </Droppable>
+                    <button
+                      className={s.cardAddBtn}
+                      onClick={() => {
+                        setModalTaskAddState(true);
+                      }}
+                    >
+                      Add card
+                    </button>
+                  </div>
+                </li>
+                //     )
+                //   }
+                // </Draggable>
+              ))}
             {/* {provided.placeholder} */}
           </ul>
           {/* )}
@@ -196,7 +184,9 @@ const Board = () => {
           // onClick={() => {
           //   setModalTaskAddState(true);
           // }}
-        >Add Column</div>
+        >
+          Add Column
+        </div>
         <ModalTaskAdd
           onConfirm={() => {}}
           isShowModal={ModalTaskAddState}

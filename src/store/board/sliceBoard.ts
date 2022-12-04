@@ -19,7 +19,11 @@ const sliceBoard = createSlice({
         state.columns = action.payload.columns;
         state.tasks = action.payload.tasks;
         state.columns.forEach((column) => {
-          column.tasks = action.payload.tasks.filter((task) => task.columnId === column._id);
+          column.tasks = action.payload.tasks
+            .filter((task) => task.columnId === column._id)
+            .sort((a, b) => {
+              return a.order - b.order;
+            });
         });
       })
       .addCase(createColumnInBoard.fulfilled, (state, action) => {

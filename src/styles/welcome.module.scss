@@ -17,7 +17,7 @@
 .textSection {
   flex: 1 0 auto;
   position: relative;
-  width: 56.3rem;
+  width: 200px;
   min-height: 300px;
   display: flex;
   flex-direction: column;
@@ -39,12 +39,18 @@
 }
 
 .mainText {
+  width: 250px;
   font-size: 6.4rem;
   padding-bottom: 0;
   margin-bottom: 0;
+  display: flex;
 
   @media (max-width: $breakpoint-tablet) {
     font-size: 2.4rem;
+  }
+
+  .headerStart {
+    margin-right: 0.7rem;
   }
 }
 

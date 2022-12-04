@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import s from '../src/styles/welcome.module.scss';
 import Image from 'next/image';
+import Typewriter from 'typewriter-effect';
 
 export default function Welcome() {
   return (
@@ -12,7 +13,43 @@ export default function Welcome() {
       </Head>
       <main className={s.main}>
         <section className={s.textSection}>
-          <h1 className={s.mainText}>Plan your success!</h1>
+          <h1 className={s.mainText}>
+            <div className={s.headerStart}>
+              Plan your 
+            </div>
+            {
+              true ?
+              <Typewriter
+                options={{
+                  strings: [
+                    'success.',
+                    'life.',
+                    'moves.',
+                    'work.',
+                    'dreams.',
+                    'future.',
+                  ],
+                  autoStart: true,
+                  loop: true,
+                }}
+              />
+              :
+              <Typewriter
+                options={{
+                  strings: [
+                    'успех.',
+                    'жизнь.',
+                    'шаги.',
+                    'работу.',
+                    'мечты.',
+                    'будущее.',
+                  ],
+                  autoStart: true,
+                  loop: true,
+                }}
+              />
+            }
+          </h1>
           <p className={s.remark}>*with our app</p>
         </section>
         <div className={s.wrapper}>

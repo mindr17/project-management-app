@@ -30,7 +30,7 @@ export const getTasksInColumn = createAsyncThunk(
 export const createTask = createAsyncThunk(
   'board/createTask',
   async (data: ITaskParameters, { rejectWithValue }) => {
-    const token: string = JSON.parse(localStorage.getItem('token') || '');
+    const token: string = JSON.parse(localStorage.getItem('token') || '');   
     const response = await fetch(
       `${BASE_URL}/boards/${data.boardId}/columns/${data.columnId}/tasks`,
       {
@@ -46,7 +46,7 @@ export const createTask = createAsyncThunk(
     if (!response.ok) {
       return rejectWithValue((await response.json()) as IKnownError);
     }
-    const allTasksInColumn: ITask[] = await response.json();
+    const allTasksInColumn: ITask = await response.json();
 
     return allTasksInColumn;
   }

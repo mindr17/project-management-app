@@ -12,7 +12,7 @@ export interface IFormData {
   [key: string]: string;
 }
 
-const CreateBoardModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => {
+const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => {
   const onSubmit = (formData: IFormData) => {
     setIsShowModal(false);
     onConfirm(formData);
@@ -41,7 +41,7 @@ const CreateBoardModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) =>
         className={isShowModal ? `${s.modalContent} ${s.active}` : s.modalContent}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2>Create board</h2>
+        <h2>Create task</h2>
 
         <form
           className={s.form}
@@ -102,4 +102,4 @@ const CreateBoardModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) =>
   );
 };
 
-export default CreateBoardModal;
+export default CreateTaskModal;

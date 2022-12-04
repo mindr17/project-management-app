@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getBoardData } from './thunkBoard';
 import { createColumnInBoard, updateColumnById } from './thunkColumns';
 import { InitialState } from './Iboard';
+import { createTask } from './thunkTasks';
 
 const initialState: InitialState = {
   columns: [],
@@ -36,6 +37,10 @@ const sliceBoard = createSlice({
             column.order = action.payload.order;
           }
         });
+      })
+      .addCase(createTask.fulfilled, (state, action) => {
+        const { columnId } = action.payload;
+        state.columns.find(c => c._id == columnId)?.tasks?.push(action.payload);
       });
   },
 });

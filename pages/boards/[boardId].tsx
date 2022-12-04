@@ -7,7 +7,7 @@ import { getBoardData } from '../../src/store/board/thunkBoard';
 import { useAppDispatch, useAppSelector } from '../../src/hooks/hooks';
 import { createColumnInBoard } from '../../src/store/board/thunkColumns';
 import { createTask, deleteTaskById, updateSetOfTasks } from '../../src/store/board/thunkTasks';
-import ModalTaskAdd from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
+import CreateTaskModal from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 import s from '../../src/components/BoardPage/BoardPage.module.scss';
 import IFormData from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 import { ITask } from '../../src/store/board/Iboard';
@@ -19,8 +19,10 @@ const Board = () => {
   const { columns } = useAppSelector((state) => state.board);
   const { tasks } = useAppSelector((state) => state.board)
   const [ModalTaskAddState, setModalTaskAddState] = useState<boolean>(false);
+  const { user } = useAppSelector((state) => state.auth);
 
   const [_columns, setTasksState] = useState();
+  const [columnId, setColumnId] = useState();
 
   useEffect(() => {
     if (boardId === undefined || typeof boardId !== 'string') return;
@@ -90,18 +92,29 @@ const Board = () => {
     // dispatch(createColumnInBoard());
   };
 
-  const handleCardAdd = () => {
-    // dispatch(createTask({
-    // boardId: boardId,
-    // columnId:
-    // newTaskParams: {
-    // title: ,
-    // order: ,
-    // description: ,
-    // userId: number;
-    // users: string[];
-    // },
-    // }));
+  interface IFormData {
+    title: string;
+    desc: string;
+  }
+  
+  const handleCardAdd = (formData: IFormData) => {  
+    const column = _columns.filter((x: ITask) => x._id === columnId); // колонка где случилось
+    const order = column[0].tasks.length;
+    const userId = user?._id;
+    const users = ['string'];
+
+    // отправить запрос на бэк на добавление
+    dispatch(createTask({ 
+      boardId: boardId,
+      columnId: columnId,
+      newTaskParams: {
+        title: formData.title,
+        description: formData.desc,
+        userId: userId,
+        order: order,
+        users: users
+      }
+    }))
   };
 
   const handleKeyDown = (e) => {
@@ -188,7 +201,8 @@ const Board = () => {
                     </Droppable>
                     <button
                       className={s.cardAddBtn}
-                      onClick={() => {
+                      onClick={(e) => {
+                        setColumnId(column._id);
                         setModalTaskAddState(true);
                       }}
                     >
@@ -213,8 +227,8 @@ const Board = () => {
         >
           Add Column
         </div>
-        <ModalTaskAdd
-          onConfirm={() => {}}
+        <CreateTaskModal
+          onConfirm={handleCardAdd}
           isShowModal={ModalTaskAddState}
           setIsShowModal={setModalTaskAddState}
         />

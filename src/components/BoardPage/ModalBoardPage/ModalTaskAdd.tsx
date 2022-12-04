@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import s from './ModalTaskAdd.module.scss';
 
 interface IProps {
@@ -13,6 +14,7 @@ export interface IFormData {
 }
 
 const CreateBoardModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => {
+  const { t } = useTranslation('modalTaskAdd');
   const onSubmit = (formData: IFormData) => {
     setIsShowModal(false);
     onConfirm(formData);
@@ -41,7 +43,7 @@ const CreateBoardModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) =>
         className={isShowModal ? `${s.modalContent} ${s.active}` : s.modalContent}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2>Create board</h2>
+        <h2>{t('title')}</h2>
 
         <form
           className={s.form}
@@ -51,7 +53,7 @@ const CreateBoardModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) =>
         >
           <section>
             <label className={s.label} htmlFor='title'>
-              Title
+              {t('input_title')}
             </label>
             <input
               id='title'
@@ -73,7 +75,7 @@ const CreateBoardModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) =>
           </section>
           <section>
             <label className={s.label} htmlFor='desc'>
-              Description
+              {t('input_desc')}
             </label>
             <textarea
               id='desc'
@@ -91,9 +93,9 @@ const CreateBoardModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) =>
 
           <div className={s.btnContent}>
             <button onClick={handleCloseModal} className={s.btn}>
-              cancel
+              {t('modal_no')}
             </button>
-            <button className={s.btn}>create</button>
+            <button className={s.btn}>{t('modal_yes')}</button>
           </div>
         </form>
         <div className={s.closeBtn} onClick={handleCloseModal}></div>

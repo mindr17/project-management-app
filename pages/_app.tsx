@@ -4,8 +4,10 @@ import { Provider } from 'react-redux';
 import store from '../src/store';
 import { Footer } from '../src/components/Footer/Footer';
 import { Header } from '../src/components/Header/Header';
+import { appWithTranslation } from 'next-i18next';
+import nextI18NextConfig from '../next-i18next.config.js';
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <Header />
@@ -14,3 +16,5 @@ export default function App({ Component, pageProps }: AppProps) {
     </Provider>
   );
 }
+
+export default appWithTranslation(App, nextI18NextConfig);

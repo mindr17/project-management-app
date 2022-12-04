@@ -16,7 +16,6 @@ export const getStaticProps: GetStaticProps<Props> = async ({ locale }) => ({
   },
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function Welcome(_props: InferGetStaticPropsType<typeof getStaticProps>) {
   const { t } = useTranslation('welcome');
   return (

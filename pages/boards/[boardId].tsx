@@ -5,12 +5,12 @@ import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautif
 import { SetStateAction, useEffect, useState } from 'react';
 import { getBoardData } from '../../src/store/board/thunkBoard';
 import { useAppDispatch, useAppSelector } from '../../src/hooks/hooks';
-import { createColumnInBoard } from '../../src/store/board/thunkColumns';
+import { createColumnInBoard, deleteColumnById, updateSetOfColumns } from '../../src/store/board/thunkColumns';
 import { createTask, deleteTaskById, updateSetOfTasks } from '../../src/store/board/thunkTasks';
 import CreateTaskModal from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 import s from '../../src/components/BoardPage/BoardPage.module.scss';
 import IFormData from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
-import { ITask } from '../../src/store/board/Iboard';
+import { IColumn, ITask } from '../../src/store/board/Iboard';
 import CreateColumnModal from '../../src/components/BoardPage/ModalBoardPage/ModalColumnAdd';
 
 const Board = () => {
@@ -60,7 +60,7 @@ const Board = () => {
     }
   };
 
-  const handleCardDelete = (task: ITask) => {
+  const handleTaskDelete = (task: ITask) => {
     // убрать из колонки
     const column = _columns.filter((x: ITask) => x._id === task.columnId); // колонка где случилось
     let tasksCopy = [...column[0].tasks.filter((x: ITask) => x._id != task._id)]; // копия тасок без удаленной
@@ -126,6 +126,31 @@ const Board = () => {
     }))
   };
 
+  const handleColumnDelete = (column: IColumn) => {
+    
+    // убрать из колонок
+    let columnsCopy = JSON.parse(JSON.stringify(_columns));
+    columnsCopy = columnsCopy.filter((col: IColumn) => col._id !== column._id);
+    
+    // поменять ордер у всех
+    columnsCopy = columnsCopy.map((c: IColumn, index: number) => ({
+      ...c,
+      order: index,
+    }))
+
+    setTasksState(columnsCopy); // сохраняем новый стэйт
+
+    // отправить на бэк удаленную
+    dispatch(deleteColumnById({ boardId: boardId, columnId: column._id }));
+
+    // отправить на бэк все остальные в колонке с новыми ордерами
+    const resToApi = columnsCopy.map((x: IColumn, index: number) => ({
+      _id: x._id,
+      order: index,
+    }));
+    dispatch(updateSetOfColumns(resToApi));
+  }
+
   const handleKeyDown = (e) => {
     e.target.style.height = 'inherit';
     e.target.style.height = `${e.target.scrollHeight + 2}px`;
@@ -174,7 +199,7 @@ const Board = () => {
                         id=''
                         onInput={handleKeyDown}
                       ></textarea>
-                      <button className={s.columnDeleteBtn}>X</button>
+                      <button className={s.columnDeleteBtn} onClick={() => handleColumnDelete(column)}>X</button>
                     </div>
                     <Droppable droppableId={column._id}>
                       {(provided, snapshot) => (
@@ -196,7 +221,7 @@ const Board = () => {
                                       {...provided.draggableProps}
                                     >
                                       <div className={s.cardText}>{task.title}</div>
-                                      <div className={s.cardDeleteBtn} onClick={() => handleCardDelete(task)}>
+                                      <div className={s.cardDeleteBtn} onClick={() => handleTaskDelete(task)}>
                                         X
                                       </div>
                                     </li>

@@ -17,7 +17,9 @@ const sliceBoard = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getBoardData.fulfilled, (state, action) => {
-        state.columns = action.payload.columns;
+        state.columns = action.payload.columns.sort((a, b) => {
+          return a.order - b.order;
+        });
         state.tasks = action.payload.tasks;
         state.columns.forEach((column) => {
           column.tasks = action.payload.tasks

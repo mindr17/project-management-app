@@ -6,7 +6,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { getBoardData } from '../../src/store/board/thunkBoard';
 import { useAppDispatch, useAppSelector } from '../../src/hooks/hooks';
 import { createColumnInBoard } from '../../src/store/board/thunkColumns';
-import { createTask, updateSetOfTasks } from '../../src/store/board/thunkTasks';
+import { createTask, deleteTaskById, updateSetOfTasks } from '../../src/store/board/thunkTasks';
 import ModalTaskAdd from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 import s from '../../src/components/BoardPage/BoardPage.module.scss';
 import IFormData from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
@@ -17,6 +17,7 @@ const Board = () => {
   const router = useRouter();
   const { boardId } = router.query;
   const { columns } = useAppSelector((state) => state.board);
+  const { tasks } = useAppSelector((state) => state.board)
   const [ModalTaskAddState, setModalTaskAddState] = useState<boolean>(false);
 
   const [_columns, setTasksState] = useState();
@@ -34,20 +35,20 @@ const Board = () => {
     if (!result.destination) return;
 
     if (result.destination.droppableId === result.source.droppableId) {
-      const column = _columns.filter((x) => x._id === result.source.droppableId);
+      const column = _columns.filter((x: ITask) => x._id === result.source.droppableId); // колонка где случилось
+      
+      const tasksCopy = [...column[0].tasks]; // копия тасок
 
-      const tasksCopy = [...column[0].tasks];
+      const [movedColumn] = tasksCopy.splice(result.source.index, 1); // таска, которая переместилась
+      tasksCopy.splice(result.destination.index, 0, movedColumn); // вставляем в новое место
 
-      const [movedColumn] = tasksCopy.splice(result.source.index, 1);
-      tasksCopy.splice(result.destination.index, 0, movedColumn);
+      const newState = JSON.parse(JSON.stringify(_columns)); // дублируем общее состояние
+      const newColumn = newState.filter((x: ITask) => x._id === result.source.droppableId); // находим в новом состоянии нужную колонку
+      newColumn[0].tasks = [...tasksCopy]; // записываем в новую колонку новым массив тасок
 
-      const newState = JSON.parse(JSON.stringify(_columns));
-      const newColumn = newState.filter((x) => x._id === result.source.droppableId);
-      newColumn[0].tasks = [...tasksCopy];
+      setTasksState(newState); // сохраняем новый стэйт
 
-      setTasksState(newState);
-
-      const resToApi = newColumn[0].tasks.map((x, index) => ({
+      const resToApi = newColumn[0].tasks.map((x: ITask, index: number) => ({
         _id: x._id,
         order: index,
         columnId: x.columnId,
@@ -56,8 +57,33 @@ const Board = () => {
     }
   };
 
-  const handleCardDelete = () => {
-    // console.log('handleCardDelete: ', handleCardDelete);
+  const handleCardDelete = (task: ITask) => {
+    // убрать из колонки
+    const column = _columns.filter((x: ITask) => x._id === task.columnId); // колонка где случилось
+    let tasksCopy = [...column[0].tasks.filter((x: ITask) => x._id != task._id)]; // копия тасок без удаленной
+    
+    // поменять ордер у всех
+    tasksCopy = tasksCopy.map((t: ITask, index: number) => ({
+      ...t,
+      order: index,
+    }))
+    
+    const newState = JSON.parse(JSON.stringify(_columns)); // дублируем общее состояние
+    const newColumn = newState.filter((x: ITask) => x._id === task.columnId); // находим в новом состоянии нужную колонку
+    newColumn[0].tasks = [...tasksCopy]; // записываем в новую колонку новым массив тасок
+    setTasksState(newState); // сохраняем новый стэйт
+  
+    // отправить на бэк удаленную
+    dispatch(deleteTaskById({ boardId: boardId, columnId: task.columnId, taskId: task._id }));
+
+    // отправить на бэк все остальные в колонке с новыми ордерами
+    const resToApi = tasksCopy.map((x: ITask, index: number) => ({
+      _id: x._id,
+      order: index,
+      columnId: x.columnId,
+    }));
+    dispatch(updateSetOfTasks(resToApi));
+
   };
 
   const handleColumnAdd = () => {
@@ -148,7 +174,7 @@ const Board = () => {
                                       {...provided.draggableProps}
                                     >
                                       <div className={s.cardText}>{task.title}</div>
-                                      <div className={s.cardDeleteBtn} onClick={handleCardDelete}>
+                                      <div className={s.cardDeleteBtn} onClick={() => handleCardDelete(task)}>
                                         X
                                       </div>
                                     </li>

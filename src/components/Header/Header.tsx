@@ -47,7 +47,7 @@ export const Header = () => {
     <header className={s.header}>
       <nav className={s.nav}>
         <Link href={router.asPath} locale={changeTo}>
-          <button>{t('change-locale', { changeTo })}</button>
+          <label className={s.navLink}>{t('change-locale', { changeTo })}</label>
         </Link>
       </nav>
       {user ? (

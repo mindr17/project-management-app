@@ -11,14 +11,15 @@ import CreateTaskModal from '../../src/components/BoardPage/ModalBoardPage/Modal
 import s from '../../src/components/BoardPage/BoardPage.module.scss';
 import IFormData from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 import { ITask } from '../../src/store/board/Iboard';
+import CreateColumnModal from '../../src/components/BoardPage/ModalBoardPage/ModalColumnAdd';
 
 const Board = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { boardId } = router.query;
   const { columns } = useAppSelector((state) => state.board);
-  const { tasks } = useAppSelector((state) => state.board)
   const [ModalTaskAddState, setModalTaskAddState] = useState<boolean>(false);
+  const [ModalColumnAddState, setModalColumnAddState] = useState<boolean>(false);
   const { user } = useAppSelector((state) => state.auth);
 
   const [_columns, setTasksState] = useState();
@@ -88,8 +89,16 @@ const Board = () => {
 
   };
 
-  const handleColumnAdd = () => {
-    // dispatch(createColumnInBoard());
+  const handleColumnAdd = (formData: IFormData) => {
+    const order = _columns.length;
+
+    dispatch(createColumnInBoard({ 
+      boardId: boardId,
+      newParams: {
+        title: formData.title,
+        order: order,
+      }
+    }));
   };
 
   interface IFormData {
@@ -221,9 +230,9 @@ const Board = () => {
         </DragDropContext>
         <div
           className={s.columnAddBtn}
-          // onClick={() => {
-          //   setModalTaskAddState(true);
-          // }}
+          onClick={() => {
+             setModalColumnAddState(true);
+          }}
         >
           Add Column
         </div>
@@ -231,6 +240,11 @@ const Board = () => {
           onConfirm={handleCardAdd}
           isShowModal={ModalTaskAddState}
           setIsShowModal={setModalTaskAddState}
+        />
+        <CreateColumnModal
+          onConfirm={handleColumnAdd}
+          isShowModal={ModalColumnAddState}
+          setIsShowModal={setModalColumnAddState}
         />
       </div>
     </div>

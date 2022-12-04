@@ -1,8 +1,24 @@
 import Head from 'next/head';
 import s from '../src/styles/welcome.module.scss';
 import Image from 'next/image';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
-export default function Welcome() {
+type Props = {
+  // Add custom props here
+};
+
+export const getStaticProps: GetStaticProps<Props> = async ({ locale }) => ({
+  props: {
+    locale,
+    ...(await serverSideTranslations(locale ?? 'en', ['common', 'welcome'])),
+  },
+});
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function Welcome(_props: InferGetStaticPropsType<typeof getStaticProps>) {
+  const { t } = useTranslation('welcome');
   return (
     <div className={s.container}>
       <Head>
@@ -12,48 +28,44 @@ export default function Welcome() {
       </Head>
       <main className={s.main}>
         <section className={s.textSection}>
-          <h1 className={s.mainText}>Plan your success!</h1>
-          <p className={s.remark}>*with our app</p>
+          <h1 className={s.mainText}>{t('mainText')}</h1>
+          <p className={s.remark}>{t('mainText_subtitle')}</p>
         </section>
         <div className={s.wrapper}>
           <section className={s.aboutBlock}>
-            <h1 className={s.blockHeader}>Who we are?</h1>
+            <h1 className={s.blockHeader}>{t('aboutBlock_header')}</h1>
             <div className={s.teamWrapper}>
               <div className={s.teammate}>
                 <Image src='/avatar.png' alt='avatar' width={50} height={50} />
                 <div className={s.teammateInfo}>
-                  <p className={s.name}>Andrey</p>
-                  <p className={s.position}>Developer, Teamlead</p>
+                  <p className={s.name}>{t('teammateInfo_name1')}</p>
+                  <p className={s.position}>{t('teammateInfo_position1')}</p>
                 </div>
               </div>
               <div className={s.teammate}>
                 <Image src='/avatar.png' alt='avatar' width={50} height={50} />
                 <div className={s.teammateInfo}>
-                  <p className={s.name}>Andrey</p>
-                  <p className={s.position}>Developer</p>
+                  <p className={s.name}>{t('teammateInfo_name2')}</p>
+                  <p className={s.position}>{t('teammateInfo_position2')}</p>
                 </div>
               </div>
               <div className={s.teammate}>
                 <Image src='/avatar.png' alt='avatar' width={50} height={50} />
                 <div className={s.teammateInfo}>
-                  <p className={s.name}>Sergey</p>
-                  <p className={s.position}>Developer</p>
+                  <p className={s.name}>{t('teammateInfo_name3')}</p>
+                  <p className={s.position}>{t('teammateInfo_position3')}</p>
                 </div>
               </div>
             </div>
           </section>
           <section className={s.descBlock}>
-            <h1 className={s.blockHeader}>What our app can?</h1>
+            <h1 className={s.blockHeader}>{t('descBlock_header')}</h1>
             <div className={s.descriptionWrapper}>
-              <p className={s.description}>
-                This app allow you to create projects and divide them by pices(tasks). You can
-                create as many project as you want. Moreover, set up your task lifetime. Our team
-                wish it help you to manage your projects and achieve your goals.
-              </p>
+              <p className={s.description}>{t('descBlock_description')}</p>
             </div>
           </section>
           <section className={s.techBlock}>
-            <h1 className={s.blockHeader}>What we use?</h1>
+            <h1 className={s.blockHeader}>{t('techBlock_header')}</h1>
             <div className={s.technologiesWrapper}>
               <div className={s.technologies}>
                 <Image src='/typescript.png' alt='typescript' width={50} height={50} />

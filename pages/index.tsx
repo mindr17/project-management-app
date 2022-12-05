@@ -6,20 +6,18 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
-type Props = {
-  // Add custom props here
-};
+type staticProps = {};
+type Props = InferGetStaticPropsType<typeof getStaticProps> & {locale: string};
 
-export const getStaticProps: GetStaticProps<Props> = async ({ locale }) => ({
+export const getStaticProps: GetStaticProps<staticProps> = async ({ locale }) => ({
   props: {
     locale,
     ...(await serverSideTranslations(locale ?? 'en', ['common', 'welcome'])),
   },
 });
 
-export default function Welcome(_props: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function Welcome(_props: Props) {
   const { t } = useTranslation('welcome');
-  // console.log('_props: ', _props);
 
   return (
     <div className={s.container}>
@@ -35,7 +33,7 @@ export default function Welcome(_props: InferGetStaticPropsType<typeof getStatic
               {t('mainText')}
             </div>
             {
-              true ?
+              _props.locale === 'en' ?
               <Typewriter
                 options={{
                   strings: [

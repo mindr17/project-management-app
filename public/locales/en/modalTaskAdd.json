@@ -1,7 +1,0 @@
-{
-  "title": "Create board",
-  "input_title": "Title",
-  "input_desc": "Description",
-  "modal_yes":"create",
-  "modal_no":"cancel"
-}

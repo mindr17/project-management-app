@@ -1,0 +1,13 @@
+{
+  "titleBoard": "Create board",
+  "titleColumn": "Create column",
+  "titleTask": "Create task",
+  "input_title": "Title",
+  "input_desc": "Description",
+  "modal_yes": "create",
+  "modal_no": "cancel",
+  "title_valid": "Please enter title",
+  "title_valid>3": "title must contain more than 3 letters",
+  "desc_valid": "Please enter description",
+  "desc_valid>3": "description must contain more than 3 letters"
+}

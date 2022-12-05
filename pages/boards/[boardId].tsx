@@ -34,7 +34,7 @@ type Props = {
 export const getServerSideProps: GetStaticProps<Props> = async ({ locale }) => ({
   props: {
     locale,
-    ...(await serverSideTranslations(locale ?? 'en', ['common', 'modalTaskAdd', 'board'])),
+    ...(await serverSideTranslations(locale ?? 'en', ['common', 'modalAdd', 'board'])),
   },
 });
 

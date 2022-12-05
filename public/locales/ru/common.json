@@ -6,5 +6,6 @@
   "profile": "Профиль",
   "logout": "Выход",
   "modalYes": "да",
-  "modalNo": "нет"
+  "modalNo": "нет",
+  "PageNotFound": "Страница не найдена"
 }

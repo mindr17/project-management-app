@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE_URL } from '../../config';
-import { IBoard } from './IBoard';
+import { IBoard, INewParams } from './IBoard';
 
 export const getBoards = createAsyncThunk<Array<IBoard>>('boards/getBoards', async () => {
-  const token = JSON.parse(localStorage.getItem('token'));
+  const token = JSON.parse(localStorage.getItem('token') || '');
   const response = await fetch(`${BASE_URL}/boards`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -20,7 +20,7 @@ export interface IKnownError {
 export const deleteBoard = createAsyncThunk<IBoard, string, { rejectValue: IKnownError }>(
   'board/deleteBoard',
   async (id: string, { rejectWithValue }) => {
-    const token = JSON.parse(localStorage.getItem('token'));
+    const token = JSON.parse(localStorage.getItem('token') || '');
 
     const response = await fetch(`${BASE_URL}/boards/${id}`, {
       method: 'DELETE',
@@ -31,15 +31,10 @@ export const deleteBoard = createAsyncThunk<IBoard, string, { rejectValue: IKnow
   }
 );
 
-interface IFormData {
-  title: string;
-  desc: string;
-}
-
-export const createBoard = createAsyncThunk<IBoard, IBoard, { rejectValue: IKnownError }>(
+export const createBoard = createAsyncThunk<IBoard, INewParams, { rejectValue: IKnownError }>(
   'board/createBoard',
-  async (data: IBoard, { rejectWithValue }) => {
-    const token = JSON.parse(localStorage.getItem('token'));
+  async (data: INewParams, { rejectWithValue }) => {
+    const token = JSON.parse(localStorage.getItem('token') || '');
 
     const response = await fetch(`${BASE_URL}/boards/`, {
       method: 'POST',

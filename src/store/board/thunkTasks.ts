@@ -30,7 +30,7 @@ export const getTasksInColumn = createAsyncThunk(
 export const createTask = createAsyncThunk(
   'board/createTask',
   async (data: ITaskParameters, { rejectWithValue }) => {
-    const token: string = JSON.parse(localStorage.getItem('token') || '');   
+    const token: string = JSON.parse(localStorage.getItem('token') || '');
     const response = await fetch(
       `${BASE_URL}/boards/${data.boardId}/columns/${data.columnId}/tasks`,
       {
@@ -128,6 +128,7 @@ export const deleteTaskById = createAsyncThunk(
 export const updateSetOfTasks = createAsyncThunk(
   'board/updateSetOfTasks',
   async (data: ITaskListParams[], { rejectWithValue }) => {
+    if (data.length === 0) return;
     const token: string = JSON.parse(localStorage.getItem('token') || '');
     const response = await fetch(`${BASE_URL}/tasksSet`, {
       method: 'PATCH',

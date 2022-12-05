@@ -14,12 +14,13 @@ export interface IColumn {
   title: string;
   order: number;
   boardId: string;
-  tasks?: ITask[];
+  tasks: ITask[];
 }
 
 export interface InitialState {
   columns: IColumn[];
   tasks: ITask[];
+  isLoading: boolean;
 }
 
 export interface IBoardCreateColumn {
@@ -59,7 +60,7 @@ export interface newTaskParams {
   title: string;
   order: number;
   description: string;
-  userId: number;
+  userId: string;
   users: string[];
 }
 export interface ITaskParameters {

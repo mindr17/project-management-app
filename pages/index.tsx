@@ -1,23 +1,24 @@
 import Head from 'next/head';
 import s from '../src/styles/welcome.module.scss';
 import Image from 'next/image';
+import Typewriter from 'typewriter-effect';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
-type Props = {
-  // Add custom props here
-};
+type staticProps = {};
+type Props = InferGetStaticPropsType<typeof getStaticProps> & {locale: string};
 
-export const getStaticProps: GetStaticProps<Props> = async ({ locale }) => ({
+export const getStaticProps: GetStaticProps<staticProps> = async ({ locale }) => ({
   props: {
     locale,
     ...(await serverSideTranslations(locale ?? 'en', ['common', 'welcome'])),
   },
 });
 
-export default function Welcome(_props: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function Welcome(_props: Props) {
   const { t } = useTranslation('welcome');
+
   return (
     <div className={s.container}>
       <Head>
@@ -27,7 +28,43 @@ export default function Welcome(_props: InferGetStaticPropsType<typeof getStatic
       </Head>
       <main className={s.main}>
         <section className={s.textSection}>
-          <h1 className={s.mainText}>{t('mainText')}</h1>
+          <h1 className={s.mainText}>
+            <div className={s.headerStart}>
+              {t('mainText')}
+            </div>
+            {
+              _props.locale === 'en' ?
+              <Typewriter
+                options={{
+                  strings: [
+                    'success.',
+                    'life.',
+                    'moves.',
+                    'work.',
+                    'dreams.',
+                    'future.',
+                  ],
+                  autoStart: true,
+                  loop: true,
+                }}
+              />
+              :
+              <Typewriter
+                options={{
+                  strings: [
+                    'успех.',
+                    'жизнь.',
+                    'шаги.',
+                    'работу.',
+                    'мечты.',
+                    'будущее.',
+                  ],
+                  autoStart: true,
+                  loop: true,
+                }}
+              />
+            }
+          </h1>
           <p className={s.remark}>{t('mainText_subtitle')}</p>
         </section>
         <div className={s.wrapper}>

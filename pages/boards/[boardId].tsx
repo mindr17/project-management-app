@@ -18,6 +18,7 @@ import { IColumn, ITask } from '../../src/store/board/Iboard';
 import CreateColumnModal from '../../src/components/BoardPage/ModalBoardPage/ModalColumnAdd';
 import { updateColumns } from '../../src/store/board/sliceBoard';
 import Preloader from '../../src/components/Preloader/Preloader';
+import Modal from '../../src/components/ModalDelete/Modal';
 
 export interface IFormDataModal {
   title: string;
@@ -29,12 +30,16 @@ const Board = () => {
   const router = useRouter();
   const { boardId } = router.query;
   const { columns, isLoading } = useAppSelector((state) => state.board);
-  const [ModalTaskAddState, setModalTaskAddState] = useState<boolean>(false);
-  const [ModalColumnAddState, setModalColumnAddState] = useState<boolean>(false);
+  const [modalTaskAddState, setModalTaskAddState] = useState<boolean>(false);
+  const [modalColumnAddState, setModalColumnAddState] = useState<boolean>(false);
+  const [modalTaskDeleteState, setModalTaskDeleteState] = useState<boolean>(false);
+  const [modalColumnDeleteState, setModalColumnDeleteState] = useState<boolean>(false); 
   const { user } = useAppSelector((state) => state.auth);
 
   const [_columns, setTasksState] = useState<IColumn[]>([]);
   const [columnId, setColumnId] = useState<string>('');
+  const [taskDeleteState, setTaskDeleteState] = useState<ITask>();
+  const [columnDeleteState, setColumnDeleteState] = useState<IColumn>();
 
   useEffect(() => {
     if (boardId === undefined || typeof boardId !== 'string') return;
@@ -130,10 +135,11 @@ const Board = () => {
     }
   };
 
-  const handleTaskDelete = (task: ITask) => {
+  const handleTaskDelete = () => {
+
     // убрать из колонки
-    const column = _columns.filter((x) => x._id === task.columnId); // колонка где случилось
-    let tasksCopy = [...column[0].tasks.filter((x: ITask) => x._id != task._id)]; // копия тасок без удаленной
+    const column = _columns.filter((x) => x._id === taskDeleteState.columnId); // колонка где случилось
+    let tasksCopy = [...column[0].tasks.filter((x: ITask) => x._id != taskDeleteState._id)]; // копия тасок без удаленной
 
     // поменять ордер у всех
     tasksCopy = tasksCopy.map((t, index) => ({
@@ -142,12 +148,12 @@ const Board = () => {
     }));
 
     const newState = JSON.parse(JSON.stringify(_columns)); // дублируем общее состояние
-    const newColumn = newState.filter((x: ITask) => x._id === task.columnId); // находим в новом состоянии нужную колонку
+    const newColumn = newState.filter((x: ITask) => x._id === taskDeleteState.columnId); // находим в новом состоянии нужную колонку
     newColumn[0].tasks = [...tasksCopy]; // записываем в новую колонку новым массив тасок
     setTasksState(newState); // сохраняем новый стэйт
 
     // отправить на бэк удаленную
-    dispatch(deleteTaskById({ boardId: boardId, columnId: task.columnId, taskId: task._id }));
+    dispatch(deleteTaskById({ boardId: boardId, columnId: taskDeleteState.columnId, taskId: taskDeleteState._id }));
 
     // отправить на бэк все остальные в колонке с новыми ордерами
     const resToApi = tasksCopy.map((x, index) => ({
@@ -194,10 +200,10 @@ const Board = () => {
     );
   };
 
-  const handleColumnDelete = (column: IColumn) => {
+  const handleColumnDelete = () => {
     // убрать из колонок 123
     let columnsCopy: IColumn[] = JSON.parse(JSON.stringify(_columns));
-    columnsCopy = columnsCopy.filter((col) => col._id !== column._id);
+    columnsCopy = columnsCopy.filter((col) => col._id !== columnDeleteState._id);
 
     // поменять ордер у всех
     columnsCopy = columnsCopy.map((c, index) => ({
@@ -208,7 +214,7 @@ const Board = () => {
     setTasksState(columnsCopy); // сохраняем новый стэйт
 
     // отправить на бэк удаленную
-    dispatch(deleteColumnById({ boardId: boardId, columnId: column._id }));
+    dispatch(deleteColumnById({ boardId: boardId, columnId: columnDeleteState._id }));
 
     // отправить на бэк все остальные в колонке с новыми ордерами
     const resToApi = columnsCopy.map((x, index) => ({
@@ -268,7 +274,11 @@ const Board = () => {
                       ></input>
                       <button
                         className={s.columnDeleteBtn}
-                        onClick={() => handleColumnDelete(column)}
+                        onClick={() => {
+                          setColumnDeleteState(column);
+                          setModalColumnDeleteState(true);
+                        }
+                        }
                       >
                         X
                       </button>
@@ -295,7 +305,11 @@ const Board = () => {
                                       <div className={s.cardText}>{task.title}</div>
                                       <div
                                         className={s.cardDeleteBtn}
-                                        onClick={() => handleTaskDelete(task)}
+                                        onClick={() => {
+                                          setTaskDeleteState(task);
+                                          setModalTaskDeleteState(true);
+                                        }
+                                        }
                                       >
                                         X
                                       </div>
@@ -338,13 +352,25 @@ const Board = () => {
         </div>
         <CreateTaskModal
           onConfirm={handleCardAdd}
-          isShowModal={ModalTaskAddState}
+          isShowModal={modalTaskAddState}
           setIsShowModal={setModalTaskAddState}
         />
         <CreateColumnModal
           onConfirm={handleColumnAdd}
-          isShowModal={ModalColumnAddState}
+          isShowModal={modalColumnAddState}
           setIsShowModal={setModalColumnAddState}
+        />
+        <Modal
+          onConfirm={handleTaskDelete}
+          title={'Delete task?'}
+          isShowModal={modalTaskDeleteState}
+          setIsShowModal={setModalTaskDeleteState}
+        />
+        <Modal
+          onConfirm={handleColumnDelete}
+          title={'Delete column?'}
+          isShowModal={modalColumnDeleteState}
+          setIsShowModal={setModalColumnDeleteState}
         />
       </div>
     </div>

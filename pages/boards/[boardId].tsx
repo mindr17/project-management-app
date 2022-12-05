@@ -1,8 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-// import { initialBoardState, columns as initialColumns, tasks as initialTasks } from './mockupData';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getBoardData } from '../../src/store/board/thunkBoard';
 import { useAppDispatch, useAppSelector } from '../../src/hooks/hooks';
 import {
@@ -13,7 +12,6 @@ import {
 import { createTask, deleteTaskById, updateSetOfTasks } from '../../src/store/board/thunkTasks';
 import CreateTaskModal from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 import s from '../../src/components/BoardPage/BoardPage.module.scss';
-import IFormData from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 import { IColumn, ITask } from '../../src/store/board/Iboard';
 import CreateColumnModal from '../../src/components/BoardPage/ModalBoardPage/ModalColumnAdd';
 import { updateColumns } from '../../src/store/board/sliceBoard';
@@ -28,18 +26,37 @@ export interface IFormDataModal {
 const Board = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { boardId } = router.query;
+  const boardId = router.query.boardId as string;
   const { columns, isLoading } = useAppSelector((state) => state.board);
   const [modalTaskAddState, setModalTaskAddState] = useState<boolean>(false);
   const [modalColumnAddState, setModalColumnAddState] = useState<boolean>(false);
   const [modalTaskDeleteState, setModalTaskDeleteState] = useState<boolean>(false);
-  const [modalColumnDeleteState, setModalColumnDeleteState] = useState<boolean>(false); 
+  const [modalColumnDeleteState, setModalColumnDeleteState] = useState<boolean>(false);
   const { user } = useAppSelector((state) => state.auth);
+
+  const defaultTask = {
+    _id: '',
+    title: '',
+    order: 0,
+    description: '',
+    userId: '',
+    boardId: '',
+    columnId: '',
+    users: [''],
+  };
+
+  const defaultColumn = {
+    _id: '',
+    title: '',
+    order: 0,
+    boardId: '',
+    tasks: [defaultTask],
+  };
 
   const [_columns, setTasksState] = useState<IColumn[]>([]);
   const [columnId, setColumnId] = useState<string>('');
-  const [taskDeleteState, setTaskDeleteState] = useState<ITask>();
-  const [columnDeleteState, setColumnDeleteState] = useState<IColumn>();
+  const [taskDeleteState, setTaskDeleteState] = useState<ITask>(defaultTask);
+  const [columnDeleteState, setColumnDeleteState] = useState<IColumn>(defaultColumn);
 
   useEffect(() => {
     if (boardId === undefined || typeof boardId !== 'string') return;
@@ -51,25 +68,25 @@ const Board = () => {
   }, [columns]);
 
   useEffect(() => {
-    dispatch(updateColumns(_columns || [])); // Делаем один источник истины, записываем данные в глобальный state из локального useState
+    dispatch(updateColumns(_columns || []));
   }, [_columns, dispatch]);
 
   const handleOnDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
     if (result.destination.droppableId === result.source.droppableId) {
-      const column = _columns.filter((x) => x._id === result.source.droppableId); // колонка где случилось
+      const column = _columns.filter((x) => x._id === result.source.droppableId);
 
-      const tasksCopy = [...column[0].tasks]; // копия тасок
+      const tasksCopy = [...column[0].tasks];
 
-      const [movedColumn] = tasksCopy.splice(result.source.index, 1); // таска, которая переместилась
-      tasksCopy.splice(result.destination.index, 0, movedColumn); // вставляем в новое место
+      const [movedColumn] = tasksCopy.splice(result.source.index, 1);
+      tasksCopy.splice(result.destination.index, 0, movedColumn);
 
-      const newState: IColumn[] = JSON.parse(JSON.stringify(_columns)); // дублируем общее состояние
-      const newColumn = newState.filter((x) => x._id === result.source.droppableId); // находим в новом состоянии нужную колонку
-      newColumn[0].tasks = [...tasksCopy]; // записываем в новую колонку новым массив тасок
+      const newState: IColumn[] = JSON.parse(JSON.stringify(_columns));
+      const newColumn = newState.filter((x) => x._id === result.source.droppableId);
+      newColumn[0].tasks = [...tasksCopy];
 
-      setTasksState(newState); // сохраняем новый стэйт
+      setTasksState(newState);
 
       const resToApi = newColumn[0].tasks.map((x, index) => ({
         _id: x._id,
@@ -83,29 +100,25 @@ const Board = () => {
       const sourceColId = result.source.droppableId;
       const destColId = result.destination.droppableId;
 
-      const columnSource = _columns.filter((x) => x._id === sourceColId); // колонка где было
-      const tasksSourceCopy = [...columnSource[0].tasks]; // копия тасок
-      const [movedTask] = tasksSourceCopy.splice(result.source.index, 1); // таска, которая переместилась
-      let newTasksSource = tasksSourceCopy.filter((x) => x._id != taskId); // измененные таски первой колонки
+      const columnSource = _columns.filter((x) => x._id === sourceColId);
+      const tasksSourceCopy = [...columnSource[0].tasks];
+      const [movedTask] = tasksSourceCopy.splice(result.source.index, 1);
+      let newTasksSource = tasksSourceCopy.filter((x) => x._id != taskId);
+      const columnDest = _columns.filter((x) => x._id === destColId);
+      let newTasksDest = [...columnDest[0].tasks];
+      newTasksDest.splice(result.destination.index, 0, movedTask);
 
-      const columnDest = _columns.filter((x) => x._id === destColId); // колонка где было
-      let newTasksDest = [...columnDest[0].tasks]; // копия тасок
-      newTasksDest.splice(result.destination.index, 0, movedTask); // вставляем в новое место
-
-      // поменять ордер
       newTasksSource = newTasksSource.map((t, index) => ({
         ...t,
         order: index,
       }));
 
-      // поменять ордер
       newTasksDest = newTasksDest.map((t, index) => ({
         ...t,
         order: index,
       }));
 
-      const newState: IColumn[] = JSON.parse(JSON.stringify(_columns)); // дублируем общее состояние
-
+      const newState: IColumn[] = JSON.parse(JSON.stringify(_columns));
       const newStateSource = newState.find((x) => x._id == sourceColId);
       if (newStateSource) newStateSource.tasks = newTasksSource;
 
@@ -116,7 +129,7 @@ const Board = () => {
         if (t) t.columnId = destColId;
       }
 
-      setTasksState(newState); // сохраняем новый стэйт
+      setTasksState(newState);
 
       const resToApiSource = newTasksSource.map((x, index) => ({
         _id: x._id,
@@ -136,26 +149,27 @@ const Board = () => {
   };
 
   const handleTaskDelete = () => {
+    const column = _columns.filter((x) => x._id === taskDeleteState.columnId);
+    let tasksCopy = [...column[0].tasks.filter((x: ITask) => x._id != taskDeleteState._id)];
 
-    // убрать из колонки
-    const column = _columns.filter((x) => x._id === taskDeleteState.columnId); // колонка где случилось
-    let tasksCopy = [...column[0].tasks.filter((x: ITask) => x._id != taskDeleteState._id)]; // копия тасок без удаленной
-
-    // поменять ордер у всех
     tasksCopy = tasksCopy.map((t, index) => ({
       ...t,
       order: index,
     }));
 
-    const newState = JSON.parse(JSON.stringify(_columns)); // дублируем общее состояние
-    const newColumn = newState.filter((x: ITask) => x._id === taskDeleteState.columnId); // находим в новом состоянии нужную колонку
-    newColumn[0].tasks = [...tasksCopy]; // записываем в новую колонку новым массив тасок
-    setTasksState(newState); // сохраняем новый стэйт
+    const newState = JSON.parse(JSON.stringify(_columns));
+    const newColumn = newState.filter((x: ITask) => x._id === taskDeleteState.columnId);
+    newColumn[0].tasks = [...tasksCopy];
+    setTasksState(newState);
 
-    // отправить на бэк удаленную
-    dispatch(deleteTaskById({ boardId: boardId, columnId: taskDeleteState.columnId, taskId: taskDeleteState._id }));
+    dispatch(
+      deleteTaskById({
+        boardId: boardId,
+        columnId: taskDeleteState.columnId,
+        taskId: taskDeleteState._id,
+      })
+    );
 
-    // отправить на бэк все остальные в колонке с новыми ордерами
     const resToApi = tasksCopy.map((x, index) => ({
       _id: x._id,
       order: index,
@@ -179,12 +193,11 @@ const Board = () => {
   };
 
   const handleCardAdd = (formData: IFormDataModal) => {
-    const column = _columns.filter((x) => x._id === columnId); // колонка где случилось
+    const column = _columns.filter((x) => x._id === columnId);
     const order = column[0].tasks === undefined ? 0 : column[0].tasks.length;
     const userId = user ? user._id : '';
     const users = ['string'];
 
-    // отправить запрос на бэк на добавление
     dispatch(
       createTask({
         boardId: boardId,
@@ -201,32 +214,23 @@ const Board = () => {
   };
 
   const handleColumnDelete = () => {
-    // убрать из колонок 123
     let columnsCopy: IColumn[] = JSON.parse(JSON.stringify(_columns));
     columnsCopy = columnsCopy.filter((col) => col._id !== columnDeleteState._id);
 
-    // поменять ордер у всех
     columnsCopy = columnsCopy.map((c, index) => ({
       ...c,
       order: index,
     }));
 
-    setTasksState(columnsCopy); // сохраняем новый стэйт
+    setTasksState(columnsCopy);
 
-    // отправить на бэк удаленную
     dispatch(deleteColumnById({ boardId: boardId, columnId: columnDeleteState._id }));
 
-    // отправить на бэк все остальные в колонке с новыми ордерами
     const resToApi = columnsCopy.map((x, index) => ({
       _id: x._id,
       order: index,
     }));
     dispatch(updateSetOfColumns(resToApi));
-  };
-
-  const handleKeyDown = (e) => {
-    e.target.style.height = 'inherit';
-    e.target.style.height = `${e.target.scrollHeight + 2}px`;
   };
 
   return (
@@ -239,52 +243,30 @@ const Board = () => {
       {isLoading ? <Preloader /> : ''}
       <div className={s.columnsWrapper}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
-          {/* <Droppable droppableId="columns">
-            {(provided, snapshot) => ( */}
-          <ul
-            className={s.columnsList}
-            // ref={provided.innerRef}
-            // {...provided.droppableProps}
-          >
+          <ul className={s.columnsList}>
             {_columns &&
               _columns.map((column) => (
-                // <Draggable
-                //   key={column._id}
-                //   draggableId={column._id}
-                //   index={index}
-                // >
-                //   {
-                //     (provided) => (
-                <li
-                  key={column._id}
-                  className={s.column}
-                  // ref={provided.innerRef}
-                  // {...provided.dragHandleProps}
-                  // {...provided.draggableProps}
-                >
+                <li key={column._id} className={s.column}>
                   <div className={s.columnContent}>
                     <div className={s.columnHeader}>
                       <input
                         className={s.columnTitleArea}
                         defaultValue={column.title}
                         name=''
-                        rows={1}
                         id=''
-                        // onInput={handleKeyDown}
                       ></input>
                       <button
                         className={s.columnDeleteBtn}
                         onClick={() => {
                           setColumnDeleteState(column);
                           setModalColumnDeleteState(true);
-                        }
-                        }
+                        }}
                       >
                         X
                       </button>
                     </div>
                     <Droppable droppableId={column._id}>
-                      {(provided, snapshot) => (
+                      {(provided) => (
                         <ul
                           className={s.cardsList}
                           ref={provided.innerRef}
@@ -308,8 +290,7 @@ const Board = () => {
                                         onClick={() => {
                                           setTaskDeleteState(task);
                                           setModalTaskDeleteState(true);
-                                        }
-                                        }
+                                        }}
                                       >
                                         X
                                       </div>
@@ -324,7 +305,7 @@ const Board = () => {
                     </Droppable>
                     <button
                       className={s.cardAddBtn}
-                      onClick={(e) => {
+                      onClick={() => {
                         setColumnId(column._id);
                         setModalTaskAddState(true);
                       }}
@@ -333,14 +314,8 @@ const Board = () => {
                     </button>
                   </div>
                 </li>
-                //     )
-                //   }
-                // </Draggable>
               ))}
-            {/* {provided.placeholder} */}
           </ul>
-          {/* )}
-          </Droppable> */}
         </DragDropContext>
         <div
           className={s.columnAddBtn}

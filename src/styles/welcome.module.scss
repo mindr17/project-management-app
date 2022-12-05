@@ -7,7 +7,6 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-
   background: url('/background.png');
   background-repeat: no-repeat;
   background-position: center;
@@ -17,7 +16,7 @@
 .textSection {
   flex: 1 0 auto;
   position: relative;
-  width: 56.3rem;
+  width: 250px;
   min-height: 300px;
   display: flex;
   flex-direction: column;
@@ -31,7 +30,6 @@
 
 .mainText,
 .remark {
-  // margin: 0;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
@@ -39,18 +37,19 @@
 }
 
 .mainText {
-  font-size: 6.4rem;
+  width: 250px;
   padding-bottom: 0;
   margin-bottom: 0;
+  display: flex;
+  font-size: 2.6rem;
 
-  @media (max-width: $breakpoint-tablet) {
-    font-size: 2.4rem;
+  .headerStart {
+    margin-right: 0.7rem;
   }
 }
 
 .remark {
   font-size: 1.6rem;
-  // line-height: 1.9rem;
   right: 0;
   align-self: flex-end;
   margin-bottom: 0;
@@ -88,18 +87,20 @@
   border-radius: 10px;
 }
 
+.descBlock {
+  flex: 0 0 300px;
+  width: 300px;
+}
+
 .blockHeader {
   width: max-content;
   padding: 1rem 0;
-
   font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 2.4rem;
   line-height: 130%;
-
   color: #ffffff;
-
   border-bottom: .2rem solid #ffffff;
 }
 
@@ -148,15 +149,12 @@
 
 .description {
   margin: 0;
-
   font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 1.6rem;
   line-height: 130%;
-
   letter-spacing: 0.06em;
-
   color: #FFFFFF;
 }
 

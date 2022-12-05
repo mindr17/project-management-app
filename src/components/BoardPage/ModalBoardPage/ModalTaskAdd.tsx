@@ -15,7 +15,7 @@ interface IProps {
 // }
 
 const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => {
-  const { t } = useTranslation('modalTaskAdd');
+  const { t } = useTranslation();
   const onSubmit = (formData: IFormDataModal) => {
     setIsShowModal(false);
     onConfirm(formData);
@@ -44,7 +44,7 @@ const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => 
         className={isShowModal ? `${s.modalContent} ${s.active}` : s.modalContent}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2>{t('title')}</h2>
+        <h2>{t('modalAdd:titleTask')}</h2>
 
         <form
           className={s.form}
@@ -54,17 +54,17 @@ const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => 
         >
           <section>
             <label className={s.label} htmlFor='title'>
-              {t('input_title')}
+              {t('modalAdd:input_title')}
             </label>
             <input
               id='title'
               type='text'
               className={s.input}
               {...register('title', {
-                required: 'Please enter title',
+                required: `${t('modalAdd:title_valid')}`,
                 minLength: {
                   value: 3,
-                  message: 'title must contain more than 3 letters',
+                  message: `${t('modalAdd:title_valid>3')}`,
                 },
                 pattern: {
                   value: /^[0-9a-zA-Zа-яёА-ЯЁ\s\-]+$/u,
@@ -76,16 +76,16 @@ const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => 
           </section>
           <section>
             <label className={s.label} htmlFor='desc'>
-              {t('input_desc')}
+              {t('modalAdd:input_desc')}
             </label>
             <textarea
               id='desc'
               className={s.input}
               {...register('desc', {
-                required: 'Please enter description',
+                required: `${t('modalAdd:desc_valid')}`,
                 minLength: {
                   value: 3,
-                  message: 'description must contain more than 3 letters',
+                  message: `${t('modalAdd:desc_valid>3')}`,
                 },
               })}
             />
@@ -94,9 +94,9 @@ const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => 
 
           <div className={s.btnContent}>
             <button onClick={handleCloseModal} className={s.btn}>
-              {t('modal_no')}
+              {t('modalAdd:modal_no')}
             </button>
-            <button className={s.btn}>{t('modal_yes')}</button>
+            <button className={s.btn}>{t('modalAdd:modal_yes')}</button>
           </div>
         </form>
         <div className={s.closeBtn} onClick={handleCloseModal}></div>

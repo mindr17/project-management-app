@@ -1,0 +1,196 @@
+@import '../../styles/variables.scss';
+
+.container {
+  height: calc(100vh - $header-height - $footer-height);
+  padding-bottom: 0;
+  margin: 0;
+}
+
+.boardHeader {
+  font-size: 2rem;
+  font-weight: 700;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  padding-left: 16px;
+  margin: 0;
+  height: 32px;
+}
+
+.columnsWrapper {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  padding-bottom: 10px;
+  padding-bottom: 10px;
+  height: calc(100% - $footer-height);
+  overflow-X: auto;
+}
+
+.columnsList {
+  display: flex;
+  gap: 10px;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  cursor: grab;
+
+  .columnContent {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    font-size: 1.6rem;
+    gap: 4px;
+    padding: 6px;
+    border-radius: 6px;
+    background-color: $color-primary;
+    
+    .columnHeader {
+      border-color: transparent;
+      border-radius: 10px;
+      width: 100%;
+      display: flex;
+      gap: 4px;
+      
+      .columnTitleArea {
+        flex: 1 1 100%;
+        background-color: transparent;
+        font-family: -apple-system, 'Inter', Segoe UI, sans-serif;
+        color: white;
+        font-size: 2rem;
+        min-height: 30px;
+        resize: none;
+        border-radius: 4px;
+        border-color: transparent;
+        cursor: pointer;
+        overflow-Y: scroll;
+      }
+  
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .columnDeleteBtn {
+        border-color: transparent;
+        border-radius: 4px;
+        height: 32px;
+        aspect-ratio: 1;
+        color: $color-secondary;
+        background-color: $color-primary;
+        border: 0px solid $color-secondary;
+        padding: 0;
+        cursor: pointer;
+  
+        &:hover {
+          background-color: red;
+          color: white;
+          border-color: white;
+        }
+      }
+  
+      &:hover > .columnDeleteBtn {
+        border-width: 1px;
+      }
+    }
+  }
+
+  .cardsList {
+    position: relative;
+    max-height: 100%;
+    flex: 0 1 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    overflow-Y: auto;
+
+    .card {
+      flex: 1 0 auto;
+      height: 40px;
+      background-color: #fff;
+      border-radius: 4px;
+      display: flex;
+      color: $color-font-secondary;
+      align-items: center;
+      margin-top: 4px;
+      padding-left: 6px;
+      justify-content: space-between;
+      cursor: pointer;
+
+      .cardText {
+        color: $color-font-secondary;
+      }
+
+      .cardDeleteBtn {
+        height: 100%;
+        aspect-ratio: 1;
+        border-radius: 4px;
+        background-color: white;
+        border: 1px solid $color-font-secondary;
+        color: $color-primary;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        
+        &:hover {
+          background-color: red;
+        }
+      }
+
+      &:hover > .cardDeleteBtn {
+        display: flex;
+      }
+    }
+  }
+
+  .cardsList::-webkit-scrollbar-track {
+    background: $color-primary;
+  }
+  
+  // .cardsList::-webkit-scrollbar-thumb {
+  //   background: #888;
+  // }
+
+  .cardAddBtn {
+    flex: 0 0 40px;
+    // height: 40px;
+    font-size: 1.2em;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border-width: 0px;
+    cursor: pointer;
+    color: $color-font-secondary;
+
+    &:hover {
+      background-color: red;
+      color: white;
+    }
+  }
+}
+
+.columnAddBtn {
+  flex: 0 0 300px;
+  width: 300px;
+  height: 40px;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background-color: $color-primary;
+  color: white;
+  
+  &:hover {
+    background-color: red;
+    cursor: pointer;
+  }
+}

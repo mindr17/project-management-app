@@ -1,0 +1,33 @@
+.boardList {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.addBoard {
+  width: 27rem;
+  height: 23rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(61.64% 82.92% at 50% 50%, #17374D 0%, #446985 100%);
+  box-shadow: 0px 1rem .6rem rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+  
+  &:hover {
+    cursor: pointer;
+    background: lighten(#446985, 2%);
+  }
+}
+
+.plus {
+  font-family: 'Inter';
+  font-weight: 700;
+  font-size: 2.6rem;
+  color: #ffffff;
+}

@@ -1,0 +1,95 @@
+@import '../../styles/variables.scss';
+
+.footer {
+  height: $footer-height;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $color-primary;
+  padding: 12px;
+  
+  // @media (max-width: $breakpoint-tablet) {
+  //   padding: 1.1rem 2rem;
+  // }
+}
+
+.year,
+.githubSection {
+  color: #ffffff;
+  font-family: 'Inter';
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.githubSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // gap: 2.7rem;
+
+  // @media (max-width: $breakpoint-tablet) {
+  //   width: 33%;
+  //   gap: initial;
+  //  }
+}
+
+.wrapper {
+  display: flex;
+  gap: 12px;
+}
+
+.wrapper p {
+  display: none;
+  margin: 0;
+
+  @media (min-width: $breakpoint-desktop) {
+    display: flex;
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.githubSection {
+  gap: 12px;
+}
+
+.githubLogo {
+  width: 24px;
+  height: 24px;
+
+  // @media (max-width: $breakpoint-tablet) {
+  //   width: 2.3rem;
+  //   height: 2.2rem;
+  // }
+}
+
+.rssLogo {
+  flex: 0 1 auto;
+  width: 60px;
+  height: 22px;
+
+  // @media (max-width: $breakpoint-desktop) {
+  //   width: 60px;
+  //   height: 22px;
+  // }
+}
+
+.yearSection {
+  display: flex;
+  align-items: center;
+  flex: 0 1 100%;
+  justify-content: flex-start;
+}
+
+.courseLogoSection {
+  display: flex;
+  align-items: center;
+  flex: 0 1 100%;
+  justify-content: flex-end;
+}

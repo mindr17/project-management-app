@@ -1,0 +1,79 @@
+.container {
+  position: relative;
+  margin: 0 auto;
+  max-width: 144rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main {
+  // width: 100%;
+  min-height: calc(100vh - 50px - 32px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #CEE0EF;
+  background: #446985;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.label {
+  font-size: 1.4rem;
+  color: #cee0ef;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  margin-top: 0.8rem;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+  font-size: 1.6rem;
+  line-height: 4rem;
+  color: #17374d;
+  border: 0.1rem solid #cee0ef;
+  border-radius: 0.2rem;
+}
+
+.errorForm {
+  width: 100%;
+  min-height: 2rem;
+  margin-top: 0.3rem;
+  color: #fe7bb0;
+}
+
+.btn {
+  width: 100%;
+  height: 5.1rem;
+  padding: 1.5rem 4.5rem;
+  border: 0.1rem solid #bad1e7;
+  border-radius: 10rem;
+  background: #17374d;
+  font-family: 'Inter';
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 130%;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+
+  &:hover {
+    cursor: pointer;
+    background: lighten(#17374d, 2%);
+  }
+}
+
+.signUpLink {
+  margin-top: 0.5rem;
+  font-size: 1.4rem;
+}

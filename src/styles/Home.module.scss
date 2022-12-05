@@ -1,0 +1,11 @@
+@import './variables.scss';
+
+.main {
+  min-height: calc(100vh - $header-height - $footer-height);
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

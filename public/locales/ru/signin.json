@@ -1,0 +1,11 @@
+{
+  "login": "Авторизоваться",
+  "formInput_login": "Логин",
+  "formInput_login_valid": "Пожалуйста, введите логин",
+  "formInput_login_valid>3": "логин должен содержать более 3 символов",
+  "formInput_password": "Пароль",
+  "formInput_pass_valid>5": "пароль должен содержать более 5 символов",
+  "formInput_pass_valid": "Пожалуйста введите пароль",
+  "formBtn_signin": "Войти",
+  "signUpLink": "Создать аккаунт"
+}

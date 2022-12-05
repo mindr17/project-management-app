@@ -1,0 +1,11 @@
+{
+  "login": "Login",
+  "formInput_login": "Login",
+  "formInput_login_valid": "Please enter login",
+  "formInput_login_valid>3": "login must contain more than 3 characters",
+  "formInput_password": "Password",
+  "formInput_pass_valid": "Please enter password",
+  "formInput_pass_valid>5": "password must contain more than 5 characters",
+  "formBtn_signin": "Sign in",
+  "signUpLink": "Create an account"
+}

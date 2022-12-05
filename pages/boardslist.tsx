@@ -1,11 +1,23 @@
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { BoardList } from '../src/components/BoardList/BoardList';
 import { useAppDispatch, useAppSelector } from '../src/hooks/hooks';
 import styles from '../src/styles/Home.module.scss';
 
-export default function Home() {
+type Props = {
+  // Add custom props here
+};
+
+export const getStaticProps: GetStaticProps<Props> = async ({ locale }) => ({
+  props: {
+    locale,
+    ...(await serverSideTranslations(locale ?? 'en', ['common', 'boardsList', 'modalAdd'])),
+  },
+});
+
+export default function Home(_props: InferGetStaticPropsType<typeof getStaticProps>) {
   const { user } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
 
   return (
     <div className={styles.container}>

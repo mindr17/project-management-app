@@ -6,8 +6,14 @@ import { logout } from '../../store/auth/authThunk';
 import s from './header.module.scss';
 import { IUserDataLs } from './interfaceHeader';
 import { getTokenValidness } from '../utilities/getTokenValidness';
+import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/router';
 
 export const Header = () => {
+  const { t } = useTranslation();
+  const router = useRouter();
+  const changeTo = router.locale === 'en' ? 'ru' : 'en';
+
   const dispatch = useAppDispatch();
   const { user, token } = useAppSelector((state) => state.auth);
 
@@ -40,32 +46,32 @@ export const Header = () => {
   return (
     <header className={s.header}>
       <nav className={s.nav}>
-        <Link className={s.navLink} href={'#'}>
-          EN
+        <Link href={router.asPath} locale={changeTo}>
+          <label className={s.navLink}>{t('change-locale', { changeTo })}</label>
         </Link>
       </nav>
       {user ? (
         <>
           <Link className={s.navLink} href={'/boardslist'}>
-            Boards
+            {t('boards')}
           </Link>
           <Link className={s.navLink} href={'/profile'}>
-            Profile
+            {t('profile')}
           </Link>
           <Link onClick={onLogout} className={s.navLink} href={'/'}>
-            Logout
+            {t('logout')}
           </Link>
         </>
       ) : (
         <>
           <nav className={s.nav}>
             <Link className={s.navLink} href={'signin'}>
-              Sign In
+              {t('signIn')}
             </Link>
           </nav>
           <nav className={s.nav}>
             <Link className={s.navLink} href={'signup'}>
-              Sign Up
+              {t('signUp')}
             </Link>
           </nav>
         </>

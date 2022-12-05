@@ -17,13 +17,28 @@ import CreateColumnModal from '../../src/components/BoardPage/ModalBoardPage/Mod
 import { updateColumns } from '../../src/store/board/sliceBoard';
 import Preloader from '../../src/components/Preloader/Preloader';
 import Modal from '../../src/components/ModalDelete/Modal';
+import { useTranslation } from 'react-i18next';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export interface IFormDataModal {
   title: string;
   desc: string;
 }
 
-const Board = () => {
+type Props = {
+  // Add custom props here
+};
+
+export const getServerSideProps: GetStaticProps<Props> = async ({ locale }) => ({
+  props: {
+    locale,
+    ...(await serverSideTranslations(locale ?? 'en', ['common', 'modalAdd', 'board'])),
+  },
+});
+
+const Board = (_props: InferGetStaticPropsType<typeof getServerSideProps>) => {
+  const { t } = useTranslation('board');
   const dispatch = useAppDispatch();
   const router = useRouter();
   const boardId = router.query.boardId as string;
@@ -239,7 +254,7 @@ const Board = () => {
         <title>Board</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <h1 className={s.boardHeader}>Board title</h1>
+      <h1 className={s.boardHeader}>{t('board_h1')}</h1>
       {isLoading ? <Preloader /> : ''}
       <div className={s.columnsWrapper}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -310,7 +325,7 @@ const Board = () => {
                         setModalTaskAddState(true);
                       }}
                     >
-                      Add card
+                      {t('btn_addTask')}
                     </button>
                   </div>
                 </li>
@@ -323,7 +338,7 @@ const Board = () => {
             setModalColumnAddState(true);
           }}
         >
-          Add Column
+          {t('btn_addColumn')}
         </div>
         <CreateTaskModal
           onConfirm={handleCardAdd}

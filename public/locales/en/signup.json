@@ -1,0 +1,16 @@
+{
+  "register_h1": "Register",
+  "formInput_name": "Name",
+  "formInput_name_valid": "Please enter name",
+  "formInput_name_valid>3": "Name must contain more than 3 letters",
+  "formInput_name_validAlphabetic": "Name must be alphabetic",
+  "formInput_login": "Login",
+  "formInput_login_valid": "Please enter login",
+  "formInput_login_valid>3": "Login must contain more than 3 characters",
+  "formInput_pass": "Password",
+  "formInput_pass_valid": "Please enter password",
+  "formInput_pass_valid>5": "Password must contain more than 5 characters",
+  "formBtn_signup": "Register",
+  "signUpLink_title": "Already have an account?",
+  "signUpLink": "Sign in"
+}

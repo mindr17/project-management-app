@@ -1,0 +1,11 @@
+{
+  "change-locale": "RU",
+  "signIn": "Войти",
+  "signUp": "Регистрация",
+  "boards": "Доски",
+  "profile": "Профиль",
+  "logout": "Выход",
+  "modalYes": "да",
+  "modalNo": "нет",
+  "PageNotFound": "Страница не найдена"
+}

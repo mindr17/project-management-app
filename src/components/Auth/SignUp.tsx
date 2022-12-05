@@ -10,8 +10,10 @@ import Preloader from '../Preloader/Preloader';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IFormData } from './interfaceAuth';
+import { useTranslation } from 'react-i18next';
 
 export default function SignUp() {
+  const { t } = useTranslation('signup');
   const dispatch = useAppDispatch();
   const { isError, isLoading, isSuccess, message, user, token } = useAppSelector(
     (state) => state.auth
@@ -59,21 +61,21 @@ export default function SignUp() {
       >
         <section>
           <label className={s.label} htmlFor='name'>
-            Name
+            {t('formInput_name')}
           </label>
           <input
             id='name'
             type='text'
             className={s.input}
             {...register('name', {
-              required: 'Please enter name',
+              required: `${t('formInput_name_valid')}`,
               minLength: {
                 value: 3,
-                message: 'name must contain more than 3 letters',
+                message: `${t('formInput_name_valid>3')}`,
               },
               pattern: {
                 value: /^[a-zA-Zа-яёА-ЯЁ\s\-]+$/u,
-                message: 'name must be alphabetic',
+                message: `${t('formInput_name_validAlphabetic')}`,
               },
             })}
           />
@@ -81,17 +83,17 @@ export default function SignUp() {
         </section>
         <section>
           <label className={s.label} htmlFor='login'>
-            Login
+            {t('formInput_login')}
           </label>
           <input
             id='login'
             type='text'
             className={s.input}
             {...register('login', {
-              required: 'Please enter login',
+              required: `${t('formInput_login_valid')}`,
               minLength: {
                 value: 3,
-                message: 'login must contain more than 3 letters',
+                message: `${t('formInput_login_valid>3')}`,
               },
             })}
           />
@@ -99,28 +101,28 @@ export default function SignUp() {
         </section>
         <section>
           <label className={s.label} htmlFor='password'>
-            Password
+            {t('formInput_pass')}
           </label>
           <input
             id='password'
             type='password'
             className={s.input}
             {...register('password', {
-              required: 'Please enter password',
+              required: `${t('formInput_pass_valid')}`,
               minLength: {
                 value: 5,
-                message: 'password must contain more than 5 characters',
+                message: `${t('formInput_pass_valid>5')}`,
               },
             })}
           />
           <div className={s.errorForm}>{errors.password?.message}</div>
         </section>
-        <button className={s.btn}>Register</button>
+        <button className={s.btn}>{t('formBtn_signup')}</button>
       </form>
       <span className={s.signUpLink}>
-        Already have an account?{' '}
+        {t('signUpLink_title')}
         <strong>
-          <Link href={'/signin'}>Sign in</Link>
+          <Link href={'/signin'}>{t('signUpLink')}</Link>
         </strong>
       </span>
       <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />

@@ -33,8 +33,8 @@ export const BoardList = () => {
     dispatch(
       createBoard({
         title: title,
-        owner: user?._id,
-        users: [user?._id],
+        owner: user ? user._id : '',
+        users: user ? [user._id] : [],
       })
     ); // create board
   };

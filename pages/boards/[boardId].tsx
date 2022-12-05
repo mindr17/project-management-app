@@ -1,106 +1,170 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 // import { initialBoardState, columns as initialColumns, tasks as initialTasks } from './mockupData';
 import { SetStateAction, useEffect, useState } from 'react';
 import { getBoardData } from '../../src/store/board/thunkBoard';
 import { useAppDispatch, useAppSelector } from '../../src/hooks/hooks';
-import { createColumnInBoard } from '../../src/store/board/thunkColumns';
-import { createTask } from '../../src/store/board/thunkTasks';
-import ModalTaskAdd from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
+import {
+  createColumnInBoard,
+  deleteColumnById,
+  updateSetOfColumns,
+} from '../../src/store/board/thunkColumns';
+import { createTask, deleteTaskById, updateSetOfTasks } from '../../src/store/board/thunkTasks';
+import CreateTaskModal from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
 import s from '../../src/components/BoardPage/BoardPage.module.scss';
 import IFormData from '../../src/components/BoardPage/ModalBoardPage/ModalTaskAdd';
-import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'react-i18next';
+import { IColumn, ITask } from '../../src/store/board/Iboard';
+import CreateColumnModal from '../../src/components/BoardPage/ModalBoardPage/ModalColumnAdd';
+import { updateColumns } from '../../src/store/board/sliceBoard';
+import Preloader from '../../src/components/Preloader/Preloader';
 
-type Props = {
-  // Add custom props here
-};
-
-export const getServerSideProps: GetStaticProps<Props> = async ({ locale }) => ({
-  props: {
-    locale,
-    ...(await serverSideTranslations(locale ?? 'en', ['common', 'modalTaskAdd', 'board'])),
-  },
-});
+export interface IFormDataModal {
+  title: string;
+  desc: string;
+}
 
 const Board = (_props: InferGetStaticPropsType<typeof getServerSideProps>) => {
   const { t } = useTranslation('board');
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { boardId } = router.query;
-  const { columns } = useAppSelector((state) => state.board);
+  const { columns, isLoading } = useAppSelector((state) => state.board);
   const [ModalTaskAddState, setModalTaskAddState] = useState<boolean>(false);
+  const [ModalColumnAddState, setModalColumnAddState] = useState<boolean>(false);
+  const { user } = useAppSelector((state) => state.auth);
+
+  const [_columns, setTasksState] = useState<IColumn[]>([]);
+  const [columnId, setColumnId] = useState<string>('');
 
   useEffect(() => {
     if (boardId === undefined || typeof boardId !== 'string') return;
-
     dispatch(getBoardData(boardId));
   }, [router]);
 
-  // useEffect(() => {
-  //   const { bid } = router.query;
+  useEffect(() => {
+    setTasksState(columns);
+  }, [columns]);
 
-  //   if (!bid) return;
+  useEffect(() => {
+    dispatch(updateColumns(_columns || [])); // Делаем один источник истины, записываем данные в глобальный state из локального useState
+  }, [_columns, dispatch]);
 
-  //   dispatch(GetBoardData(bid));
-  // }, [boards]);
-
-  const handleOnDragEnd = (result: any) => {
+  const handleOnDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
-    // const columnsForEdit = Array.from(columnsState);
-    // const [movedColumn] = columnsForEdit.splice(result.source.index, 1);
-    // columnsForEdit.splice(result.destination.index, 0, movedColumn);
-    // console.log('columnsForEdit: ', columnsForEdit);
+    if (result.destination.droppableId === result.source.droppableId) {
+      const column = _columns.filter((x) => x._id === result.source.droppableId); // колонка где случилось
 
-    // setColumnsState(columnsForEdit);
+      const tasksCopy = [...column[0].tasks]; // копия тасок
 
-    // const tasksCopy = Array.from(tasksState);
-    // const [movedColumn] = tasksCopy.splice(result.source.index, 1);
-    // tasksCopy.splice(result.destination.index, 0, movedColumn);
+      const [movedColumn] = tasksCopy.splice(result.source.index, 1); // таска, которая переместилась
+      tasksCopy.splice(result.destination.index, 0, movedColumn); // вставляем в новое место
 
-    // tasksCopy.forEach((task, index) => {
-    //   task.order = index;
-    // });
+      const newState: IColumn[] = JSON.parse(JSON.stringify(_columns)); // дублируем общее состояние
+      const newColumn = newState.filter((x) => x._id === result.source.droppableId); // находим в новом состоянии нужную колонку
+      newColumn[0].tasks = [...tasksCopy]; // записываем в новую колонку новым массив тасок
 
-    // setTasksState(tasksCopy);
+      setTasksState(newState); // сохраняем новый стэйт
 
-    const tasksCopy = Array.from(columns.tasks);
-    const [movedColumn] = tasksCopy.splice(result.source.index, 1);
-    tasksCopy.splice(result.destination.index, 0, movedColumn);
-
-    tasksCopy.forEach((task, index) => {
-      task.order = index;
-    });
-
-    setTasksState(tasksCopy);
+      const resToApi = newColumn[0].tasks.map((x, index) => ({
+        _id: x._id,
+        order: index,
+        columnId: x.columnId,
+      }));
+      dispatch(updateSetOfTasks(resToApi));
+    }
   };
 
-  const handleCardDelete = () => {
-    console.log('handleCardDelete: ', handleCardDelete);
+  const handleTaskDelete = (task: ITask) => {
+    // убрать из колонки
+    const column = _columns.filter((x) => x._id === task.columnId); // колонка где случилось
+    let tasksCopy = [...column[0].tasks.filter((x: ITask) => x._id != task._id)]; // копия тасок без удаленной
+
+    // поменять ордер у всех
+    tasksCopy = tasksCopy.map((t, index) => ({
+      ...t,
+      order: index,
+    }));
+
+    const newState = JSON.parse(JSON.stringify(_columns)); // дублируем общее состояние
+    const newColumn = newState.filter((x: ITask) => x._id === task.columnId); // находим в новом состоянии нужную колонку
+    newColumn[0].tasks = [...tasksCopy]; // записываем в новую колонку новым массив тасок
+    setTasksState(newState); // сохраняем новый стэйт
+
+    // отправить на бэк удаленную
+    dispatch(deleteTaskById({ boardId: boardId, columnId: task.columnId, taskId: task._id }));
+
+    // отправить на бэк все остальные в колонке с новыми ордерами
+    const resToApi = tasksCopy.map((x, index) => ({
+      _id: x._id,
+      order: index,
+      columnId: x.columnId,
+    }));
+    dispatch(updateSetOfTasks(resToApi));
   };
 
-  const handleColumnAdd = () => {
-    // dispatch(createColumnInBoard());
+  const handleColumnAdd = (formData: IFormDataModal) => {
+    const order = _columns.length;
+
+    dispatch(
+      createColumnInBoard({
+        boardId: boardId,
+        newParams: {
+          title: formData.title,
+          order: order,
+        },
+      })
+    );
   };
 
-  const handleCardAdd = (e: any) => {
-    // dispatch(createTask({
-    // boardId: boardId,
-    // columnId:
-    // newTaskParams: {
-    // title: ,
-    // order: ,
-    // description: ,
-    // userId: number;
-    // users: string[];
-    // },
-    // }));
+  const handleCardAdd = (formData: IFormDataModal) => {
+    const column = _columns.filter((x) => x._id === columnId); // колонка где случилось
+    const order = column[0].tasks === undefined ? 0 : column[0].tasks.length;
+    const userId = user ? user._id : '';
+    const users = ['string'];
+
+    // отправить запрос на бэк на добавление
+    dispatch(
+      createTask({
+        boardId: boardId,
+        columnId: columnId,
+        newTaskParams: {
+          title: formData.title,
+          description: formData.desc,
+          userId: userId,
+          order: order,
+          users: users,
+        },
+      })
+    );
   };
 
-  const handleKeyDown = (e: any) => {
+  const handleColumnDelete = (column: IColumn) => {
+    // убрать из колонок 123
+    let columnsCopy: IColumn[] = JSON.parse(JSON.stringify(_columns));
+    columnsCopy = columnsCopy.filter((col) => col._id !== column._id);
+
+    // поменять ордер у всех
+    columnsCopy = columnsCopy.map((c, index) => ({
+      ...c,
+      order: index,
+    }));
+
+    setTasksState(columnsCopy); // сохраняем новый стэйт
+
+    // отправить на бэк удаленную
+    dispatch(deleteColumnById({ boardId: boardId, columnId: column._id }));
+
+    // отправить на бэк все остальные в колонке с новыми ордерами
+    const resToApi = columnsCopy.map((x, index) => ({
+      _id: x._id,
+      order: index,
+    }));
+    dispatch(updateSetOfColumns(resToApi));
+  };
+
+  const handleKeyDown = (e) => {
     e.target.style.height = 'inherit';
     e.target.style.height = `${e.target.scrollHeight + 2}px`;
   };
@@ -112,7 +176,8 @@ const Board = (_props: InferGetStaticPropsType<typeof getServerSideProps>) => {
         <meta name='description' content='Generated by create next app' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <h1 className={s.boardHeader}>{t('board_h1')}</h1>
+      <h1 className={s.boardHeader}>Board title</h1>
+      {isLoading ? <Preloader /> : ''}
       <div className={s.columnsWrapper}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
           {/* <Droppable droppableId="columns">
@@ -122,79 +187,89 @@ const Board = (_props: InferGetStaticPropsType<typeof getServerSideProps>) => {
             // ref={provided.innerRef}
             // {...provided.droppableProps}
           >
-            {columns.map((column, index: number) => (
-              // <Draggable
-              //   key={column._id}
-              //   draggableId={column._id}
-              //   index={index}
-              // >
-              //   {
-              //     (provided) => (
-              <li
-                key={column._id}
-                className={s.column}
-                // ref={provided.innerRef}
-                // {...provided.dragHandleProps}
-                // {...provided.draggableProps}
-              >
-                <div className={s.columnContent}>
-                  <div className={s.columnHeader}>
-                    <textarea
-                      className={s.columnTitleArea}
-                      defaultValue={column.title}
-                      name=''
-                      rows={1}
-                      id=''
-                      onInput={handleKeyDown}
-                    ></textarea>
-                    <button className={s.columnDeleteBtn}>X</button>
-                  </div>
-                  <Droppable droppableId={column._id}>
-                    {(provided, snapshot) => (
-                      <ul
-                        className={s.cardsList}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
+            {_columns &&
+              _columns.map((column) => (
+                // <Draggable
+                //   key={column._id}
+                //   draggableId={column._id}
+                //   index={index}
+                // >
+                //   {
+                //     (provided) => (
+                <li
+                  key={column._id}
+                  className={s.column}
+                  // ref={provided.innerRef}
+                  // {...provided.dragHandleProps}
+                  // {...provided.draggableProps}
+                >
+                  <div className={s.columnContent}>
+                    <div className={s.columnHeader}>
+                      <input
+                        className={s.columnTitleArea}
+                        defaultValue={column.title}
+                        name=''
+                        rows={1}
+                        id=''
+                        // onInput={handleKeyDown}
+                      ></input>
+                      <button
+                        className={s.columnDeleteBtn}
+                        onClick={() => handleColumnDelete(column)}
                       >
-                        {column.tasks &&
-                          column.tasks.map((task, index) => {
-                            return (
-                              <Draggable key={task._id} draggableId={task._id} index={index}>
-                                {(provided) => (
-                                  <li
-                                    key={index}
-                                    className={s.card}
-                                    ref={provided.innerRef}
-                                    {...provided.dragHandleProps}
-                                    {...provided.draggableProps}
-                                  >
-                                    <div className={s.cardText}>{task.title}</div>
-                                    <div className={s.cardDeleteBtn} onClick={handleCardDelete}>
-                                      X
-                                    </div>
-                                  </li>
-                                )}
-                              </Draggable>
-                            );
-                          })}
-                        {provided.placeholder}
-                      </ul>
-                    )}
-                  </Droppable>
-                  <button
-                    className={s.cardAddBtn}
-                    onClick={() => {
-                      setModalTaskAddState(true);
-                    }}
-                  >
-                    {t('btn_addTask')}
-                  </button>
-                </div>
-              </li>
-              //     )
-              //   }
-              // </Draggable>
-            ))}
+                        X
+                      </button>
+                    </div>
+                    <Droppable droppableId={column._id}>
+                      {(provided, snapshot) => (
+                        <ul
+                          className={s.cardsList}
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                        >
+                          {column.tasks &&
+                            column.tasks.map((task: ITask, index: number) => {
+                              return (
+                                <Draggable key={task._id} draggableId={task._id} index={index}>
+                                  {(provided) => (
+                                    <li
+                                      key={task._id}
+                                      className={s.card}
+                                      ref={provided.innerRef}
+                                      {...provided.dragHandleProps}
+                                      {...provided.draggableProps}
+                                    >
+                                      <div className={s.cardText}>{task.title}</div>
+                                      <div
+                                        className={s.cardDeleteBtn}
+                                        onClick={() => handleTaskDelete(task)}
+                                      >
+                                        X
+                                      </div>
+                                    </li>
+                                  )}
+                                </Draggable>
+                              );
+                            })}
+                          {provided.placeholder}
+                        </ul>
+                      )}
+                    </Droppable>
+                    <button
+                      className={s.cardAddBtn}
+                      onClick={(e) => {
+                        setColumnId(column._id);
+                        setModalTaskAddState(true);
+                      }}
+                    >
+                      Add card
+                    </button>
+                  </div>
+                </li>
+                //     )
+                //   }
+                // </Draggable>
+              ))}
             {/* {provided.placeholder} */}
           </ul>
           {/* )}
@@ -202,16 +277,21 @@ const Board = (_props: InferGetStaticPropsType<typeof getServerSideProps>) => {
         </DragDropContext>
         <div
           className={s.columnAddBtn}
-          // onClick={() => {
-          //   setModalTaskAddState(true);
-          // }}
+          onClick={() => {
+            setModalColumnAddState(true);
+          }}
         >
-          {t('btn_addColumn')}
+          Add Column
         </div>
-        <ModalTaskAdd
-          onConfirm={() => {}}
+        <CreateTaskModal
+          onConfirm={handleCardAdd}
           isShowModal={ModalTaskAddState}
           setIsShowModal={setModalTaskAddState}
+        />
+        <CreateColumnModal
+          onConfirm={handleColumnAdd}
+          isShowModal={ModalColumnAddState}
+          setIsShowModal={setModalColumnAddState}
         />
       </div>
     </div>

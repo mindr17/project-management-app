@@ -37,8 +37,7 @@ export const getServerSideProps: GetStaticProps<Props> = async ({ locale }) => (
   },
 });
 
-const Board = (_props: InferGetStaticPropsType<typeof getServerSideProps>) => {
-  const { t } = useTranslation('board');
+const Board = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const boardId = router.query.boardId as string;
@@ -254,7 +253,7 @@ const Board = (_props: InferGetStaticPropsType<typeof getServerSideProps>) => {
         <title>Board</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <h1 className={s.boardHeader}>{t('board_h1')}</h1>
+      <h1 className={s.boardHeader}>Board header</h1>
       {isLoading ? <Preloader /> : ''}
       <div className={s.columnsWrapper}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -325,7 +324,7 @@ const Board = (_props: InferGetStaticPropsType<typeof getServerSideProps>) => {
                         setModalTaskAddState(true);
                       }}
                     >
-                      {t('btn_addTask')}
+                      Add task
                     </button>
                   </div>
                 </li>
@@ -338,7 +337,7 @@ const Board = (_props: InferGetStaticPropsType<typeof getServerSideProps>) => {
             setModalColumnAddState(true);
           }}
         >
-          {t('btn_addColumn')}
+          Add column
         </div>
         <CreateTaskModal
           onConfirm={handleCardAdd}

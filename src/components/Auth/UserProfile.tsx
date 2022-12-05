@@ -10,8 +10,10 @@ import { deleteUser, logout, updateUser } from '../../store/auth/authThunk';
 import { callReset, setIsDelete } from '../../store/auth/sliceAuth';
 import { IFormData } from './interfaceAuth';
 import Modal from '../ModalDelete/Modal';
+import { useTranslation } from 'react-i18next';
 
 export default function UserProfile() {
+  const { t } = useTranslation('profile, signup');
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [isShowModal, setIsShowModal] = useState(false);
@@ -71,8 +73,12 @@ export default function UserProfile() {
 
   return (
     <>
-      <h1>Name: {user?.name}</h1>
-      <h2>Login: {user?.login}</h2>
+      <h2>
+        {t('profile:profileName_h2')}: {user?.name}
+      </h2>
+      <h2>
+        {t('profile:profileLogin_h2')}: {user?.login}
+      </h2>
       <form
         className={s.form}
         onSubmit={handleSubmit((formData) => {
@@ -81,21 +87,21 @@ export default function UserProfile() {
       >
         <section>
           <label className={s.label} htmlFor='name'>
-            Name
+            {t('signup:formInput_name')}
           </label>
           <input
             id='name'
             type='text'
             className={s.input}
             {...register('name', {
-              required: 'Please enter name',
+              required: `${t('signup:formInput_name_valid')}`,
               minLength: {
                 value: 3,
-                message: 'name must contain more than 3 letters',
+                message: `${t('signup:formInput_name_valid>3')}`,
               },
               pattern: {
                 value: /^[a-zA-Zа-яёА-ЯЁ\s\-]+$/u,
-                message: 'name must be alphabetic',
+                message: `${t('signup:formInput_name_validAlphabetic')}`,
               },
             })}
           />
@@ -103,17 +109,17 @@ export default function UserProfile() {
         </section>
         <section>
           <label className={s.label} htmlFor='login'>
-            Login
+            {t('signup:formInput_login')}
           </label>
           <input
             id='login'
             type='text'
             className={s.input}
             {...register('login', {
-              required: 'Please enter login',
+              required: `${t('signup:formInput_login_valid')}`,
               minLength: {
                 value: 3,
-                message: 'login must contain more than 3 letters',
+                message: `${t('signup:formInput_login_valid>3')}`,
               },
             })}
           />
@@ -121,30 +127,30 @@ export default function UserProfile() {
         </section>
         <section>
           <label className={s.label} htmlFor='password'>
-            Password
+            {t('signup:formInput_pass')}
           </label>
           <input
             id='password'
             type='password'
             className={s.input}
             {...register('password', {
-              required: 'Please enter password',
+              required: `${t('signup:formInput_pass_valid')}`,
               minLength: {
                 value: 5,
-                message: 'password must contain more than 5 characters',
+                message: `${t('signup:formInput_pass_valid>5')}`,
               },
             })}
           />
           <div className={s.errorForm}>{errors.password?.message}</div>
         </section>
-        <button className={s.btn}>Change</button>
+        <button className={s.btn}>{t('profile:btnChange')}</button>
       </form>
       <button onClick={handleOpenModal} className={s.btn} style={{ background: 'red' }}>
-        Delete
+        {t('profile:btnDelete')}
       </button>
       <Modal
         onConfirm={handleDelete}
-        title={'Are you sure you want to delete your account'}
+        title={t('profile:modal_title')}
         isShowModal={isShowModal}
         setIsShowModal={setIsShowModal}
       />

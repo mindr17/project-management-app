@@ -1,0 +1,10 @@
+{
+  "change-locale": "EN",
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
+  "boards": "Boards",
+  "profile": "Profile",
+  "logout": "Logout",
+  "modalYes": "agree",
+  "modalNo": "cancel"
+}

@@ -11,8 +11,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { parseJwt } from '../utilities/parseJwt';
 import { IFormSignIn, IParseToken } from './interfaceAuth';
 import s from './auth.module.scss';
+import { useTranslation } from 'react-i18next';
 
 export default function SignIn() {
+  const { t } = useTranslation('signin');
   const dispatch = useAppDispatch();
   const { isError, isLoading, user, message, token } = useAppSelector((state) => state.auth);
   const router = useRouter();
@@ -63,17 +65,17 @@ export default function SignIn() {
       >
         <section>
           <label className={s.label} htmlFor='login'>
-            Login
+            {t('formInput_login')}
           </label>
           <input
             id='login'
             type='text'
             className={s.input}
             {...register('login', {
-              required: 'Please enter login',
+              required: `${t('formInput_login_valid')}`,
               minLength: {
                 value: 3,
-                message: 'login must contain more than 3 letters',
+                message: `${t('formInput_login_valid>3')}`,
               },
             })}
           />
@@ -81,26 +83,26 @@ export default function SignIn() {
         </section>
         <section>
           <label className={s.label} htmlFor='password'>
-            Password
+            {t('formInput_password')}
           </label>
           <input
             id='password'
             type='password'
             className={s.input}
             {...register('password', {
-              required: 'Please enter password',
+              required: `${t('formInput_pass_valid')}`,
               minLength: {
                 value: 5,
-                message: 'password must contain more than 5 characters',
+                message: `${t('formInput_pass_valid>5')}`,
               },
             })}
           />
           <div className={s.errorForm}>{errors.password?.message}</div>
         </section>
-        <button className={s.btn}>Sign in</button>
+        <button className={s.btn}>{t('formBtn_signin')}</button>
       </form>
       <Link className={s.signUpLink} href={'/signup'}>
-        <strong>Create an account</strong>
+        <strong>{t('signUpLink')}</strong>
       </Link>
       <ToastContainer position='top-center' autoClose={false} style={{ fontSize: '2rem' }} />
     </>

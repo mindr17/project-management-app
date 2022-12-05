@@ -1,0 +1,16 @@
+{
+  "register_h1": "Регистрация",
+  "formInput_name": "Имя",
+  "formInput_name_valid": "Пожалуйста, введите имя",
+  "formInput_name_valid>3": "Имя должно содержать более 3 букв",
+  "formInput_name_validAlphabetic": "Имя должно быть буквенным",
+  "formInput_login": "Логин",
+  "formInput_login_valid": "Пожалуйста, введите логин",
+  "formInput_login_valid>3": "Логин должен содержать более 3 символов",
+  "formInput_pass": "Пароль",
+  "formInput_pass_valid": "Пожалуйста введите пароль",
+  "formInput_pass_valid>5": "Пароль должен содержать более 5 символов",
+  "formBtn_signup": "Регистрация",
+  "signUpLink_title": "У вас уже есть аккаунт?",
+  "signUpLink": "Войти"
+}

@@ -46,7 +46,7 @@ export const createTask = createAsyncThunk(
     if (!response.ok) {
       return rejectWithValue((await response.json()) as IKnownError);
     }
-    const allTasksInColumn: ITask[] = await response.json();
+    const allTasksInColumn: ITask = await response.json();
 
     return allTasksInColumn;
   }
@@ -128,6 +128,7 @@ export const deleteTaskById = createAsyncThunk(
 export const updateSetOfTasks = createAsyncThunk(
   'board/updateSetOfTasks',
   async (data: ITaskListParams[], { rejectWithValue }) => {
+    if (data.length === 0) return;
     const token: string = JSON.parse(localStorage.getItem('token') || '');
     const response = await fetch(`${BASE_URL}/tasksSet`, {
       method: 'PATCH',

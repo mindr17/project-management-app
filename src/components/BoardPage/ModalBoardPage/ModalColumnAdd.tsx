@@ -13,7 +13,7 @@ interface IProps {
 //   [key: string]: string;
 // }
 
-const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => {
+const CreateColumnModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => {
   const onSubmit = (formData: IFormDataModal) => {
     setIsShowModal(false);
     onConfirm(formData);
@@ -42,7 +42,7 @@ const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => 
         className={isShowModal ? `${s.modalContent} ${s.active}` : s.modalContent}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2>Create task</h2>
+        <h2>Create column</h2>
 
         <form
           className={s.form}
@@ -72,24 +72,6 @@ const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => 
             />
             <div className={s.errorForm}>{errors.title?.message}</div>
           </section>
-          <section>
-            <label className={s.label} htmlFor='desc'>
-              Description
-            </label>
-            <textarea
-              id='desc'
-              className={s.input}
-              {...register('desc', {
-                required: 'Please enter description',
-                minLength: {
-                  value: 3,
-                  message: 'description must contain more than 3 letters',
-                },
-              })}
-            />
-            <div className={s.errorForm}>{errors.desc?.message}</div>
-          </section>
-
           <div className={s.btnContent}>
             <button onClick={handleCloseModal} className={s.btn}>
               cancel
@@ -103,4 +85,4 @@ const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => 
   );
 };
 
-export default CreateTaskModal;
+export default CreateColumnModal;

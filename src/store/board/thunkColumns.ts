@@ -90,9 +90,9 @@ export const deleteColumnById = createAsyncThunk(
     if (!response.ok) {
       return rejectWithValue((await response.json()) as IKnownError);
     }
-    const updatedColumn: IColumn = await response.json();
+    const deleteColumn: IColumn = await response.json();
 
-    return updatedColumn;
+    return deleteColumn;
   }
 );
 
@@ -119,7 +119,8 @@ export const getColumnByIdsListOrUserId = createAsyncThunk(
 
 export const updateSetOfColumns = createAsyncThunk(
   'board/updateSetOfColumns',
-  async (data: IListOfNewParams, { rejectWithValue }) => {
+  async (data: IListOfNewParams[], { rejectWithValue }) => {
+    if (data.length === 0) return;
     const token: string = JSON.parse(localStorage.getItem('token') || '');
     const response = await fetch(`${BASE_URL}/columnsSet`, {
       method: 'PATCH',
@@ -127,6 +128,7 @@ export const updateSetOfColumns = createAsyncThunk(
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(data),
     });
 
     if (!response.ok) {

@@ -9,7 +9,9 @@ import Document, {
 import React from 'react';
 import { resetServerContext } from 'react-beautiful-dnd';
 
-type Props = {};
+type Props = {
+  //a
+};
 
 class MyDocument extends Document<Props> {
   /*

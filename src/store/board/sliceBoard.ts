@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getBoardData } from './thunkBoard';
 import { createColumnInBoard, updateColumnById } from './thunkColumns';
-import { InitialState } from './Iboard';
+import { IColumn, InitialState } from './Iboard';
 import { createTask } from './thunkTasks';
 
 const initialState: InitialState = {
@@ -14,7 +14,11 @@ const sliceBoard = createSlice({
   name: 'board',
   initialState,
 
-  reducers: {},
+  reducers: {
+    updateColumns(state, action: PayloadAction<IColumn[]>) {
+      state.columns = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getBoardData.pending, (state) => {
@@ -34,6 +38,9 @@ const sliceBoard = createSlice({
         });
         state.isLoading = false;
       })
+      .addCase(getBoardData.rejected, (state) => {
+        state.isLoading = false;
+      })
       .addCase(createColumnInBoard.fulfilled, (state, action) => {
         state.columns.push(action.payload);
       })
@@ -47,11 +54,16 @@ const sliceBoard = createSlice({
       })
       .addCase(createTask.fulfilled, (state, action) => {
         const { columnId } = action.payload;
-        state.columns.find(c => c._id == columnId)?.tasks?.push(action.payload);
+        state.columns.forEach((c) => {
+          if (!c.tasks) {
+            c.tasks = [];
+          }
+        });
+        state.columns.find((c) => c._id == columnId)?.tasks.push(action.payload);
       });
   },
 });
 
-export const {} = sliceBoard.actions;
+export const { updateColumns } = sliceBoard.actions;
 
 export default sliceBoard.reducer;

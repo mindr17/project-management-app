@@ -1,19 +1,20 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
+import { IFormDataModal } from '../../../../pages/boards/[boardId]';
 import s from './ModalTaskAdd.module.scss';
 
 interface IProps {
-  onConfirm: (formData: IFormData) => void;
+  onConfirm: (formData: IFormDataModal) => void;
   isShowModal: boolean;
   setIsShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export interface IFormData {
-  [key: string]: string;
-}
+// export interface IFormData {
+//   [key: string]: string;
+// }
 
 const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => {
-  const onSubmit = (formData: IFormData) => {
+  const onSubmit = (formData: IFormDataModal) => {
     setIsShowModal(false);
     onConfirm(formData);
     reset();
@@ -28,7 +29,7 @@ const CreateTaskModal = ({ onConfirm, isShowModal, setIsShowModal }: IProps) => 
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<IFormData>({
+  } = useForm<IFormDataModal>({
     defaultValues: {
       title: '',
       desc: '',

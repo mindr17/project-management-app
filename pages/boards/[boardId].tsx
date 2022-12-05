@@ -140,7 +140,7 @@ const Board = () => {
   };
 
   const handleColumnDelete = (column: IColumn) => {
-    // убрать из колонок
+    // убрать из колонок 123
     let columnsCopy: IColumn[] = JSON.parse(JSON.stringify(_columns));
     columnsCopy = columnsCopy.filter((col) => col._id !== column._id);
 

@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 import s from './modal.module.scss';
 
 interface IProps {
@@ -9,6 +10,7 @@ interface IProps {
 }
 
 const Modal = ({ onConfirm, title, isShowModal, setIsShowModal }: IProps) => {
+  const { t } = useTranslation();
   const handleCloseModal = () => {
     setIsShowModal(false);
   };
@@ -27,10 +29,10 @@ const Modal = ({ onConfirm, title, isShowModal, setIsShowModal }: IProps) => {
         <h2>{title}</h2>
         <div className={s.btnContent}>
           <button onClick={handleBtnTrue} className={s.btn} style={{ background: 'red' }}>
-            agree
+            {t('common:modalYes')}
           </button>
           <button onClick={handleCloseModal} className={s.btn}>
-            cancel
+            {t('common:modalNo')}
           </button>
         </div>
         <div className={s.closeBtn} onClick={handleCloseModal}></div>
